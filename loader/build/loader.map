@@ -1,0 +1,375 @@
+
+Merging program properties
+
+Removed property 0xc0000002 to merge loader.o (0x3) and _loader.o (not found)
+Removed property 0xc0000002 to merge loader.o (not found) and mmu.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and vgastr.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and graph.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and cpu.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and disk.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and acpi.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and e820.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and machine.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and image.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and stdio.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and string.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and utils.o (0x3)
+Removed property 0xc0000002 to merge loader.o (not found) and allocate.o (0x3)
+
+Discarded input sections
+
+ .group         0x0000000000000000        0x8 loader.o
+ .note.gnu.property
+                0x0000000000000000       0x1c loader.o
+ .group         0x0000000000000000        0x8 mmu.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 mmu.o
+ .note.gnu.property
+                0x0000000000000000       0x1c mmu.o
+ .group         0x0000000000000000        0x8 vgastr.o
+ .group         0x0000000000000000        0x8 vgastr.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 vgastr.o
+ .note.gnu.property
+                0x0000000000000000       0x1c vgastr.o
+ .group         0x0000000000000000        0x8 graph.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 graph.o
+ .note.gnu.property
+                0x0000000000000000       0x1c graph.o
+ .group         0x0000000000000000        0x8 cpu.o
+ .group         0x0000000000000000        0x8 cpu.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 cpu.o
+ .note.gnu.property
+                0x0000000000000000       0x1c cpu.o
+ .note.gnu.property
+                0x0000000000000000       0x1c disk.o
+ .group         0x0000000000000000        0x8 acpi.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 acpi.o
+ .note.gnu.property
+                0x0000000000000000       0x1c acpi.o
+ .group         0x0000000000000000        0x8 e820.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 e820.o
+ .note.gnu.property
+                0x0000000000000000       0x1c e820.o
+ .group         0x0000000000000000        0x8 machine.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 machine.o
+ .note.gnu.property
+                0x0000000000000000       0x1c machine.o
+ .group         0x0000000000000000        0x8 image.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 image.o
+ .note.gnu.property
+                0x0000000000000000       0x1c image.o
+ .group         0x0000000000000000        0x8 stdio.o
+ .group         0x0000000000000000        0x8 stdio.o
+ .text.__x86.get_pc_thunk.bp
+                0x0000000000000000        0x4 stdio.o
+ .note.gnu.property
+                0x0000000000000000       0x1c stdio.o
+ .note.gnu.property
+                0x0000000000000000       0x1c string.o
+ .group         0x0000000000000000        0x8 utils.o
+ .group         0x0000000000000000        0x8 utils.o
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 utils.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 utils.o
+ .note.gnu.property
+                0x0000000000000000       0x1c utils.o
+ .group         0x0000000000000000        0x8 allocate.o
+ .group         0x0000000000000000        0x8 allocate.o
+ .group         0x0000000000000000        0x8 allocate.o
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 allocate.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 allocate.o
+ .note.gnu.property
+                0x0000000000000000       0x1c allocate.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000000200000                . = 0x200000
+                0x0000000000200000                __start_ldr = .
+                0x0000000000200000                __begin_start_text = .
+
+.start.text
+ *(.start.text)
+                0x0000000000200000                __end_start_text = .
+                0x0000000000200000                __begin_text = .
+
+.text           0x0000000000200000     0x16ee
+ *(.text)
+ .text          0x0000000000200000       0xaa _loader.o
+                0x0000000000200000                _start
+                0x0000000000200047                realadr_call_entry
+ .text          0x00000000002000aa       0x95 loader.o
+                0x00000000002000aa                read_string
+                0x00000000002000bc                loader_entry
+ .text          0x000000000020013f      0x17a mmu.o
+                0x000000000020013f                mmu_init
+                0x0000000000200242                mmu_display
+ .text          0x00000000002002b9      0x1f1 vgastr.o
+                0x00000000002002b9                init_cursor
+                0x00000000002002dc                close_cursor
+                0x00000000002002f1                open_cursor
+                0x00000000002002f6                set_cursor
+                0x0000000000200349                clear_screen
+                0x0000000000200371                scroll_screen
+                0x00000000002003a5                write_string
+ .text          0x00000000002004aa       0x37 graph.o
+                0x00000000002004aa                graph_init
+                0x00000000002004af                graph_display
+ .text          0x00000000002004e1       0xef cpu.o
+                0x00000000002004e1                cpu_init
+                0x0000000000200585                cpu_display
+ .text          0x00000000002005d0        0xa disk.o
+                0x00000000002005d0                disk_init
+                0x00000000002005d5                disk_display
+ .text          0x00000000002005da       0x37 acpi.o
+                0x00000000002005da                acpi_init
+                0x00000000002005df                acpi_display
+ .text          0x0000000000200611      0x1f5 e820.o
+                0x0000000000200611                e820_init
+                0x000000000020073f                e820_display
+ .text          0x0000000000200806      0x4fc machine.o
+                0x0000000000200838                init_machine
+                0x0000000000200ba7                display_machine
+ .text          0x0000000000200d02      0x273 image.o
+                0x0000000000200d02                image_display
+                0x0000000000200e7a                get_file
+                0x0000000000200f43                get_image_file
+ .text          0x0000000000200f75      0x203 stdio.o
+                0x00000000002010e4                sscank
+                0x00000000002010fa                scank
+                0x0000000000201120                sprintk
+                0x0000000000201136                printk
+ .text          0x0000000000201178       0x8a string.o
+                0x0000000000201178                strcmp
+                0x000000000020119e                strcpy
+                0x00000000002011be                strlen
+                0x00000000002011d2                strcat
+ .text          0x0000000000201202      0x1a0 utils.o
+                0x0000000000201202                die
+                0x0000000000201260                utf_to_unicode
+                0x0000000000201269                unicode_to_utf8
+                0x0000000000201272                checksum_crc32
+                0x00000000002012ad                checksum_crc64
+                0x0000000000201340                error
+                0x0000000000201372                warning
+ .text          0x00000000002013a2      0x34c allocate.o
+                0x00000000002013f4                allocate_init
+                0x0000000000201424                allocate_display
+                0x0000000000201592                allocate
+                0x000000000020162e                reserve
+                0x000000000020166d                release
+                0x00000000002016ee                __end_text = .
+                0x00000000002016ee                __begin_data = .
+
+.iplt           0x00000000002016ee        0x0
+ .iplt          0x00000000002016ee        0x0 _loader.o
+
+.text.__x86.get_pc_thunk.bx
+                0x00000000002016ee        0x4
+ .text.__x86.get_pc_thunk.bx
+                0x00000000002016ee        0x4 loader.o
+                0x00000000002016ee                __x86.get_pc_thunk.bx
+
+.text.__x86.get_pc_thunk.ax
+                0x00000000002016f2        0x4
+ .text.__x86.get_pc_thunk.ax
+                0x00000000002016f2        0x4 vgastr.o
+                0x00000000002016f2                __x86.get_pc_thunk.ax
+
+.text.__x86.get_pc_thunk.bp
+                0x00000000002016f6        0x4
+ .text.__x86.get_pc_thunk.bp
+                0x00000000002016f6        0x4 cpu.o
+                0x00000000002016f6                __x86.get_pc_thunk.bp
+
+.text.__x86.get_pc_thunk.si
+                0x00000000002016fa        0x4
+ .text.__x86.get_pc_thunk.si
+                0x00000000002016fa        0x4 stdio.o
+                0x00000000002016fa                __x86.get_pc_thunk.si
+
+.text.__x86.get_pc_thunk.cx
+                0x00000000002016fe        0x4
+ .text.__x86.get_pc_thunk.cx
+                0x00000000002016fe        0x4 allocate.o
+                0x00000000002016fe                __x86.get_pc_thunk.cx
+
+.data           0x0000000000201704       0x10
+ *(.data)
+ .data          0x0000000000201704        0x0 loader.o
+ .data          0x0000000000201704        0x0 mmu.o
+ .data          0x0000000000201704        0x8 vgastr.o
+ .data          0x000000000020170c        0x0 graph.o
+ .data          0x000000000020170c        0x0 cpu.o
+ .data          0x000000000020170c        0x0 disk.o
+ .data          0x000000000020170c        0x0 acpi.o
+ .data          0x000000000020170c        0x0 e820.o
+ .data          0x000000000020170c        0x0 machine.o
+ .data          0x000000000020170c        0x0 image.o
+ .data          0x000000000020170c        0x0 stdio.o
+ .data          0x000000000020170c        0x0 string.o
+ .data          0x000000000020170c        0x0 utils.o
+ .data          0x000000000020170c        0x8 allocate.o
+                0x0000000000201714                __end_data = .
+                0x0000000000201714                __begin_rodata = .
+
+.got            0x0000000000201714        0x0
+ .got           0x0000000000201714        0x0 _loader.o
+
+.got.plt        0x0000000000201714        0xc
+ .got.plt       0x0000000000201714        0xc _loader.o
+                0x0000000000201714                _GLOBAL_OFFSET_TABLE_
+
+.igot.plt       0x0000000000201720        0x0
+ .igot.plt      0x0000000000201720        0x0 _loader.o
+
+.rodata         0x0000000000201720      0x937
+ *(.rodata)
+ .rodata        0x0000000000201720       0x18 vgastr.o
+ .rodata        0x0000000000201738       0x30 utils.o
+ *(.rodata.*)
+ .rodata.str1.1
+                0x0000000000201768       0x9c loader.o
+                                         0x9d (size before relaxing)
+ .rodata.str1.1
+                0x0000000000201804       0xdf mmu.o
+ .rodata.str1.1
+                0x00000000002018e3       0xa0 graph.o
+ .rodata.str1.1
+                0x0000000000201983      0x11d cpu.o
+ .rodata.str1.1
+                0x0000000000201aa0       0x9e acpi.o
+ .rodata.str1.1
+                0x0000000000201b3e      0x12a e820.o
+                                        0x13e (size before relaxing)
+ .rodata.str1.1
+                0x0000000000201c68      0x274 machine.o
+                                        0x290 (size before relaxing)
+ .rodata.str1.1
+                0x0000000000201edc      0x153 image.o
+                                        0x165 (size before relaxing)
+ .rodata.str1.1
+                0x000000000020202f       0x11 stdio.o
+ .rodata.str1.1
+                0x0000000000202040       0x17 allocate.o
+                                         0x2a (size before relaxing)
+                0x0000000000202057                __end_rodata = .
+                0x0000000000202057                __begin_kstrtab = .
+
+.eh_frame       0x0000000000202058      0xbdc
+ .eh_frame      0x0000000000202058       0x74 loader.o
+ .eh_frame      0x00000000002020cc       0x9c mmu.o
+                                         0xc8 (size before relaxing)
+ .eh_frame      0x0000000000202168       0xf8 vgastr.o
+                                        0x124 (size before relaxing)
+ .eh_frame      0x0000000000202260       0x38 graph.o
+                                         0x64 (size before relaxing)
+ .eh_frame      0x0000000000202298       0x94 cpu.o
+                                         0xc0 (size before relaxing)
+ .eh_frame      0x000000000020232c       0x28 disk.o
+                                         0x40 (size before relaxing)
+ .eh_frame      0x0000000000202354       0x38 acpi.o
+                                         0x64 (size before relaxing)
+ .eh_frame      0x000000000020238c       0xd8 e820.o
+                                        0x104 (size before relaxing)
+ .eh_frame      0x0000000000202464      0x210 machine.o
+                                        0x23c (size before relaxing)
+ .eh_frame      0x0000000000202674      0x190 image.o
+                                        0x1bc (size before relaxing)
+ .eh_frame      0x0000000000202804      0x138 stdio.o
+                                        0x164 (size before relaxing)
+ .eh_frame      0x000000000020293c       0x60 string.o
+                                         0x78 (size before relaxing)
+ .eh_frame      0x000000000020299c       0xf8 utils.o
+                                        0x138 (size before relaxing)
+ .eh_frame      0x0000000000202a94      0x1a0 allocate.o
+                                        0x1e0 (size before relaxing)
+
+.rel.dyn        0x0000000000202c34        0x0
+ .rel.got       0x0000000000202c34        0x0 _loader.o
+ .rel.iplt      0x0000000000202c34        0x0 _loader.o
+
+.kstrtab
+ *(.kstrtab)
+                0x0000000000202c34                __end_kstrtab = .
+                0x0000000000202c34                __begin_bss = .
+
+.bss            0x0000000000202c34        0x4
+ *(.bss)
+ .bss           0x0000000000202c34        0x0 loader.o
+ .bss           0x0000000000202c34        0x0 mmu.o
+ .bss           0x0000000000202c34        0x0 vgastr.o
+ .bss           0x0000000000202c34        0x0 graph.o
+ .bss           0x0000000000202c34        0x0 cpu.o
+ .bss           0x0000000000202c34        0x0 disk.o
+ .bss           0x0000000000202c34        0x0 acpi.o
+ .bss           0x0000000000202c34        0x0 e820.o
+ .bss           0x0000000000202c34        0x0 machine.o
+ .bss           0x0000000000202c34        0x0 image.o
+ .bss           0x0000000000202c34        0x0 stdio.o
+ .bss           0x0000000000202c34        0x0 string.o
+ .bss           0x0000000000202c34        0x0 utils.o
+ .bss           0x0000000000202c34        0x4 allocate.o
+                0x0000000000202c38                __end_bss = .
+                0x0000000000202c38                __end_ldr = .
+LOAD _loader.o
+LOAD loader.o
+LOAD mmu.o
+LOAD vgastr.o
+LOAD graph.o
+LOAD cpu.o
+LOAD disk.o
+LOAD acpi.o
+LOAD e820.o
+LOAD machine.o
+LOAD image.o
+LOAD stdio.o
+LOAD string.o
+LOAD utils.o
+LOAD allocate.o
+OUTPUT(loader.elf elf32-i386)
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 loader.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 mmu.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 vgastr.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 graph.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 cpu.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 disk.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 acpi.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 e820.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 machine.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 image.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 stdio.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 string.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 utils.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 allocate.o

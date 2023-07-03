@@ -1,0 +1,17 @@
+# grub.bin模块
+GRUB_OBJS := _grub.o grub.o vgastr.o string.o stdio.o image.o utils.o allocate.o
+GRUB_LINK := $(GRUB_OBJS)
+GRUB_ELF = grub.elf
+GRUB_BIN = grub.bin
+
+# loader.bin模块
+LOADER_OBJS := _loader.o loader.o mmu.o vgastr.o graph.o cpu.o disk.o acpi.o e820.o machine.o image.o stdio.o string.o utils.o allocate.o
+LOADER_LINK := $(LOADER_OBJS)
+LOADER_ELF = loader.elf
+LOADER_BIN = loader.bin
+
+# bios.bin模块
+BIOS_OBJS := _bios.o
+BIOS_LINK := $(BIOS_OBJS)
+BIOS_ELF = bios.elf
+BIOS_BIN = bios.bin

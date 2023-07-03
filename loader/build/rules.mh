@@ -1,0 +1,26 @@
+####################
+# 自动化编译配置文件 #
+####################
+
+# 它俩只是为了回显
+CCSTR	= 'CC -[M] 正在构建... '$<
+
+# 将./boot/目录下的.asm编译成.o文件
+%.o : $(CCBUILDPATH)%.asm
+	$(ASM) $(ASMBFLAGS) -o $@ $<
+	@echo 'AS -[M] 正在构建...' $<
+
+# 将./boot/目录下的.c编译成.o文件
+%.o : $(CCBUILDPATH)%.c
+	$(CC) $(BTCFLAGS) -o $@ $<
+	@echo 'CC -[M] 正在构建...'$<
+
+# 将../share/lib/下的c文件进行编译
+%.o : $(LIB_PATH)%.asm
+	$(ASM) $(ASMBFLAGS) -o $@ $<
+	@echo 'AS -[M] 正在构建...'
+	
+# 将../share/lib/下的c文件进行编译
+%.o : $(LIB_PATH)%.c
+	$(CC) $(BTCFLAGS) -o $@ $<
+	$(PRINTCSTR)

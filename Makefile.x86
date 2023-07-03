@@ -1,0 +1,22 @@
+########################
+# 主控自动化编译配置文件 #
+########################
+
+MAKEFLAGS = -sR
+
+PREMENTMFLGS = -C $(BUILD_PATH) -f pretreatment.mkf
+HALYMFLGS = -C $(BUILD_PATH) -f hal.mk
+KRNLMFLGS = -C $(BUILD_PATH) -f krl.mk
+DRIVMFLGS = -C $(BUILD_PATH) -f drv.mk
+LIBSMFLGS = -C $(BUILD_PATH) -f lib.mk
+TASKMFLGS = -C $(BUILD_PATH) -f task.mk
+LINKMFLGS = -C $(BUILD_PATH) -f link.mk
+BUILD_PATH = ./build/
+
+build: all
+
+all:
+	make $(PREMENTMFLGS)
+	make $(HALYMFLGS)
+	make $(KRNLMFLGS)
+	make $(LINKMFLGS)

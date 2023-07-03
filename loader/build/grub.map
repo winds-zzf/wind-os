@@ -1,0 +1,246 @@
+
+Merging program properties
+
+Removed property 0xc0000002 to merge grub.o (0x3) and _grub.o (not found)
+Removed property 0xc0000002 to merge grub.o (not found) and vgastr.o (0x3)
+Removed property 0xc0000002 to merge grub.o (not found) and string.o (0x3)
+Removed property 0xc0000002 to merge grub.o (not found) and stdio.o (0x3)
+Removed property 0xc0000002 to merge grub.o (not found) and image.o (0x3)
+Removed property 0xc0000002 to merge grub.o (not found) and utils.o (0x3)
+Removed property 0xc0000002 to merge grub.o (not found) and allocate.o (0x3)
+
+Discarded input sections
+
+ .group         0x0000000000000000        0x8 grub.o
+ .note.gnu.property
+                0x0000000000000000       0x1c grub.o
+ .group         0x0000000000000000        0x8 vgastr.o
+ .group         0x0000000000000000        0x8 vgastr.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 vgastr.o
+ .note.gnu.property
+                0x0000000000000000       0x1c vgastr.o
+ .note.gnu.property
+                0x0000000000000000       0x1c string.o
+ .group         0x0000000000000000        0x8 stdio.o
+ .group         0x0000000000000000        0x8 stdio.o
+ .note.gnu.property
+                0x0000000000000000       0x1c stdio.o
+ .group         0x0000000000000000        0x8 image.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 image.o
+ .note.gnu.property
+                0x0000000000000000       0x1c image.o
+ .group         0x0000000000000000        0x8 utils.o
+ .group         0x0000000000000000        0x8 utils.o
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 utils.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 utils.o
+ .note.gnu.property
+                0x0000000000000000       0x1c utils.o
+ .group         0x0000000000000000        0x8 allocate.o
+ .group         0x0000000000000000        0x8 allocate.o
+ .group         0x0000000000000000        0x8 allocate.o
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 allocate.o
+ .text.__x86.get_pc_thunk.bx
+                0x0000000000000000        0x4 allocate.o
+ .note.gnu.property
+                0x0000000000000000       0x1c allocate.o
+
+Memory Configuration
+
+Name             Origin             Length             Attributes
+*default*        0x0000000000000000 0xffffffffffffffff
+
+Linker script and memory map
+
+                0x0000000004000000                . = 0x4000000
+                0x0000000004000000                __start_ldr = .
+                0x0000000004000000                __begin_start_text = .
+
+.start.text     0x0000000004000000       0xda
+ *(.start.text)
+ .start.text    0x0000000004000000       0xda _grub.o
+                0x0000000004000000                _start
+                0x00000000040000da                __end_start_text = .
+                0x00000000040000da                __begin_text = .
+
+.text           0x00000000040000dc      0xd32
+ *(.text)
+ .text          0x00000000040000dc      0x155 grub.o
+                0x0000000004000159                grub_entry
+ .text          0x0000000004000231      0x1f1 vgastr.o
+                0x0000000004000231                init_cursor
+                0x0000000004000254                close_cursor
+                0x0000000004000269                open_cursor
+                0x000000000400026e                set_cursor
+                0x00000000040002c1                clear_screen
+                0x00000000040002e9                scroll_screen
+                0x000000000400031d                write_string
+ .text          0x0000000004000422       0x8a string.o
+                0x0000000004000422                strcmp
+                0x0000000004000448                strcpy
+                0x0000000004000468                strlen
+                0x000000000400047c                strcat
+ .text          0x00000000040004ac      0x203 stdio.o
+                0x000000000400061b                sscank
+                0x0000000004000631                scank
+                0x0000000004000657                sprintk
+                0x000000000400066d                printk
+ .text          0x00000000040006af      0x273 image.o
+                0x00000000040006af                image_display
+                0x0000000004000827                get_file
+                0x00000000040008f0                get_image_file
+ .text          0x0000000004000922      0x1a0 utils.o
+                0x0000000004000922                die
+                0x0000000004000980                utf_to_unicode
+                0x0000000004000989                unicode_to_utf8
+                0x0000000004000992                checksum_crc32
+                0x00000000040009cd                checksum_crc64
+                0x0000000004000a60                error
+                0x0000000004000a92                warning
+ .text          0x0000000004000ac2      0x34c allocate.o
+                0x0000000004000b14                allocate_init
+                0x0000000004000b44                allocate_display
+                0x0000000004000cb2                allocate
+                0x0000000004000d4e                reserve
+                0x0000000004000d8d                release
+                0x0000000004000e0e                __end_text = .
+                0x0000000004000e0e                __begin_data = .
+
+.iplt           0x0000000004000e0e        0x0
+ .iplt          0x0000000004000e0e        0x0 _grub.o
+
+.text.__x86.get_pc_thunk.bx
+                0x0000000004000e0e        0x4
+ .text.__x86.get_pc_thunk.bx
+                0x0000000004000e0e        0x4 grub.o
+                0x0000000004000e0e                __x86.get_pc_thunk.bx
+
+.text.__x86.get_pc_thunk.ax
+                0x0000000004000e12        0x4
+ .text.__x86.get_pc_thunk.ax
+                0x0000000004000e12        0x4 vgastr.o
+                0x0000000004000e12                __x86.get_pc_thunk.ax
+
+.text.__x86.get_pc_thunk.si
+                0x0000000004000e16        0x4
+ .text.__x86.get_pc_thunk.si
+                0x0000000004000e16        0x4 stdio.o
+                0x0000000004000e16                __x86.get_pc_thunk.si
+
+.text.__x86.get_pc_thunk.bp
+                0x0000000004000e1a        0x4
+ .text.__x86.get_pc_thunk.bp
+                0x0000000004000e1a        0x4 stdio.o
+                0x0000000004000e1a                __x86.get_pc_thunk.bp
+
+.text.__x86.get_pc_thunk.cx
+                0x0000000004000e1e        0x4
+ .text.__x86.get_pc_thunk.cx
+                0x0000000004000e1e        0x4 allocate.o
+                0x0000000004000e1e                __x86.get_pc_thunk.cx
+
+.data           0x0000000004000e24       0x10
+ *(.data)
+ .data          0x0000000004000e24        0x0 grub.o
+ .data          0x0000000004000e24        0x8 vgastr.o
+ .data          0x0000000004000e2c        0x0 string.o
+ .data          0x0000000004000e2c        0x0 stdio.o
+ .data          0x0000000004000e2c        0x0 image.o
+ .data          0x0000000004000e2c        0x0 utils.o
+ .data          0x0000000004000e2c        0x8 allocate.o
+                0x0000000004000e34                __end_data = .
+                0x0000000004000e34                __begin_rodata = .
+
+.got            0x0000000004000e34        0x0
+ .got           0x0000000004000e34        0x0 _grub.o
+
+.got.plt        0x0000000004000e34        0xc
+ .got.plt       0x0000000004000e34        0xc _grub.o
+                0x0000000004000e34                _GLOBAL_OFFSET_TABLE_
+
+.igot.plt       0x0000000004000e40        0x0
+ .igot.plt      0x0000000004000e40        0x0 _grub.o
+
+.rodata         0x0000000004000e40      0x2f1
+ *(.rodata)
+ .rodata        0x0000000004000e40       0x18 vgastr.o
+ .rodata        0x0000000004000e58       0x30 utils.o
+ *(.rodata.*)
+ .rodata.str1.1
+                0x0000000004000e88      0x122 grub.o
+ .rodata.str1.1
+                0x0000000004000faa       0x11 stdio.o
+ .rodata.str1.1
+                0x0000000004000fbb      0x15f image.o
+                                        0x165 (size before relaxing)
+ .rodata.str1.1
+                0x000000000400111a       0x17 allocate.o
+                                         0x2a (size before relaxing)
+                0x0000000004001131                __end_rodata = .
+                0x0000000004001131                __begin_kstrtab = .
+
+.eh_frame       0x0000000004001134      0x794
+ .eh_frame      0x0000000004001134       0xc8 grub.o
+ .eh_frame      0x00000000040011fc       0xf8 vgastr.o
+                                        0x124 (size before relaxing)
+ .eh_frame      0x00000000040012f4       0x60 string.o
+                                         0x78 (size before relaxing)
+ .eh_frame      0x0000000004001354      0x14c stdio.o
+                                        0x164 (size before relaxing)
+ .eh_frame      0x00000000040014a0      0x190 image.o
+                                        0x1bc (size before relaxing)
+ .eh_frame      0x0000000004001630       0xf8 utils.o
+                                        0x138 (size before relaxing)
+ .eh_frame      0x0000000004001728      0x1a0 allocate.o
+                                        0x1e0 (size before relaxing)
+
+.rel.dyn        0x00000000040018c8        0x0
+ .rel.got       0x00000000040018c8        0x0 _grub.o
+ .rel.iplt      0x00000000040018c8        0x0 _grub.o
+
+.kstrtab
+ *(.kstrtab)
+                0x00000000040018c8                __end_kstrtab = .
+                0x00000000040018c8                __begin_bss = .
+
+.bss            0x00000000040018c8        0x4
+ *(.bss)
+ .bss           0x00000000040018c8        0x0 grub.o
+ .bss           0x00000000040018c8        0x0 vgastr.o
+ .bss           0x00000000040018c8        0x0 string.o
+ .bss           0x00000000040018c8        0x0 stdio.o
+ .bss           0x00000000040018c8        0x0 image.o
+ .bss           0x00000000040018c8        0x0 utils.o
+ .bss           0x00000000040018c8        0x4 allocate.o
+                0x00000000040018cc                __end_bss = .
+                0x00000000040018cc                __end_ldr = .
+LOAD _grub.o
+LOAD grub.o
+LOAD vgastr.o
+LOAD string.o
+LOAD stdio.o
+LOAD image.o
+LOAD utils.o
+LOAD allocate.o
+OUTPUT(grub.elf elf32-i386)
+
+.note.GNU-stack
+                0x0000000000000000        0x0
+ .note.GNU-stack
+                0x0000000000000000        0x0 grub.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 vgastr.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 string.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 stdio.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 image.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 utils.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 allocate.o
