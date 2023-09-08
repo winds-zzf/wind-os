@@ -19,7 +19,7 @@ void image_display(const addr_t addr);
  * addr:内核映像物理地址
  * fname:文件名
  */
-Handle* get_file(const addr_t addr,const char_t *fname);
+FHandle* get_file(const addr_t addr,const char_t *fname);
 
 /**
  * 获取之规定文件句柄

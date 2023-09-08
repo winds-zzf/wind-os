@@ -7,9 +7,6 @@
 #include"global.h"
 #include"io.h"
 
- /**
-  * 将内存数据拷贝到内存中
-  */
 Status mem_to_file(void* mem,u32_t size,FILE* file, u32_t offset){
 	if (NULL == mem || NULL == file) {		//参数检查
 		printf("error:@%s\n",__FUNCTION__);
@@ -20,9 +17,6 @@ Status mem_to_file(void* mem,u32_t size,FILE* file, u32_t offset){
 	return OK;
 }
 
-/**
- * 将文件内容拷贝到指定地址下
- */
 Status mem_from_file(void* mem,u32_t size,FILE* file, u32_t offset) {
 	if (NULL == mem || NULL == file) {		//参数检查
 		printf("error:@%s\n", __FUNCTION__);
@@ -33,18 +27,11 @@ Status mem_from_file(void* mem,u32_t size,FILE* file, u32_t offset) {
 	return OK;
 }
 
-/**
- * 文件拷贝
- * 将一个文件拷贝到另一个文件的偏移处
- */
 u32_t file_copy(FILE* src,FILE* dst,u32_t offset) {	
 	fseek(dst,offset,SEEK_SET);
 	return file_append(src,dst);
 }
-
-/**
- * 将一个文件中的部分数据拷贝到量一个文件中
- */
+
 Status copy_file(FILE*src,FILE* dst,u32_t offset,u32_t size) {
 	char buffer[1024];
 	u32_t count = 1024;
@@ -56,11 +43,8 @@ Status copy_file(FILE*src,FILE* dst,u32_t offset,u32_t size) {
 		size -= count;
 	}
 	return OK;
-}
+}
 
-/**
- * 追加文件
- */
 u32_t file_append(FILE* src, FILE* dst) {
 	char buffer[1024];	//缓冲区
 	u32_t sum = 0;
@@ -75,9 +59,6 @@ u32_t file_append(FILE* src, FILE* dst) {
 	return sum;
 }
 
-/**
- * 
- */
 FILE* get_fp(const char* file,const char* mode) {
 	FILE* fp;
 	if (NULL == file || 0 == file[0]) {	//参数检查

@@ -9,9 +9,9 @@ void graph_init(Machine *mach){
 	return;
 }
 
-void graph_display(){
+void graph_display(Machine mach){
 	printk("=================================graph info==================================\n");
 	;
-	printk("=================================graph end.====================================\n");
+	printk("=================================graph end.==================================\n");
 	return;
 }

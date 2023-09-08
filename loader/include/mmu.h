@@ -16,8 +16,9 @@ void mmu_init(Machine *mach);
 
 /**
  * 输出MMU信息
+ * Machine:机器信息结构体
  */
-void mmu_display();
+void mmu_display(Machine mach);
 
 
 #endif //__MMU_H

@@ -2,21 +2,30 @@
 # 主控自动化编译配置文件 #
 ########################
 
+# 使用-R参数禁止隐式规则的搜索
 MAKEFLAGS = -sR
 
-PREMENTMFLGS = -C $(BUILD_PATH) -f pretreatment.mkf
-HALYMFLGS = -C $(BUILD_PATH) -f hal.mk
-KRNLMFLGS = -C $(BUILD_PATH) -f krl.mk
-DRIVMFLGS = -C $(BUILD_PATH) -f drv.mk
-LIBSMFLGS = -C $(BUILD_PATH) -f lib.mk
-TASKMFLGS = -C $(BUILD_PATH) -f task.mk
-LINKMFLGS = -C $(BUILD_PATH) -f link.mk
+SCRIPT_PATH = ./script/
 BUILD_PATH = ./build/
 
-build: all
+# 预处理
+PREPARE_FLAG  = -C $(SCRIPT_PATH) -f prepare.mkf
+# 模块处理
+HAL_FLAG 		= -C $(BUILD_PATH) -f hal.mk
+KERNEL_FLAG 	= -C $(BUILD_PATH) -f kernel.mk
+DRIVER_FLAG 	= -C $(BUILD_PATH) -f driver.mk
+LIBRARY_FLAG 	= -C $(BUILD_PATH) -f library.mk
+MEMORY_FLAG   	= -C $(BUILD_PATH) -f memory.mk
+FSYS_FLAG  	= -C $(BUILD_PATH) -f fsys.mk 
+TASK_FLAG 	= -C $(BUILD_PATH) -f task.mk
+# 链接
+LINK_FLAG 	= -C $(BUILD_PATH) -f link.mk
+
+.PHONY : all
 
 all:
-	make $(PREMENTMFLGS)
-	make $(HALYMFLGS)
-	make $(KRNLMFLGS)
-	make $(LINKMFLGS)
+	make $(PREPARE_FLAG)
+	make $(HAL_FLAG)
+	make $(KERNEL_FLAG)
+	make $(LINK_FLAG)
+

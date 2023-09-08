@@ -12,23 +12,22 @@ static void load_file(const char_t* fname,const addr_t dst);
 void grub_entry(){
 	init_cursor();
 	clear_screen(0x0f00);
-    
-	image_display((addr_t)IMAGE_ADR);
-	die(0x200);
+	printk("==================================grub start==================================\n");
 
-    	//初始化位示图，进行简单内存管理
+    	//初始化内存位示图
     	memset(BITMAP_ADR,0,0x1000);	//清空指定区域内存
     	allocate_init(BITMAP_ADR,0x100000,0x8000000);
+	
+	//输出内核映像信息
+	image_display((addr_t)IMAGE_ADR);
     	
-    	printk("===============================loading loader.bin=============================\n");
+    	printk("loading loader.bin...\n");
     	load_file(LOADER_NAME,LOADER_ADR);
-    	die(0x200);
     	
-    	printk("===============================loading bios.bin===============================\n");
+    	printk("loading bios.bin...\n");
     	load_file(BIOS_NAME,BIOS_ADR);
-    	die(0x200);
     	
-    	printk("====================================end...====================================\n");
+    	printk("==================================grub end.===================================\n");
     	die(0x200);
     	return;
 }
@@ -42,11 +41,13 @@ static void load_file(const char_t* fname,const addr_t dst){
     	addr_t src = NULL;		//文件地址
     	size_t size = 0;		//文件大小
     	size = get_image_file(IMAGE_ADR,fname,&src);
-    	if(memcpy(src,size,dst)==0){
-    		printk("error in loading the <%s>...\n",fname);       
-    	}
-    
+    	
     	//设置这片内存区域为保留
     	reserve(dst,size);
-    	return;
+    	
+    	if(memcpy(src,size,dst)==0){
+    		printk("error in loading the <%s>...\n",fname);     
+    	}
+    	
+    	return ;
 }

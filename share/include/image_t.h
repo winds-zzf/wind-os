@@ -30,12 +30,12 @@ typedef struct HEADER{
 /**
  * 文件头描述符
  */
-typedef struct HANDLE{
+typedef struct FHANDLE{
 	char fname[FNAME_MAX_LEN];	//文件名
 	u32_t start;				//文件起始偏移
 	u32_t size;				//文件大小
 	u32_t checksum;			//文件校验和
-}Handle;
+}FHandle;
 
 
 #endif //_IMAGE_T_H

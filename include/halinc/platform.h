@@ -8,14 +8,16 @@
 
 
 /**
- * 
+ * 初始化平台信息
+ * mach: 机器信息结构体
  */
-void platform_init(Machine *mach);
+void platform_init();
 
 /**
- *
+ * 显示平台信息
+ * mach: 机器信息结构体
  */
-void platform_display(Machine *mach);
+void platform_display();
 
 
 #endif //__PLATFORM_H

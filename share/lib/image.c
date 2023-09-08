@@ -16,21 +16,21 @@
  * size:内存区域大小
  * checksum：源校验和
  */
-static boolean_t verify(addr_t addr,size_t size,u32_t checksum){
+static bool_t verify(addr_t addr,size_t size,u32_t checksum){
 	return checksum==checksum_crc32(addr,size,CRC32_POLY)? TRUE:FALSE;
 }
 
 void image_display(const addr_t adr){
 	printk("=================================image info==================================\n");
 	Header *header = (Header*)(adr+HEADER_OFFSET);		//获取映像头地址
-	Handle *fhds= (Handle*)((addr_t)header+sizeof(Header));	//文件头数组地址
+	FHandle *fhds= (FHandle*)((addr_t)header+sizeof(Header));	//文件头数组地址
 	//输出映像头信息
 	printk("version:\t%d\n",header->version);
 	printk("start:\t0x%x\n",header->start);
 	printk("size:\t%d\n",header->size);
 	printk("checksum:\t0x%x\n",header->checksum);
 	//文件头校验和
-	if (!verify((addr_t)fhds,sizeof(Handle)*header->size,header->checksum)) {
+	if (!verify((addr_t)fhds,sizeof(FHandle)*header->size,header->checksum)) {
 		printk("the kernel image file handles is damaged!\n");
 		return;
 	}
@@ -50,11 +50,11 @@ void image_display(const addr_t adr){
 	return;
 }
 
-Handle* get_file(const addr_t adr,const char_t *fname){					
+FHandle* get_file(const addr_t adr,const char_t *fname){					
 	Header *header = (Header*)(adr+HEADER_OFFSET);		//获取映像头地址
-	Handle *fhds= (Handle*)((addr_t)header+sizeof(Header));	//文件头数组地址
+	FHandle *fhds= (FHandle*)((addr_t)header+sizeof(Header));	//文件头数组地址
 	
-	if (!verify((addr_t)fhds,sizeof(Handle)*header->size,header->checksum)) {
+	if (!verify((addr_t)fhds,sizeof(FHandle)*header->size,header->checksum)) {
 		printk("the kernel image file handles is damaged!\n");
 	}
 	
@@ -71,7 +71,7 @@ Handle* get_file(const addr_t adr,const char_t *fname){
 }
 
 size_t get_image_file(const addr_t image_adr,const char_t* fname,addr_t* adr){
-	Handle *fhd = get_file(image_adr,fname);	//获取文件句柄
+	FHandle *fhd = get_file(image_adr,fname);	//获取文件句柄
 	
 	if(NULL==fhd) return 0;	//获取失败
 	*adr = fhd->start+image_adr;

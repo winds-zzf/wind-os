@@ -10,15 +10,16 @@
 
 /**
  * 初始化ACPI
- * Machine:机器信息结构体
+ * mach: 机器信息结构体
  */
 void acpi_init(Machine *mach);
 
 
 /**
  * 输出ACPI信息
+ * mach: 机器信息结构体
  */
-void acpi_display(Machine *mach);
+void acpi_display(Machine mach);
 
 
 #endif	//__ACPI_H

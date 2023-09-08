@@ -9,7 +9,7 @@
 
 //块信息
 #define BLOCK_SIZE 	0x1000	//块大小4KB
-#define ATTR	0x80000000		//取位常数
+#define ATTR	0x80000000	//取位常数
 
 //宏函数
 #define GET_SIZE(size) (((size)-1)/BLOCK_SIZE+1)		//求块数
@@ -26,5 +26,12 @@ typedef struct MEMMGR{
 	u64_t block_num;		//内存块数
 }Memmgr;
 
-
 #endif //__ALLOCATE_T_H
+
+/**
+ * 存在的问题
+ * 1.位示图不够灵活，不能够拓展管理内存的
+ * 2.没有将信息结构化
+ * 3.命名没有统一化
+ * 4.
+ */

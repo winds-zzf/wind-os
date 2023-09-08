@@ -6,9 +6,13 @@
 #include"machine_t.h"
 
 void disk_init(Machine *mach){
+	
 	return;
 }
 
-void disk_display(Machine *mach){
+void disk_display(Machine mach){
+	printk("=================================disk info===================================\n");
+	;
+	printk("=================================disk end.===================================\n");
 	return;
 }

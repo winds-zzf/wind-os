@@ -8,16 +8,16 @@
 #include"global.h"
 
 /**
- * 输出CPU信息
- */
-void cpu_display();
-
-/**
  * 初始化CPU
- * Machine:机器信息结构体
+ * mach: 机器信息结构体
  */
 void cpu_init(Machine *mach);
 
+/**
+ * 输出CPU信息
+ * mach: 机器信息结构体
+ */
+void cpu_display(Machine mach);
 
 #endif //__CPU_H
 

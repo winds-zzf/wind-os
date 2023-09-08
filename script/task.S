@@ -1,19 +1,22 @@
-###################################################################
-#		task自动化编译配置文件 Makefile                    #
-#				彭东  	  #
-###################################################################
+#####################################
+#   task自动化编译配置文件 Makefile   #
+#####################################
 
 MAKEFLAGS = -s
+
 KERNELCE_PATH	= ../task/
-HEADFILE_PATH = -I ../include -I ../include/types -I ../include/halinc -I ../include/knlinc -I ../include/libinc -I ../include/drvinc
-CCBUILDPATH	= $(KERNELCE_PATH)
-include krnlbuidcmd.mk
-include krnlobjs.mk
+HEADFILE_PATH = -I ../include \
+			-I ../include/types \
+			-I ../include/halinc \
+			-I ../include/knlinc \
+			-I ../include/libinc \
+			-I ../include/drvinc
+CCBUILD_PATH	= $(KERNELCE_PATH)
 
-.PHONY : all everything  build_kernel
-all: build_kernel
+include buildcmd.mk
+include buildobj.mk
 
-build_kernel:everything
+.PHONY : all
+all : $(BUILD_MK_TASK_OBJS)
 
-everything :$(BUILD_MK_TASK_OBJS)
-include krnlbuidrule.mk
+include buildrule.mk

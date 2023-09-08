@@ -55,11 +55,11 @@ void mmu_init(Machine *mach){
 	return;
 }
 
-void mmu_display(Machine *mach){
+void mmu_display(Machine mach){
 	printk("=================================mmu info====================================\n");
-	printk("mmu page address:0x%x\n",mach->page_addr);
-	printk("mmu page size:%d\n",mach->page_size);
-	printk("virtual memory size:%d\n",mach->viraddr_size);
+	printk("mmu page address:0x%lx\n",mach.page_addr);
+	printk("mmu page size:0x%lx\n",mach.page_size);
+	printk("virtual memory size:0x%lx\n",mach.viraddr_size);
 	printk("=================================mmu end.====================================\n");
 	return;
 }

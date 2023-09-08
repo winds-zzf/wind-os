@@ -10,14 +10,14 @@
 #define LOADER_NAME 	"loader.bin"		//二级引导器模块名
 #define BIOS_NAME 		"bios.bin"		//BIOS中断调用名
 #define KERNEL_NAME 	"kernel.bin"		//内核模块名
-#define FONT_NAME		"font.fnt"		//字体文件名
+#define FONT_NAME		"font.ttf"		//字体文件名
 #define LOGO_NAME		"logo.bmp"		//logo文件名
 
 /* 全局常量定义 */
-#define BITMAP_ADR		0x30000U		//bitmap:位示图地址
 #define STACK_SIZE		0x1000U			//stack:内核栈大小1KB
 #define BIOS_ADR 		0x1000U			//bios.bin:BIOS调用模块地址  
 #define E820S_ADR		0x20064U			//e820s:e820数组地址
+#define BITMAP_ADR		0x30000U			//bitmap:位示图地址
 #define STACK_ADR		0x90000U			//stack:内核栈地址
 //1MB之后的地址
 #define MACHINE_ADR		0x100000U			//machine:机器信息结构体machine地址

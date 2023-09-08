@@ -71,7 +71,7 @@ void read_string(const char_t* dst){
 void write_string(const char_t* str){
 	char_t* addr = NULL;
 	while(*str){
-		addr = (char_t*)(u64_t)(VGA_ADR+OFFSET(cursor.r,cursor.c));	//每次处理一个字符之前定位地址
+		addr = (char_t*)(u64_t)(VGA_ADR+OFFSET(cursor.r,cursor.c)); //每次处理一个字符前定位地址
 		set_cursor(cursor.r,cursor.c);		//设置光标位置
 		switch(*str){	//依次处理每个字符
 		case '\n':

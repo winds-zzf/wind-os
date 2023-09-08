@@ -5,8 +5,8 @@
 #include"global.h"
 #include"cpu_t.h"
 
-static boolean_t check_cpuid();
-static boolean_t check_longmode();
+static bool_t check_cpuid();
+static bool_t check_longmode();
 
 void cpu_init(Machine *mach){
 	//检查是否支持cpuid指令
@@ -25,9 +25,9 @@ void cpu_init(Machine *mach){
 	return;
 }
 
-void cpu_display(Machine *mach){
+void cpu_display(Machine mach){
 	printk("=================================cpu info==================================\n");
-	printk("cpu mode:%d\n",mach->cpu_mode);
+	printk("cpu mode:0x%lx\n",mach.cpu_mode);
 	printk("=================================cpu end.==================================\n");
 	return;
 }
@@ -35,7 +35,7 @@ void cpu_display(Machine *mach){
 /**
  * 通过改写Eflags寄存器的21位，观察其位的变化判断是否支持cpuid指令，为检查CPU是否支持长模式做准备
  */
-boolean_t check_cpuid(){
+static bool_t check_cpuid(){
     int rets = FALSE;
     __asm__ __volatile__(
         "movl $0x80000000, %%eax \n\t"
@@ -58,8 +58,8 @@ boolean_t check_cpuid(){
 /**
  * 检查CPU是否支持长模式，需要借助cpuid指令
  */
-static boolean_t check_longmode() {
-    boolean_t rets = FALSE;
+static bool_t check_longmode() {
+    bool_t rets = FALSE;
     __asm__ __volatile__(
         "movl $0x80000000, %%eax \n\t"
         "cpuid \n\t"

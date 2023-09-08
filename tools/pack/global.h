@@ -11,4 +11,4 @@ typedef int Status;
 typedef unsigned int u32_t;
 typedef unsigned long long u62_t;
 
-#endif
+#endif //__GLOBAL_H

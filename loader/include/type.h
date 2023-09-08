@@ -27,7 +27,7 @@ typedef u64_t eflags_t;           //cpu标志寄存器类型
 typedef u32_t addr_t;             //定义地址类型4B（与指针长度相同）
 typedef u32_t size_t;             //定义大小类型
 
-typedef u64_t boolean_t;          //定义布尔类型
+typedef u64_t bool_t;          //定义布尔类型
 typedef char* str_t;			//定义字符串类型
 typedef char char_t;              //定义字符类型
 

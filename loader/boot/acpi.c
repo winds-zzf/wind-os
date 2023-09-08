@@ -10,7 +10,7 @@ void acpi_init(Machine *mach){
     return;
 }
 
-void acpi_display(Machine *mach){
+void acpi_display(Machine mach){
 	printk("=================================acpi info==================================\n");
 	;
 	printk("=================================acpi end.====================================\n");

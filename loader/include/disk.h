@@ -15,6 +15,6 @@ void disk_init(Machine *mach);
  * 回显磁盘信息
  * mach:机器信息结构体
  */
-void disk_display(Machine *mach);
+void disk_display(Machine mach);
 
 #endif //__DISK_H

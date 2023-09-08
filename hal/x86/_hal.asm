@@ -40,9 +40,9 @@ _start:
     	bts eax, 31
 
 ;开启 CACHE       
-     btr eax,29					; CR0.NW=0
-     btr eax,30					; CR0.CD=0  CACHE
-     mov cr0, eax                  ; IA32_EFER.LMA = 1
+     btr eax,29				; CR0.NW=0
+     btr eax,30				; CR0.CD=0  CACHE
+     mov cr0, eax                 ; IA32_EFER.LMA = 1
 
 ;长模式跳转
      jmp 08:entry64

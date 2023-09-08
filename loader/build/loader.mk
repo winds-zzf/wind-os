@@ -13,12 +13,7 @@ INCLUDE_PATH = ../../share/include/
 include commands.mh
 include objects.mh
 
-.PHONY : all everything  build_kernel
-
-all: build_kernel 
-
-build_kernel:everything
-
-everything : $(GRUB_OBJS) $(LOADER_OBJS) $(BIOS_OBJS)
+.PHONY : all
+all : $(GRUB_OBJS) $(LOADER_OBJS) $(BIOS_OBJS)
 
 include rules.mh

@@ -7,7 +7,7 @@
 
 /* 自旋锁结构体 */
 typedef struct SPINLOCK{
-	;
+	volatile u32_t lock;	//
 }Spinlock;
 
 #endif //__SPINLOCK_T_H

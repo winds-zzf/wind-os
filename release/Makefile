@@ -7,10 +7,10 @@ MAKEFLAGS = -sR
 MAKE = make
 
 # 映像与挂载目录
-IMG_NAME = hd.img
+IMG_NAME = os.img
 IMG_SIZE = 204800
 IMG_BS = 512
-DEVICE = /dev/loop22
+DEVICE = /dev/loop23
 ROOT = hdisk
 
 # GRUB相关文件
@@ -47,7 +47,7 @@ mount:
 
 # 解除挂载
 umount:
-	sudo umount $(DEVICE)	#解除挂载
+	sudo umount $(DEVICE)		#解除挂载
 	sudo rmdir ./$(ROOT)
 	sudo losetup -d $(DEVICE)	# 解除设备循环绑定
 

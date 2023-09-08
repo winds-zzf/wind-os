@@ -19,17 +19,20 @@ addr_t allocate(const size_t size);
  * addr:地址
  * size:大小
  */
-void release(const addr_t addr, const size_t size);
+bool_t release(const addr_t addr, const size_t size);
 
 /**
  * 标记已经被占用的内存区域,相当于这部分是保留的内存
  * addr:地址
  * size:大小
  */
-void reserve(const addr_t addr, const size_t size);
+bool_t reserve(const addr_t addr, const size_t size);
 
 /**
  * 初始化bitmap
+ * maps_addr: 位示图数组地址
+ * mem_addr: 被管理的内存起始地址
+ * size: 被管理内存区域的大小
  */
 void allocate_init(addr_t maps_addr,addr_t mem_addr,size_t size);
 

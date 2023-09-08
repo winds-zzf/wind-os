@@ -8,15 +8,16 @@
 #include"global.h"
 
 /**
- * 输出E820信息
- */
-void e820_display(Machine *mach);
-
-/**
  * 初始化E820
- * Machine:机器信息结构体
+ * mach: 机器信息结构体
  */
 void e820_init(Machine *mach);
 
+
+/**
+ * 输出E820信息
+ * mach: 机器信息结构体
+ */
+void e820_display(Machine mach);
 
 #endif	//__E820_H

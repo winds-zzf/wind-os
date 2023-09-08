@@ -6,15 +6,15 @@
 #define __GRAPH_H
 
 /**
- * 输出GRAPH信息
- */
-void graph_display();
-
-/**
- * 初始化GRAPH
- * Machine:机器信息结构体
+ * 初始化graph
+ * mach: 机器信息结构体
  */
 void graph_init(Machine *mach);
 
+/**
+ * 输出graph信息
+ * mach: 机器信息结构体
+ */
+void graph_display(Machine mach);
 
 #endif	//__GRAPH_H

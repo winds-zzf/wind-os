@@ -23,14 +23,17 @@ typedef signed long s64_t;
 //专用类型
 typedef unsigned int uint_t;	//无符号int
 typedef signed int sint_t;	//有符号int
-typedef u64_t boolean_t;		//使用u64_t以提供最大的兼容性
+typedef u64_t bool_t;		//使用u64_t以提供最大的兼容性
 typedef u64_t addr_t;		//地址类型
 typedef u64_t size_t;		//大小类型
 typedef char char_t;		//字符类型
 typedef u8_t byte_t;		//子节类型
 
 //硬件类型
-typedef u64_t eflags;	//CPU标志寄存器
+typedef u64_t cpuflag_t;		//CPU标志类型
+typedef sint_t drvstus_t;	//驱动状态类型
+typedef sint_t sysstus_t;	//系统状态类型
+typedef u64_t mmstus_t;		//
 
 //宏定义
 #define public			//公有域：default

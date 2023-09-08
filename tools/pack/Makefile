@@ -1,3 +1,7 @@
+########################
+#      映像打包工具      #
+########################
+
 # 编译器
 CC := gcc
 
@@ -17,7 +21,7 @@ SRCS := $(wildcard $(SRC_DIR)*.c)
 OBJS := $(SRCS:.c=.o)
 
 # 可执行文件
-TARGET := pack
+TARGET := packer
 
 # 默认目标
 all: clean $(TARGET)

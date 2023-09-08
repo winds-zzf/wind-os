@@ -118,7 +118,7 @@ Status pack(const char* fname,char fnames[][FNAME_MAX_LEN], int len) {
 		fhds[i].checksum = checksum_file(fp);
 		base += (i == 0)? 0x5000 : fhds[i].size;
 		fclose(fp);
-		printf("%s打包完成:0x%X,%d,0x%X\n",fnames[i],fhds[i].start,fhds[i].size,fhds[i].checksum);
+		printf("打包完成:0x%X\t%d\t0x%X\n",fhds[i].start,fhds[i].size,fhds[i].checksum);
 	}
 	header.checksum = checksum_mem(fhds,sizeof(Handle)*header.size);	//计算文件头结构体数组的校验和
 	

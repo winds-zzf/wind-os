@@ -14,14 +14,17 @@ typedef struct MACHINE{
 	u64_t page_size;		//页表总大小
 	u64_t cpu_mode;		//CPU工作模式
 	u64_t mem_size;		//内存大小
-	u64_t e820_addr;		//e820数组地址
-	u64_t e820_num;		//e820数组元素个数
-	u64_t e820_size;		//e820数组大小
+	u64_t e820s_addr;		//e820数组地址
+	u64_t e820s_num;		//e820数组元素数
+	u64_t e820s_size;		//e820数组大小
 	u64_t font_addr;		//内核字体地址
 	u64_t font_size;		//内核字体大小
-	u64_t kernel_addr;		//内核文件大小
+	u64_t kernel_addr;		//内核文件地址
 	u64_t kernel_size;		//内核文件大小
 	u64_t viraddr_size;		//内核虚拟地址空间大小
+	u64_t pages_addr;		//内存页表首地址
+	u64_t pages_num;		//内存页表数量
+	u64_t pages_size;		//内存页表大小
 	u64_t bitmap_addr;		//位示图位置
 	u64_t bitmap_size;		//位示图大小		
 	u64_t checksum;		//校验和

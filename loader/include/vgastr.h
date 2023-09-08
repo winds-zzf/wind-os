@@ -40,7 +40,7 @@ void scroll_screen();
  * 从键盘读取用户输入，并显示在控制台上
  * dst:接收读取的字符串
  */
-void read_string(const char_t* str);
+void pause();
 
 /**
  * 屏幕输出函数

@@ -21,7 +21,7 @@ typedef unsigned int u32_t;
 
 /* 映像头描述符 */
 typedef struct HEADER {
-	u32_t version;		//版本号
+	u32_t version;			//版本号
 	u32_t start;			//文件句柄起始位置
 	u32_t size;			//文件句柄数量
 	u32_t checksum;		//文件句柄校验和(CRC校验和需要放在结构体尾部，且需要初始化0)
