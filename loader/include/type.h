@@ -36,8 +36,8 @@ typedef char char_t;              //定义字符类型
 #define FALSE 0     //boolean:false 
 #define INLINE static inline      //定义静态内置函数
 
-#define ALIGN(x,b)  (((x)+(b)-1)&~((b)-1))  //x按照a的倍数向上取证对齐
-#define ALIGN_4K(x) ALIGN(x,0x1000)		//4K对齐 
+#define ALIGN(x,b)  (((x)+(b)-1)&~((b)-1))  //x向上x对齐
+#define ALIGN_4K(x) ALIGN(x,0x1000)		//x向上4K对齐
 #define HALT() __asm__ __volatile__("cli; hlt": : :"memory")	//主动死机
 
 

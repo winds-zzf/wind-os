@@ -3,8 +3,8 @@
  * 类型定义
  */
 
-#ifndef __MEMORY_T_H
-#define __MEMORY_T_H
+#ifndef __MEMVIEW_T_H
+#define __MEMVIEW_T_H
 
 
 #define RAM_USABLE		1	//可用内存
@@ -21,13 +21,13 @@ typedef struct E820{
 
 
 /* 内存视图结构定义 */
-typedef struct MEMORY{
+typedef struct MEMVIEW{
 	Spinlock lock;		//保护结构体的自旋锁
 	u32_t type;		//内存地址空间类型
 	u64_t addr;		//内存空间的开始地址
 	u64_t size;		//内存空间的大小
 	u64_t end;		//内存空间的结束地址
-}Memory;
+}MemView;
 
 
-# endif //__MEMORY_T_H
+# endif //__MEMVIEW_T_H

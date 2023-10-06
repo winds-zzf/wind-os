@@ -5,6 +5,13 @@
 #include "globaltype.h"
 #include "globalctrl.h"
 
+/**
+ * · 栈帧：元素大小指的是内核栈中每个栈帧（stack frame）的大小。
+ * 	栈帧是用于存储函数调用的局部变量、返回地址和其他与函数调用相关的信息的一块内存区域。
+ * ·
+ */
+
+
 static void set_intFault(IntFault *ifault,u32_t flag,u32_t sts,uint_t priority,uint_t irq);
 static void init_intFaults();
 
@@ -30,8 +37,8 @@ void interrupt_init(){
 	i8259_init();
 	printk("finish initializing 8259A...\n");
 
-	//5.取消mask，开启中断请求
-	i8259_enabled_line(0);
+	//5.取消mask，开启硬件中断请求
+	//i8259_enabled_line(0);
 	
 	return;
 }
@@ -61,9 +68,27 @@ sysstus_t hal_syscal_allocator(uint_t sys_num,void* msgp){
  * 
  */
 void hal_fault_allocator(uint_t fault_num,void *sframe){
+	/**
+	 * 暂时演示处理缺页中断
+	 */
+	addr_t vadr = NULL;
+	printk("faultnumb is :%d\n",fault_num);
+	if(fault_num==14){
+		//获取缺页地址
+		vadr = (addr_t)read_cr2();
+		printk("fault address:0x%lx\n",vadr);
+		if(krluserspace_accessfailed(vadr)!=0){
+			printk("page fault process error\n");
+			die(0);
+		}
+		//成功则返回
+		return ;
+	}
+
+	die(0);	//如果缺页异常没有被解决，将会重复出现缺页异常
 	//我们的异常处理回调函数也是放在中断异常描述符中的
 	hal_do_hwint(fault_num,sframe);
-	die(0);	//暂时还没办法处理错误，因此错误会一直出现
+	
 	return;
 }
 
@@ -72,8 +97,8 @@ void hal_fault_allocator(uint_t fault_num,void *sframe){
  * 异常处理程序在保存了CPU信息之后，调用hal_do_allocator,并将传入中断号和
  */
 void hal_hwint_allocator(uint_t int_num, void *sframe){
+	i8259_send_eoi();
 	hal_do_hwint(int_num,sframe);
-	i8259_send_eoi();	//完成硬件中断之后需要向i8259发送eoi信号表示结束
 	die(0);
 	return;
 }
@@ -87,6 +112,8 @@ void hal_hwint_allocator(uint_t int_num, void *sframe){
  * 为什么调用中断回调函数之前要加锁？
  */
 static void hal_do_hwint(uint_t int_num,void *sframe){
+	printk("interrupt occupied:%d\n",int_num);
+	
 	IntFault *ifault = NULL;
 	cpuflag_t cpuflag;		//CPU标志寄存器
 	//0.参数检查
@@ -94,7 +121,7 @@ static void hal_do_hwint(uint_t int_num,void *sframe){
 	//1.根据中断号获取中断异常描述符
 	ifault = get_intFault(int_num);
 	//2.中断异常描述符加锁并关中断，
-	hal_spinlock_saveflg_cli(&ifault->lock,&cpuflag);
+	spinlock_lock_saveflg_cli(&ifault->lock,&cpuflag);
 	//3.修改中断异常描述信息
 	ifault->count++;
 	ifault->deep++;
@@ -103,7 +130,7 @@ static void hal_do_hwint(uint_t int_num,void *sframe){
 	//5.修改中断描述符信息
 	ifault->deep--;
 	//6.解锁并恢复中断状态
-	hal_spinunlock_restflg_sti(&ifault->lock,&cpuflag);
+	spinlock_unlock_restflg_sti(&ifault->lock,&cpuflag);
 	
 	return;
 }
@@ -143,7 +170,7 @@ static void run_callback(uint_t ifault_num, void *sframe){
  */
 static void set_intFault(IntFault *ifault,u32_t flag,u32_t status,uint_t priority,uint_t irq){
 	//
-	hal_spinlock_init(&ifault->lock);
+	spinlock_init(&ifault->lock);
 	ifault->flag = flag;
 	ifault->status = status;
 	//
@@ -206,10 +233,10 @@ bool_t add_ihandle(IntFault *ifault,IntHandle *ihandle){
 		return FALSE;
 	}
 	cpuflag_t cpuflag;
-	hal_spinlock_saveflg_cli(&ifault->lock,&cpuflag);
+	spinlock_lock_saveflg_cli(&ifault->lock,&cpuflag);
 	list_add(&ihandle->int_list,&ifault->callback_list);
 	ifault->callback_num++;	//中断回调链表长度加1
 
-	hal_spinunlock_restflg_sti(&ifault->lock,&cpuflag);	
+	spinlock_unlock_restflg_sti(&ifault->lock,&cpuflag);	
 	return TRUE;
 }

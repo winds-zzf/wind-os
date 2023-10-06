@@ -6,22 +6,35 @@ Removed property 0xc0000002 to merge hal.o (not found) and vgastr.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and stdio.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and string.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and utils.o (0x3)
-Removed property 0xc0000002 to merge hal.o (not found) and allocate.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and global.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and platform.o (0x3)
-Removed property 0xc0000002 to merge hal.o (not found) and memory.o (0x3)
-Removed property 0xc0000002 to merge hal.o (not found) and i8259.o (0x3)
-Removed property 0xc0000002 to merge hal.o (not found) and interrupt.o (0x3)
-Removed property 0xc0000002 to merge hal.o (not found) and cpuctrl.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and gdt.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and idt.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and tss.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and i8259.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and interrupt.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and spinlock.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and remmu.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and mmu.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and memview.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and mempage.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and memtable.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and memarea.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and memobject.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and memmgr.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and memapi.o (0x3)
 Removed property 0xc0000002 to merge hal.o (not found) and kernel.o (0x3)
-Removed property 0xc0000002 to merge hal.o (not found) and callback.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and knlglobal.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and kvmarea.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and kvmbox.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and kvmprocess.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and mempool.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and thread.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and schedule.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and waitlist.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and idle.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and sem.o (0x3)
+Removed property 0xc0000002 to merge hal.o (not found) and device.o (0x3)
 
 Discarded input sections
 
@@ -36,19 +49,9 @@ Discarded input sections
  .note.gnu.property
                 0x0000000000000000       0x20 utils.o
  .note.gnu.property
-                0x0000000000000000       0x20 allocate.o
- .note.gnu.property
                 0x0000000000000000       0x20 global.o
  .note.gnu.property
                 0x0000000000000000       0x20 platform.o
- .note.gnu.property
-                0x0000000000000000       0x20 memory.o
- .note.gnu.property
-                0x0000000000000000       0x20 i8259.o
- .note.gnu.property
-                0x0000000000000000       0x20 interrupt.o
- .note.gnu.property
-                0x0000000000000000       0x20 cpuctrl.o
  .note.gnu.property
                 0x0000000000000000       0x20 gdt.o
  .note.gnu.property
@@ -56,17 +59,53 @@ Discarded input sections
  .note.gnu.property
                 0x0000000000000000       0x20 tss.o
  .note.gnu.property
+                0x0000000000000000       0x20 i8259.o
+ .note.gnu.property
+                0x0000000000000000       0x20 interrupt.o
+ .note.gnu.property
+                0x0000000000000000       0x20 spinlock.o
+ .note.gnu.property
+                0x0000000000000000       0x20 remmu.o
+ .note.gnu.property
+                0x0000000000000000       0x20 mmu.o
+ .note.gnu.property
+                0x0000000000000000       0x20 memview.o
+ .note.gnu.property
                 0x0000000000000000       0x20 mempage.o
  .note.gnu.property
                 0x0000000000000000       0x20 memtable.o
  .note.gnu.property
                 0x0000000000000000       0x20 memarea.o
  .note.gnu.property
+                0x0000000000000000       0x20 memobject.o
+ .note.gnu.property
                 0x0000000000000000       0x20 memmgr.o
+ .note.gnu.property
+                0x0000000000000000       0x20 memapi.o
  .note.gnu.property
                 0x0000000000000000       0x20 kernel.o
  .note.gnu.property
-                0x0000000000000000       0x20 callback.o
+                0x0000000000000000       0x20 knlglobal.o
+ .note.gnu.property
+                0x0000000000000000       0x20 kvmarea.o
+ .note.gnu.property
+                0x0000000000000000       0x20 kvmbox.o
+ .note.gnu.property
+                0x0000000000000000       0x20 kvmprocess.o
+ .note.gnu.property
+                0x0000000000000000       0x20 mempool.o
+ .note.gnu.property
+                0x0000000000000000       0x20 thread.o
+ .note.gnu.property
+                0x0000000000000000       0x20 schedule.o
+ .note.gnu.property
+                0x0000000000000000       0x20 waitlist.o
+ .note.gnu.property
+                0x0000000000000000       0x20 idle.o
+ .note.gnu.property
+                0x0000000000000000       0x20 sem.o
+ .note.gnu.property
+                0x0000000000000000       0x20 device.o
 
 Memory Configuration
 
@@ -191,349 +230,518 @@ Linker script and memory map
                 0xffff800002001ced                __end_drive_text = .
                 0xffff800002001ced                __begin_text = .
 
-.text           0xffff800002001cf0     0x4156 load address 0x0000000002001cf0
+.text           0xffff800002001cf0     0xa649 load address 0x0000000002001cf0
  *(.text)
- .text          0xffff800002001cf0      0x1df hal.o
+ .text          0xffff800002001cf0      0x17d hal.o
                 0xffff800002001cf0                hal_entry
- *fill*         0xffff800002001ecf        0x1 
- .text          0xffff800002001ed0      0x503 vgastr.o
-                0xffff800002001ed0                init_cursor
-                0xffff800002001f00                close_cursor
-                0xffff800002001f20                open_cursor
-                0xffff800002001f30                set_cursor
-                0xffff800002001fa0                clear_screen
-                0xffff800002002020                scroll_screen
-                0xffff800002002090                read_string
-                0xffff8000020020a0                write_string
- *fill*         0xffff8000020023d3        0xd 
- .text          0xffff8000020023e0      0x9bb stdio.o
-                0xffff800002002a40                sscank
-                0xffff800002002b00                scank
-                0xffff800002002be0                sprintk
-                0xffff800002002ca0                printk
- *fill*         0xffff800002002d9b        0x5 
- .text          0xffff800002002da0       0xf6 string.o
-                0xffff800002002da0                strcmp
-                0xffff800002002df0                strcpy
-                0xffff800002002e20                strlen
-                0xffff800002002e50                strcat
- *fill*         0xffff800002002e96        0xa 
- .text          0xffff800002002ea0      0x1f9 utils.o
-                0xffff800002002ea0                die
-                0xffff800002002f20                utf_to_unicode
-                0xffff800002002f30                unicode_to_utf8
-                0xffff800002002f40                checksum_crc32
-                0xffff800002002fa0                checksum_crc64
-                0xffff800002003000                error
-                0xffff800002003050                warning
- *fill*         0xffff800002003099        0x7 
- .text          0xffff8000020030a0      0x6d7 allocate.o
-                0xffff8000020032f0                allocate_init
-                0xffff800002003340                allocate_display
-                0xffff800002003520                allocate
-                0xffff800002003620                reserve
-                0xffff8000020036a0                release
- .text          0xffff800002003777        0x0 global.o
- *fill*         0xffff800002003777        0x9 
- .text          0xffff800002003780      0x38f platform.o
-                0xffff800002003780                platform_init
-                0xffff800002003810                platform_display
- *fill*         0xffff800002003b0f        0x1 
- .text          0xffff800002003b10      0x334 memory.o
-                0xffff800002003b10                memory_init
-                0xffff800002003d00                memory_display
- *fill*         0xffff800002003e44        0xc 
- .text          0xffff800002003e50      0x1da i8259.o
-                0xffff800002003e50                i8259_init
-                0xffff800002003eb0                i8259_display
-                0xffff800002003ec0                i8259_send_eoi
-                0xffff800002003ee0                i8259_enabled_line
-                0xffff800002003f40                i8259_disable_line
-                0xffff800002003fa0                i8259_save_disableline
-                0xffff800002004000                i8259_rest_enabledline
- *fill*         0xffff80000200402a        0x6 
- .text          0xffff800002004030      0x425 interrupt.o
-                0xffff800002004150                interrupt_init
-                0xffff8000020042b0                interrupt_display
-                0xffff8000020042c0                hal_syscal_allocator
-                0xffff8000020042d0                hal_fault_allocator
-                0xffff800002004310                hal_hwint_allocator
-                0xffff800002004370                init_intHandle
-                0xffff8000020043b0                add_ihandle
- *fill*         0xffff800002004455        0xb 
- .text          0xffff800002004460      0x12b cpuctrl.o
-                0xffff800002004460                hal_spinlock_init
-                0xffff800002004470                hal_spinlock_lock
-                0xffff800002004490                hal_spinlock_unlock
-                0xffff8000020044a0                hal_spinlock_saveflg_cli
-                0xffff8000020044c0                hal_spinunlock_restflg_sti
-                0xffff8000020044e0                knl_spinlock_init
-                0xffff8000020044f0                knl_spinlock_lock
-                0xffff800002004520                knl_spinlock_unlock
-                0xffff800002004530                knl_spinlock_cli
-                0xffff800002004560                knl_spinunlock_sti
- *fill*         0xffff80000200458b        0x5 
- .text          0xffff800002004590       0xe8 gdt.o
-                0xffff800002004590                gdt_init
- *fill*         0xffff800002004678        0x8 
- .text          0xffff800002004680      0xdb2 idt.o
-                0xffff800002004680                idt_init
- *fill*         0xffff800002005432        0xe 
- .text          0xffff800002005440       0x47 tss.o
-                0xffff800002005440                set_tss
- *fill*         0xffff800002005487        0x9 
- .text          0xffff800002005490      0x324 mempage.o
-                0xffff800002005490                mempage_init
-                0xffff800002005710                mempage_display
- *fill*         0xffff8000020057b4        0xc 
- .text          0xffff8000020057c0      0x139 memtable.o
-                0xffff8000020057c0                memtable_init
-                0xffff8000020058f0                memtable_display
- *fill*         0xffff8000020058f9        0x7 
- .text          0xffff800002005900      0x189 memarea.o
-                0xffff800002005900                memarea_init
-                0xffff800002005a80                memarea_display
- *fill*         0xffff800002005a89        0x7 
- .text          0xffff800002005a90       0xb9 memmgr.o
-                0xffff800002005a90                memmgr_init
-                0xffff800002005b40                memmgr_display
- *fill*         0xffff800002005b49        0x7 
- .text          0xffff800002005b50      0x154 kernel.o
-                0xffff800002005b50                kernel_entry
- *fill*         0xffff800002005ca4        0xc 
- .text          0xffff800002005cb0      0x196 callback.o
-                0xffff800002005cb0                callback_divide0
-                0xffff800002005d80                callback_divide1
-                0xffff800002005e46                __end_text = .
-                0xffff800002005e46                __begin_spinlock_text = .
+ *fill*         0xffff800002001e6d        0x3 
+ .text          0xffff800002001e70      0x503 vgastr.o
+                0xffff800002001e70                init_cursor
+                0xffff800002001ea0                close_cursor
+                0xffff800002001ec0                open_cursor
+                0xffff800002001ed0                set_cursor
+                0xffff800002001f40                clear_screen
+                0xffff800002001fc0                scroll_screen
+                0xffff800002002030                read_string
+                0xffff800002002040                write_string
+ *fill*         0xffff800002002373        0xd 
+ .text          0xffff800002002380      0x9bb stdio.o
+                0xffff8000020029e0                sscank
+                0xffff800002002aa0                scank
+                0xffff800002002b80                sprintk
+                0xffff800002002c40                printk
+ *fill*         0xffff800002002d3b        0x5 
+ .text          0xffff800002002d40       0xf6 string.o
+                0xffff800002002d40                strcmp
+                0xffff800002002d90                strcpy
+                0xffff800002002dc0                strlen
+                0xffff800002002df0                strcat
+ *fill*         0xffff800002002e36        0xa 
+ .text          0xffff800002002e40      0x1f9 utils.o
+                0xffff800002002e40                die
+                0xffff800002002ec0                utf_to_unicode
+                0xffff800002002ed0                unicode_to_utf8
+                0xffff800002002ee0                checksum_crc32
+                0xffff800002002f40                checksum_crc64
+                0xffff800002002fa0                error
+                0xffff800002002ff0                warning
+ .text          0xffff800002003039        0x0 global.o
+ *fill*         0xffff800002003039        0x7 
+ .text          0xffff800002003040      0x407 platform.o
+                0xffff800002003040                platform_init
+                0xffff8000020030b0                platform_display
+ *fill*         0xffff800002003447        0x9 
+ .text          0xffff800002003450       0xe8 gdt.o
+                0xffff800002003450                gdt_init
+ *fill*         0xffff800002003538        0x8 
+ .text          0xffff800002003540      0xdb2 idt.o
+                0xffff800002003540                idt_init
+ *fill*         0xffff8000020042f2        0xe 
+ .text          0xffff800002004300       0x57 tss.o
+                0xffff800002004300                tss_t_init
+                0xffff800002004310                set_tss
+ *fill*         0xffff800002004357        0x9 
+ .text          0xffff800002004360      0x1da i8259.o
+                0xffff800002004360                i8259_init
+                0xffff8000020043c0                i8259_display
+                0xffff8000020043d0                i8259_send_eoi
+                0xffff8000020043f0                i8259_enabled_line
+                0xffff800002004450                i8259_disable_line
+                0xffff8000020044b0                i8259_save_disableline
+                0xffff800002004510                i8259_rest_enabledline
+ *fill*         0xffff80000200453a        0x6 
+ .text          0xffff800002004540      0x505 interrupt.o
+                0xffff800002004680                interrupt_init
+                0xffff8000020047e0                interrupt_display
+                0xffff8000020047f0                hal_syscal_allocator
+                0xffff800002004800                hal_fault_allocator
+                0xffff8000020048f0                hal_hwint_allocator
+                0xffff800002004960                init_intHandle
+                0xffff8000020049a0                add_ihandle
+ *fill*         0xffff800002004a45        0xb 
+ .text          0xffff800002004a50       0xdb spinlock.o
+                0xffff800002004a50                spinlock_init
+                0xffff800002004a60                spinlock_lock
+                0xffff800002004a80                spinlock_unlock
+                0xffff800002004a90                spinlock_lock_cli
+                0xffff800002004ab0                spinlock_lock_saveflg_cli
+                0xffff800002004ae0                spinlock_unlock_sti
+                0xffff800002004b00                spinlock_unlock_restflg_sti
+ *fill*         0xffff800002004b2b        0x5 
+ .text          0xffff800002004b30      0x1ef remmu.o
+                0xffff800002004b30                remmu_init
+                0xffff800002004c40                remmu_display
+ *fill*         0xffff800002004d1f        0x1 
+ .text          0xffff800002004d20     0x12b1 mmu.o
+                0xffff8000020051d0                mmu_transform
+                0xffff800002005a90                mmu_untransform
+                0xffff800002005c80                mmu_clean
+                0xffff800002005d20                mmu_load
+                0xffff800002005da0                mmu_refresh
+                0xffff800002005db0                mmu_init
+                0xffff800002005fa0                mmu_test_main
+ *fill*         0xffff800002005fd1        0xf 
+ .text          0xffff800002005fe0      0x304 memview.o
+                0xffff800002005fe0                memview_init
+                0xffff8000020061a0                memview_display
+ *fill*         0xffff8000020062e4        0xc 
+ .text          0xffff8000020062f0      0x626 mempage.o
+                0xffff8000020063e0                mempage_init
+                0xffff800002006650                mempage_occupy
+                0xffff8000020066d0                mempage_test_main
+                0xffff800002006710                mempage_display
+ *fill*         0xffff800002006916        0xa 
+ .text          0xffff800002006920      0x581 memtable.o
+                0xffff8000020069e0                memtable_init
+                0xffff800002006b40                mount_table
+                0xffff800002006de0                memlists_tostring
+                0xffff800002006e70                memlist_test_main
+ *fill*         0xffff800002006ea1        0xf 
+ .text          0xffff800002006eb0      0x369 memarea.o
+                0xffff800002006eb0                memarea_init
+                0xffff800002007090                mount_pages
+                0xffff800002007210                memarea_test_main
+ *fill*         0xffff800002007219        0x7 
+ .text          0xffff800002007220      0xd81 memobject.o
+                0xffff800002007e10                memobject_init
+                0xffff800002007ea0                mobj_new
+                0xffff800002007ef0                mobj_delete
+                0xffff800002007f40                memobject_test_main
+ *fill*         0xffff800002007fa1        0xf 
+ .text          0xffff800002007fb0      0x1a9 memmgr.o
+                0xffff800002007fb0                memmgr_init
+                0xffff800002008150                memmgr_display
+ *fill*         0xffff800002008159        0x7 
+ .text          0xffff800002008160      0xb00 memapi.o
+                0xffff8000020087d0                get_order
+                0xffff800002008820                mem_divide
+                0xffff8000020088b0                mem_divide_apps
+                0xffff8000020089e0                mem_merge
+                0xffff800002008a30                memapi_test_main
+ .text          0xffff800002008c60       0xb9 kernel.o
+                0xffff800002008c60                kernel_entry
+ .text          0xffff800002008d19        0x0 knlglobal.o
+ *fill*         0xffff800002008d19        0x7 
+ .text          0xffff800002008d20      0x4f1 kvmarea.o
+                0xffff800002008d20                kvmarea_init
+                0xffff800002008d30                kvmArea_init
+                0xffff800002008db0                kvmSpace_init
+                0xffff800002008e50                new_kvmArea
+                0xffff800002008f00                del_kvmArea
+                0xffff800002008f50                new_kvmSpace
+                0xffff800002009020                del_kvmSpace
+                0xffff800002009070                init_userspace_kvmspace
+ *fill*         0xffff800002009211        0xf 
+ .text          0xffff800002009220      0x355 kvmbox.o
+                0xffff800002009220                kvmBox_init
+                0xffff8000020092b0                kvmBoxs_init
+                0xffff800002009350                new_kvmBox
+                0xffff800002009410                del_kvmBox
+                0xffff800002009460                new_kvmBoxs
+                0xffff800002009530                del_kvmBoxs
+ *fill*         0xffff800002009575        0xb 
+ .text          0xffff800002009580     0x10b0 kvmprocess.o
+                0xffff800002009b00                init_krlmm
+                0xffff800002009b90                kvmProcess_init
+                0xffff800002009d00                kvm_new
+                0xffff800002009e10                kvm_delete
+                0xffff800002009e70                krluserspace_accessfailed
+                0xffff80000200a4a0                kvmProcess_test_main
+ .text          0xffff80000200a630      0x399 mempool.o
+                0xffff80000200a630                mempool_new
+                0xffff80000200a7a0                mempool_delete
+                0xffff80000200a940                mempool_init
+                0xffff80000200a9c0                mempool_test_main
+ *fill*         0xffff80000200a9c9        0x7 
+ .text          0xffff80000200a9d0      0x50b thread.o
+                0xffff80000200a9d0                new_thread
+                0xffff80000200ab50                del_thread
+                0xffff80000200ab60                krnl_stack_init
+                0xffff80000200ac00                krlnew_thread
+ *fill*         0xffff80000200aedb        0x5 
+ .text          0xffff80000200aee0      0x7fc schedule.o
+                0xffff80000200af70                schedule_init
+                0xffff80000200b050                first_sched
+                0xffff80000200b090                __to_new_context
+                0xffff80000200b140                krl_schedule
+                0xffff80000200b350                schedule_add
+                0xffff80000200b440                schedule_wait
+                0xffff80000200b570                schedule_up
+ *fill*         0xffff80000200b6dc        0x4 
+ .text          0xffff80000200b6e0      0x266 waitlist.o
+                0xffff80000200b6e0                waitlist_t_init
+                0xffff80000200b740                waitlist_wait
+                0xffff80000200b770                waitlist_up
+                0xffff80000200b7c0                waitlist_allup
+                0xffff80000200b820                waitlist_add
+                0xffff80000200b8b0                waitlist_del
+ *fill*         0xffff80000200b946        0xa 
+ .text          0xffff80000200b950      0x786 idle.o
+                0xffff80000200b950                thread_a_main
+                0xffff80000200bab0                thread_b_main
+                0xffff80000200bc10                thread_c_main
+                0xffff80000200be80                init_abc_thread
+                0xffff80000200bf80                idle_init
+ *fill*         0xffff80000200c0d6        0xa 
+ .text          0xffff80000200c0e0      0x246 sem.o
+                0xffff80000200c0e0                sem_t_init
+                0xffff80000200c140                sem_set
+                0xffff80000200c1b0                sem_down
+                0xffff80000200c260                sem_up
+ *fill*         0xffff80000200c326        0xa 
+ .text          0xffff80000200c330        0x9 device.o
+                0xffff80000200c330                device_init
+                0xffff80000200c339                __end_text = .
+                0xffff80000200c339                __begin_spinlock_text = .
 
-.iplt           0xffff800002005e46        0x0 load address 0x0000000002005e46
- .iplt          0xffff800002005e46        0x0 _hal.o
+.iplt           0xffff80000200c339        0x0 load address 0x000000000200c339
+ .iplt          0xffff80000200c339        0x0 _hal.o
 
-.text.unlikely  0xffff800002005e46       0x20 load address 0x0000000002005e46
+.text.unlikely  0xffff80000200c339       0x20 load address 0x000000000200c339
  .text.unlikely
-                0xffff800002005e46       0x20 interrupt.o
+                0xffff80000200c339       0x20 interrupt.o
 
-.spinlock.text  0xffff800002005e68       0x14 load address 0x0000000002005e68
+.spinlock.text  0xffff80000200c35c       0x14 load address 0x000000000200c35c
  *(.spinlock.text)
  .spinlock.text
-                0xffff800002005e68       0x14 cpuctrl.o
-                0xffff800002005e7c                __end_spinlock_text = .
-                0xffff800002005e7c                __begin_init_text = .
+                0xffff80000200c35c       0x14 spinlock.o
+                0xffff80000200c370                __end_spinlock_text = .
+                0xffff80000200c370                __begin_init_text = .
 
 .init.text
  *(.init.text)
-                0xffff800002005e7c                __end_init_text = .
-                0xffff800002005e7c                __begin_driver_entry_text = .
+                0xffff80000200c370                __end_init_text = .
+                0xffff80000200c370                __begin_driver_entry_text = .
 
 .drventry.text
  *(.drventry.text)
-                0xffff800002005e7c                __end_driver_entry_text = .
-                0xffff800002005e7c                __begin_data = .
+                0xffff80000200c370                __end_driver_entry_text = .
+                0xffff80000200c370                __begin_data = .
 
-.data           0xffff800002005e7c     0xb5c4 load address 0x0000000002005e7c
+.data           0xffff80000200c370     0x8a00 load address 0x000000000200c370
  *(.data)
- .data          0xffff800002005e7c        0x0 hal.o
- *fill*         0xffff800002005e7c        0x4 
- .data          0xffff800002005e80        0x8 vgastr.o
- .data          0xffff800002005e88        0x0 stdio.o
- .data          0xffff800002005e88        0x0 string.o
- .data          0xffff800002005e88        0x0 utils.o
- .data          0xffff800002005e88       0x18 allocate.o
- .data          0xffff800002005ea0        0x0 global.o
- .data          0xffff800002005ea0        0x0 platform.o
- .data          0xffff800002005ea0        0x0 memory.o
- .data          0xffff800002005ea0        0x0 i8259.o
- .data          0xffff800002005ea0        0x0 interrupt.o
- .data          0xffff800002005ea0        0x0 cpuctrl.o
- .data          0xffff800002005ea0        0x0 gdt.o
- .data          0xffff800002005ea0        0x0 idt.o
- .data          0xffff800002005ea0        0x0 tss.o
- .data          0xffff800002005ea0        0x0 mempage.o
- .data          0xffff800002005ea0        0x0 memtable.o
- .data          0xffff800002005ea0        0x0 memarea.o
- .data          0xffff800002005ea0        0x0 memmgr.o
- .data          0xffff800002005ea0        0x0 kernel.o
- .data          0xffff800002005ea0        0x0 callback.o
+ .data          0xffff80000200c370        0x0 hal.o
+ .data          0xffff80000200c370        0x8 vgastr.o
+ .data          0xffff80000200c378        0x0 stdio.o
+ .data          0xffff80000200c378        0x0 string.o
+ .data          0xffff80000200c378        0x0 utils.o
+ .data          0xffff80000200c378        0x0 global.o
+ .data          0xffff80000200c378        0x0 platform.o
+ .data          0xffff80000200c378        0x0 gdt.o
+ .data          0xffff80000200c378        0x0 idt.o
+ .data          0xffff80000200c378        0x0 tss.o
+ .data          0xffff80000200c378        0x0 i8259.o
+ .data          0xffff80000200c378        0x0 interrupt.o
+ .data          0xffff80000200c378        0x0 spinlock.o
+ .data          0xffff80000200c378        0x0 remmu.o
+ .data          0xffff80000200c378        0x0 mmu.o
+ .data          0xffff80000200c378        0x0 memview.o
+ .data          0xffff80000200c378        0x0 mempage.o
+ .data          0xffff80000200c378        0x0 memtable.o
+ .data          0xffff80000200c378        0x0 memarea.o
+ .data          0xffff80000200c378        0x0 memobject.o
+ .data          0xffff80000200c378        0x0 memmgr.o
+ .data          0xffff80000200c378        0x0 memapi.o
+ .data          0xffff80000200c378        0x0 kernel.o
+ .data          0xffff80000200c378        0x0 knlglobal.o
+ .data          0xffff80000200c378        0x0 kvmarea.o
+ .data          0xffff80000200c378        0x0 kvmbox.o
+ .data          0xffff80000200c378        0x0 kvmprocess.o
+ .data          0xffff80000200c378        0x0 mempool.o
+ .data          0xffff80000200c378        0x0 thread.o
+ .data          0xffff80000200c378        0x0 schedule.o
+ .data          0xffff80000200c378        0x0 waitlist.o
+ .data          0xffff80000200c378        0x0 idle.o
+ .data          0xffff80000200c378        0x0 sem.o
+ .data          0xffff80000200c378        0x0 device.o
  *(.bss)
- .bss           0xffff800002005ea0        0x0 hal.o
- .bss           0xffff800002005ea0        0x0 vgastr.o
- .bss           0xffff800002005ea0        0x0 stdio.o
- .bss           0xffff800002005ea0        0x0 string.o
- .bss           0xffff800002005ea0        0x0 utils.o
- .bss           0xffff800002005ea0        0x0 allocate.o
- .bss           0xffff800002005ea0     0xb5a0 global.o
-                0xffff800002005ea0                memAreas
-                0xffff80000200a2a0                x64tss
-                0xffff80000200a320                intFaults
-                0xffff800002010320                gdtr
-                0xffff800002010340                gdt
-                0xffff800002010390                idtr
-                0xffff8000020103a0                idt
-                0xffff8000020113a0                machine
- .bss           0xffff800002011440        0x0 platform.o
- .bss           0xffff800002011440        0x0 memory.o
- .bss           0xffff800002011440        0x0 i8259.o
- .bss           0xffff800002011440        0x0 interrupt.o
- .bss           0xffff800002011440        0x0 cpuctrl.o
- .bss           0xffff800002011440        0x0 gdt.o
- .bss           0xffff800002011440        0x0 idt.o
- .bss           0xffff800002011440        0x0 tss.o
- .bss           0xffff800002011440        0x0 mempage.o
- .bss           0xffff800002011440        0x0 memtable.o
- .bss           0xffff800002011440        0x0 memarea.o
- .bss           0xffff800002011440        0x0 memmgr.o
- .bss           0xffff800002011440        0x0 kernel.o
- .bss           0xffff800002011440        0x0 callback.o
-                0xffff800002011440                __end_data = .
-                0xffff800002011440                __begin_rodata = .
+ .bss           0xffff80000200c378        0x0 hal.o
+ .bss           0xffff80000200c378        0x0 vgastr.o
+ .bss           0xffff80000200c378        0x0 stdio.o
+ .bss           0xffff80000200c378        0x0 string.o
+ .bss           0xffff80000200c378        0x0 utils.o
+ *fill*         0xffff80000200c378        0x8 
+ .bss           0xffff80000200c380     0x7c60 global.o
+                0xffff80000200c380                memmgr
+                0xffff80000200ce20                x64tss
+                0xffff80000200cea0                intFaults
+                0xffff800002012ea0                gdtr
+                0xffff800002012ec0                gdt
+                0xffff800002012f10                idtr
+                0xffff800002012f20                idt
+                0xffff800002013f20                machine
+ .bss           0xffff800002013fe0        0x0 platform.o
+ .bss           0xffff800002013fe0        0x0 gdt.o
+ .bss           0xffff800002013fe0        0x0 idt.o
+ .bss           0xffff800002013fe0        0x0 tss.o
+ .bss           0xffff800002013fe0        0x0 i8259.o
+ .bss           0xffff800002013fe0        0x0 interrupt.o
+ .bss           0xffff800002013fe0        0x0 spinlock.o
+ .bss           0xffff800002013fe0        0x0 remmu.o
+ .bss           0xffff800002013fe0        0x0 mmu.o
+ .bss           0xffff800002013fe0        0x0 memview.o
+ .bss           0xffff800002013fe0        0x0 mempage.o
+ .bss           0xffff800002013fe0        0x0 memtable.o
+ .bss           0xffff800002013fe0        0x0 memarea.o
+ .bss           0xffff800002013fe0        0x0 memobject.o
+ .bss           0xffff800002013fe0        0x0 memmgr.o
+ .bss           0xffff800002013fe0        0x0 memapi.o
+ .bss           0xffff800002013fe0        0x0 kernel.o
+ .bss           0xffff800002013fe0      0xd50 knlglobal.o
+                0xffff800002013fe0                devtable
+                0xffff800002014000                mempool
+                0xffff800002014360                scheclass
+                0xffff800002014bc0                kvmProcess
+ .bss           0xffff800002014d30        0x0 kvmarea.o
+ .bss           0xffff800002014d30        0x0 kvmbox.o
+ .bss           0xffff800002014d30        0x0 kvmprocess.o
+ .bss           0xffff800002014d30        0x0 mempool.o
+ .bss           0xffff800002014d30        0x0 thread.o
+ .bss           0xffff800002014d30        0x0 schedule.o
+ .bss           0xffff800002014d30        0x0 waitlist.o
+ *fill*         0xffff800002014d30       0x10 
+ .bss           0xffff800002014d40       0x30 idle.o
+ .bss           0xffff800002014d70        0x0 sem.o
+ .bss           0xffff800002014d70        0x0 device.o
+                0xffff800002014d70                __end_data = .
+                0xffff800002014d70                __begin_rodata = .
 
-.got            0xffff800002011440      0x1f8 load address 0x0000000002011440
- .got           0xffff800002011440      0x1f8 _hal.o
+.got            0xffff800002014d70      0x200 load address 0x0000000002014d70
+ .got           0xffff800002014d70      0x200 _hal.o
 
-.got.plt        0xffff800002011638       0x18 load address 0x0000000002011638
- .got.plt       0xffff800002011638       0x18 _hal.o
-                0xffff800002011638                _GLOBAL_OFFSET_TABLE_
+.got.plt        0xffff800002014f70       0x18 load address 0x0000000002014f70
+ .got.plt       0xffff800002014f70       0x18 _hal.o
+                0xffff800002014f70                _GLOBAL_OFFSET_TABLE_
 
-.igot.plt       0xffff800002011650        0x0 load address 0x0000000002011650
- .igot.plt      0xffff800002011650        0x0 _hal.o
+.igot.plt       0xffff800002014f88        0x0 load address 0x0000000002014f88
+ .igot.plt      0xffff800002014f88        0x0 _hal.o
 
-.rodata         0xffff800002011650      0x5f4 load address 0x0000000002011650
+.rodata         0xffff800002014f88      0x9fa load address 0x0000000002014f88
  *(.rodata)
- .rodata        0xffff800002011650       0x30 vgastr.o
- .rodata        0xffff800002011680       0xb8 stdio.o
- .rodata        0xffff800002011738       0x30 utils.o
+ .rodata        0xffff800002014f88       0x30 vgastr.o
+ .rodata        0xffff800002014fb8       0xb8 stdio.o
+ .rodata        0xffff800002015070       0x30 utils.o
  *(.rodata.*)
  .rodata.str1.8
-                0xffff800002011768      0x10f hal.o
+                0xffff8000020150a0      0x10f hal.o
  .rodata.str1.1
-                0xffff800002011877       0x11 stdio.o
+                0xffff8000020151af       0x11 stdio.o
  .rodata.str1.1
-                0xffff800002011888       0x2c allocate.o
-                                         0x3f (size before relaxing)
+                0xffff8000020151c0      0x1a4 platform.o
  .rodata.str1.1
-                0xffff8000020118b4      0x162 platform.o
- *fill*         0xffff800002011a16        0x2 
+                0xffff800002015364       0xae interrupt.o
+ *fill*         0xffff800002015412        0x6 
  .rodata.str1.8
-                0xffff800002011a18       0x22 memory.o
+                0xffff800002015418       0x21 interrupt.o
+ *fill*         0xffff800002015439        0x7 
+ .rodata.str1.8
+                0xffff800002015440       0x9f remmu.o
  .rodata.str1.1
-                0xffff800002011a3a       0x5a memory.o
+                0xffff8000020154df       0x48 remmu.o
+ .rodata.str1.1
+                0xffff800002015527       0xb6 mmu.o
+ .rodata.str1.1
+                0xffff8000020155dd       0x47 memview.o
                                          0x61 (size before relaxing)
  .rodata.str1.1
-                0xffff800002011a94       0x56 interrupt.o
- *fill*         0xffff800002011aea        0x6 
- .rodata.str1.8
-                0xffff800002011af0       0x21 interrupt.o
+                0xffff800002015624       0x5a mempage.o
+                                         0x7a (size before relaxing)
  .rodata.str1.1
-                0xffff800002011b11       0x29 mempage.o
-                                         0x3b (size before relaxing)
- *fill*         0xffff800002011b3a        0x6 
+                0xffff80000201567e        0xd memtable.o
+                                          0xf (size before relaxing)
+ *fill*         0xffff80000201568b        0x5 
  .rodata.str1.8
-                0xffff800002011b40       0x4d memmgr.o
- *fill*         0xffff800002011b8d        0x3 
- .rodata.str1.8
-                0xffff800002011b90       0x22 kernel.o
+                0xffff800002015690       0x1f memtable.o
  .rodata.str1.1
-                0xffff800002011bb2       0x29 kernel.o
-                                          0x4 (size before relaxing)
- *fill*         0xffff800002011bb2        0x6 
- .rodata.str1.8
-                0xffff800002011bb8       0x5f callback.o
+                0xffff8000020156af       0x51 memobject.o
+                                         0x58 (size before relaxing)
  .rodata.str1.1
-                0xffff800002011c17       0x2d callback.o
-                0xffff800002011c44                __end_rodata = .
-                0xffff800002011c44                __begin_kstrtab = .
+                0xffff800002015700       0x18 memapi.o
+ .rodata.str1.8
+                0xffff800002015718       0x22 kernel.o
+ .rodata.str1.1
+                0xffff80000201573a      0x16a kvmprocess.o
+                                        0x171 (size before relaxing)
+ .rodata.str1.1
+                0xffff8000020158a4       0x65 schedule.o
+ *fill*         0xffff800002015909        0x7 
+ .rodata.str1.8
+                0xffff800002015910       0x22 schedule.o
+ .rodata.str1.1
+                0xffff800002015932       0x3f idle.o
+                                         0x43 (size before relaxing)
+ .rodata.str1.1
+                0xffff800002015971       0x11 sem.o
+                0xffff800002015982                __end_rodata = .
+                0xffff800002015982                __begin_kstrtab = .
 
-.eh_frame       0xffff800002011c48      0xb28 load address 0x0000000002011c48
- .eh_frame      0xffff800002011c48       0x48 hal.o
- .eh_frame      0xffff800002011c90       0xe0 vgastr.o
+.eh_frame       0xffff800002015988     0x1c7c load address 0x0000000002015988
+ .eh_frame      0xffff800002015988       0x48 hal.o
+ .eh_frame      0xffff8000020159d0       0xe0 vgastr.o
                                          0xf8 (size before relaxing)
- .eh_frame      0xffff800002011d70       0xc8 stdio.o
+ .eh_frame      0xffff800002015ab0       0xc8 stdio.o
                                          0xe0 (size before relaxing)
- .eh_frame      0xffff800002011e38       0x50 string.o
+ .eh_frame      0xffff800002015b78       0x50 string.o
                                          0x68 (size before relaxing)
- .eh_frame      0xffff800002011e88       0xa8 utils.o
+ .eh_frame      0xffff800002015bc8       0xa8 utils.o
                                          0xc0 (size before relaxing)
- .eh_frame      0xffff800002011f30      0x1a0 allocate.o
-                                        0x1b8 (size before relaxing)
- .eh_frame      0xffff8000020120d0       0x48 platform.o
-                                         0x60 (size before relaxing)
- .eh_frame      0xffff800002012118       0xa0 memory.o
-                                         0xb8 (size before relaxing)
- .eh_frame      0xffff8000020121b8       0xa8 i8259.o
-                                         0xc0 (size before relaxing)
- .eh_frame      0xffff800002012260      0x190 interrupt.o
-                                        0x1a8 (size before relaxing)
- .eh_frame      0xffff8000020123f0       0xc8 cpuctrl.o
-                                         0xe0 (size before relaxing)
- .eh_frame      0xffff8000020124b8       0x30 gdt.o
+ .eh_frame      0xffff800002015c70       0x40 platform.o
+                                         0x58 (size before relaxing)
+ .eh_frame      0xffff800002015cb0       0x30 gdt.o
                                          0x48 (size before relaxing)
- .eh_frame      0xffff8000020124e8       0x28 idt.o
+ .eh_frame      0xffff800002015ce0       0x28 idt.o
                                          0x40 (size before relaxing)
- .eh_frame      0xffff800002012510       0x18 tss.o
+ .eh_frame      0xffff800002015d08       0x28 tss.o
+                                         0x40 (size before relaxing)
+ .eh_frame      0xffff800002015d30       0xa8 i8259.o
+                                         0xc0 (size before relaxing)
+ .eh_frame      0xffff800002015dd8      0x1f0 interrupt.o
+                                        0x208 (size before relaxing)
+ .eh_frame      0xffff800002015fc8       0x90 spinlock.o
+                                         0xa8 (size before relaxing)
+ .eh_frame      0xffff800002016058       0x48 remmu.o
+                                         0x60 (size before relaxing)
+ .eh_frame      0xffff8000020160a0      0x248 mmu.o
+                                        0x260 (size before relaxing)
+ .eh_frame      0xffff8000020162e8       0xa8 memview.o
+                                         0xc0 (size before relaxing)
+ .eh_frame      0xffff800002016390       0xf8 mempage.o
+                                        0x110 (size before relaxing)
+ .eh_frame      0xffff800002016488      0x130 memtable.o
+                                        0x148 (size before relaxing)
+ .eh_frame      0xffff8000020165b8       0xb8 memarea.o
+                                         0xd0 (size before relaxing)
+ .eh_frame      0xffff800002016670      0x180 memobject.o
+                                        0x198 (size before relaxing)
+ .eh_frame      0xffff8000020167f0       0x48 memmgr.o
+                                         0x60 (size before relaxing)
+ .eh_frame      0xffff800002016838      0x1d8 memapi.o
+                                        0x1f0 (size before relaxing)
+ .eh_frame      0xffff800002016a10       0x20 kernel.o
+                                         0x38 (size before relaxing)
+ .eh_frame      0xffff800002016a30      0x160 kvmarea.o
+                                        0x178 (size before relaxing)
+ .eh_frame      0xffff800002016b90       0xf8 kvmbox.o
+                                        0x110 (size before relaxing)
+ .eh_frame      0xffff800002016c88      0x230 kvmprocess.o
+                                        0x248 (size before relaxing)
+ .eh_frame      0xffff800002016eb8      0x150 mempool.o
+                                        0x168 (size before relaxing)
+ .eh_frame      0xffff800002017008       0xa8 thread.o
+                                         0xc0 (size before relaxing)
+ .eh_frame      0xffff8000020170b0      0x208 schedule.o
+                                        0x220 (size before relaxing)
+ .eh_frame      0xffff8000020172b8      0x110 waitlist.o
+                                        0x128 (size before relaxing)
+ .eh_frame      0xffff8000020173c8      0x130 idle.o
+                                        0x148 (size before relaxing)
+ .eh_frame      0xffff8000020174f8       0xf8 sem.o
+                                        0x110 (size before relaxing)
+ .eh_frame      0xffff8000020175f0       0x14 device.o
                                          0x30 (size before relaxing)
- .eh_frame      0xffff800002012528       0x80 mempage.o
-                                         0x98 (size before relaxing)
- .eh_frame      0xffff8000020125a8       0x68 memtable.o
-                                         0x80 (size before relaxing)
- .eh_frame      0xffff800002012610       0x68 memarea.o
-                                         0x80 (size before relaxing)
- .eh_frame      0xffff800002012678       0x30 memmgr.o
-                                         0x48 (size before relaxing)
- .eh_frame      0xffff8000020126a8       0x50 kernel.o
-                                         0x68 (size before relaxing)
- .eh_frame      0xffff8000020126f8       0x78 callback.o
-                                         0x90 (size before relaxing)
 
-.rela.dyn       0xffff800002012770        0x0 load address 0x0000000002012770
- .rela.got      0xffff800002012770        0x0 _hal.o
- .rela.iplt     0xffff800002012770        0x0 _hal.o
+.rela.dyn       0xffff800002017608        0x0 load address 0x0000000002017608
+ .rela.got      0xffff800002017608        0x0 _hal.o
+ .rela.iplt     0xffff800002017608        0x0 _hal.o
 
 .kstrtab
  *(.kstrtab)
-                0xffff800002012770                __end_kstrtab = .
-                0xffff800002012770                __begin_apboot_text = .
+                0xffff800002017604                __end_kstrtab = .
+                0xffff800002017604                __begin_apboot_text = .
 
 .apboot.text
  *(.apboot.text)
-                0xffff800002012770                __end_apboot_text = .
-                0xffff800002012770                __begin_apboot_data = .
+                0xffff800002017604                __end_apboot_text = .
+                0xffff800002017604                __begin_apboot_data = .
 
 .apboot.data
  *(.apboot.data)
-                0xffff800002012770                __end_apboot_data = .
-                0xffff800002012770                __begin_kmodsattrb_data = .
+                0xffff800002017604                __end_apboot_data = .
+                0xffff800002017604                __begin_kmodsattrb_data = .
 
 .kmodsattrbdata
  *(.kmodsattrbdata)
-                0xffff800002012770                __end_kmodsattrb_data = .
+                0xffff800002017604                __end_kmodsattrb_data = .
 
 .krnl.krnend
  *(.krnl.krnend)
-                0xffff800002012770                __end_kernel = .
+                0xffff800002017604                __end_kernel = .
 LOAD _hal.o
 LOAD hal.o
 LOAD vgastr.o
 LOAD stdio.o
 LOAD string.o
 LOAD utils.o
-LOAD allocate.o
 LOAD global.o
 LOAD platform.o
-LOAD memory.o
-LOAD i8259.o
 LOAD _isr.o
-LOAD interrupt.o
-LOAD cpuctrl.o
 LOAD gdt.o
 LOAD idt.o
 LOAD tss.o
+LOAD i8259.o
+LOAD interrupt.o
+LOAD spinlock.o
+LOAD remmu.o
+LOAD mmu.o
+LOAD memview.o
 LOAD mempage.o
 LOAD memtable.o
 LOAD memarea.o
+LOAD memobject.o
 LOAD memmgr.o
+LOAD memapi.o
 LOAD kernel.o
-LOAD callback.o
+LOAD knlglobal.o
+LOAD kvmarea.o
+LOAD kvmbox.o
+LOAD kvmprocess.o
+LOAD mempool.o
+LOAD thread.o
+LOAD schedule.o
+LOAD waitlist.o
+LOAD idle.o
+LOAD sem.o
+LOAD device.o
 OUTPUT(kernel.elf elf64-x86-64)
 
 .note.GNU-stack
@@ -549,19 +757,9 @@ OUTPUT(kernel.elf elf64-x86-64)
  .note.GNU-stack
                 0x0000000000000000        0x0 utils.o
  .note.GNU-stack
-                0x0000000000000000        0x0 allocate.o
- .note.GNU-stack
                 0x0000000000000000        0x0 global.o
  .note.GNU-stack
                 0x0000000000000000        0x0 platform.o
- .note.GNU-stack
-                0x0000000000000000        0x0 memory.o
- .note.GNU-stack
-                0x0000000000000000        0x0 i8259.o
- .note.GNU-stack
-                0x0000000000000000        0x0 interrupt.o
- .note.GNU-stack
-                0x0000000000000000        0x0 cpuctrl.o
  .note.GNU-stack
                 0x0000000000000000        0x0 gdt.o
  .note.GNU-stack
@@ -569,14 +767,50 @@ OUTPUT(kernel.elf elf64-x86-64)
  .note.GNU-stack
                 0x0000000000000000        0x0 tss.o
  .note.GNU-stack
+                0x0000000000000000        0x0 i8259.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 interrupt.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 spinlock.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 remmu.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 mmu.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 memview.o
+ .note.GNU-stack
                 0x0000000000000000        0x0 mempage.o
  .note.GNU-stack
                 0x0000000000000000        0x0 memtable.o
  .note.GNU-stack
                 0x0000000000000000        0x0 memarea.o
  .note.GNU-stack
+                0x0000000000000000        0x0 memobject.o
+ .note.GNU-stack
                 0x0000000000000000        0x0 memmgr.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 memapi.o
  .note.GNU-stack
                 0x0000000000000000        0x0 kernel.o
  .note.GNU-stack
-                0x0000000000000000        0x0 callback.o
+                0x0000000000000000        0x0 knlglobal.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 kvmarea.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 kvmbox.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 kvmprocess.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 mempool.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 thread.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 schedule.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 waitlist.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 idle.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 sem.o
+ .note.GNU-stack
+                0x0000000000000000        0x0 device.o

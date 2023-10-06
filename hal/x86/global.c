@@ -19,8 +19,8 @@ Gdtr gdtr[CPUCORE_MAX];		//定义全局段描述符表寄存器
 
 IntFault intFaults[INTMAX];	//定义中断异常描述符表
 
-Tss x64tss[CPUCORE_MAX];		//任务段Task Segment
+tss_t x64tss[CPUCORE_MAX];		//任务段Task Segment
 
 
-//内存管理基础
-MemArea memAreas[MEMAREA_MAX];
+//内存管理基础结构
+Memmgr memmgr;

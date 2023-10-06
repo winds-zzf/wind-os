@@ -3,26 +3,36 @@
  */
 #include"global.h"
 
+static void loader_init();
 
 /**
- * 二级引导器入口函数
+ * entry of loader
  */
 void loader_entry(){
 	init_cursor();			//模块切换重新初始化文本模式
 	clear_screen(0x0f00);
 	printk("=================================loader start===============================\n");
 
-	//加载位示图
-	allocate_init(BITMAP_ADR,0x100000,0x8000000);
-
-	//创建机器信息结构体并初始化
-	Machine *machine = (Machine*)MACHINE_ADR;	//机器信息结构体指针
-	init_machine(machine);
-	display_machine(*machine);
+	loader_init();
 	
 	printk("=================================loader end.================================\n");
 	pause("");
 	return;
+}
+
+/**
+ * initializing loader
+ */
+static void loader_init(){
+	
+	//创建机器信息结构体并初始化
+	Machine *machine = (Machine*)MACHINE_ADR;	//机器信息结构体指针
+	//收集机器信息
+	machine_init(machine);
+	//输出机器信息
+	machine_display(*machine);
+
+	return ;
 }
 
 void pause(){

@@ -14,39 +14,34 @@ static void hal_init();
 void hal_entry(){
 	init_cursor();
 	clear_screen(0x0f00);
-	printk("===================================hal start==================================\n");
 	
+	printk("===================================hal start==================================\n");	
 	//初始化内核抽象层
 	hal_init();
-	platform_display();
-
-	die(0);
-	//进入内核层
-	kernel_entry();
 	
 	printk("===================================hal end.==================================\n");
-	die(0x3F0);
+    	
+    	//进入内核层
+	kernel_entry();
     	return;
 }
 
-static void hal_init(){
-	//初始化简单内存管理（由于平坦映射，这里的虚拟地址值就等于物理地址值）
-	allocate_init(MAP_RV(0x30000),MAP_RV(0x100000),0x8000000);
+static void hal_init(){	
 	
-	//1.初始化平台
+	//1.initializing platform
 	platform_init(&machine);		//直接使用已经定义的全局变量
 	platform_display(&machine);	//显示	
 	printk("finish initializing platform...\n");
-
-	//2.初始化内存
-	memory_init(&machine);
-	memory_display(&machine);
-	printk("finish initializing memory...\n");
 	
-	//3.初始化中断
+	//2.initializing interrupt
 	interrupt_init(&machine);
 	interrupt_display(&machine);
 	printk("finish initializing interrupt...\n");
+
+	//3.initializing memmgr
+	memmgr_init(&machine);
+	memmgr_display(&machine);
+	printk("finish initializing memory...\n");
 	
 	return;
 }

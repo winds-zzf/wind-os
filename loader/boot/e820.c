@@ -16,22 +16,21 @@ void e820_init(Machine* mach){
 	//获取e820数组(数据和大小)
 	get_e820s(&e820s,&num);	
 	if(0==num){
-		printk("there is no e820 array in your computer!\n");
+		printk("there is no e820s array in your computer!\n");
 	}
+
+	//copy the e820s from the mask address to E820S_ADR
+	memcpy((addr_t)e820s,num*sizeof(E820),E820S_ADR);
 
 	//检查指定内存地址区域是否可用(内存地址从1MB开始大小为128MB的区域是USABLE)，0x0~0xfffff这1MB内存段一般不使用
 	if(NULL == check_memsize(e820s,num,0x100000U,0x8000000U)){	//找不到满足条件的内存段
 		printk("Your computer is low on memory,the usable memory isn't less than 128MB\n");
 	}
-
-	//复制e820到指定位置
-	addr_t dst = allocate(num*sizeof(E820));		//内存分配
-	memcpy((addr_t)e820s,num*sizeof(E820),dst);	//拷贝到新分配位置
 	
 	//填写机器信息
-	mach->e820s_addr = (u64_t)dst;	//32位的指针需要先转换为32位的常数，再转换为64位的数
-	mach->e820s_num = num;	//e820数组元素个数
-	mach->e820s_size = num*sizeof(E820);	//e820s数组大小
+	mach->e820s_addr = E820S_ADR;				//32位的指针需要先转换为32位的常数，再转换为64位的数
+	mach->e820s_num = num;					//e820s数组元素个数
+	mach->e820s_size = num*sizeof(E820);		//e820s数组大小
 	mach->mem_size = get_memsize(e820s,num);	//可用内存总大小
 	return ;
 }

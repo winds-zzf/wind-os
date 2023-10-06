@@ -17,23 +17,17 @@ static void font_display(Machine mach);
 static void logo_init(Machine* mach);
 static void logo_display(Machine mach);
 
-static void bitmap_init(Machine* mach);
-static void bitmap_display(Machine mach);
-
 /**
  * 收集机器信息
  */
-void init_machine(Machine *mach){
-	reserve(MACHINE_ADR,sizeof(Machine));		//占用指定位置的内存
-	memset(MACHINE_ADR,0,sizeof(Machine));		//清空Machine变量内存
+void machine_init(Machine *mach){
+	memset((addr_t)mach,0,sizeof(Machine));		//清空Machine变量内存
 	printk("finishing initializing Machine...\n");
 	pause();
 
-	//初始化简单内存分配
-	bitmap_init(mach);
-	printk("finishing initializing bitmap...\n");
-	bitmap_display(*mach);
-	pause();
+	//记录内核映像文件
+	mach->image_addr = IMAGE_ADR;
+	mach->image_size = get_image_size(IMAGE_ADR);
 	
 	//初始化CPU
 	cpu_init(mach);
@@ -81,8 +75,8 @@ void init_machine(Machine *mach){
 	mmu_init(mach);
 	printk("finishing initializing mmu...\n");
 	mmu_display(*mach);
-	pause();
 	
+	pause();
 	//初始化图形模式
 	graph_init(mach);
 	printk("finishing initializing graph...\n");
@@ -98,34 +92,37 @@ void init_machine(Machine *mach){
 	return;
 }
 
-void display_machine(Machine mach){
+void machine_display(Machine mach){
 	printk("stack addr:0x%lx\n",mach.stack_addr);
 	printk("stack size:0x%lx\n",mach.stack_size);
-	printk("page addr:0x%lx\n",mach.page_addr);
-	printk("page size:0x%lx\n",mach.page_size);		
+	printk("mmu addr:0x%lx\n",mach.mmu_addr);
+	printk("mmu size:0x%lx\n",mach.mmu_size);		
 	printk("cpu mode:0x%lx\n",mach.cpu_mode);
 	printk("mem size:0x%lx\n",mach.mem_size);
-	printk("e820 addr:0x%lx\n",mach.e820s_addr);
-	printk("e820 num:0x%lx\n",mach.e820s_num);	
-	printk("e820 size:0x%lx\n",mach.e820s_size);
+	printk("e820s addr:0x%lx\n",mach.e820s_addr);
+	printk("e820s num:0x%lx\n",mach.e820s_num);	
+	printk("e820s size:0x%lx\n",mach.e820s_size);
+	printk("image addr:0x%lx\n",mach.image_addr);
+	printk("image size:0x%lx\n",mach.image_size);	
 	printk("font addr:0x%lx\n",mach.font_addr);
 	printk("font size:0x%lx\n",mach.font_size);
 	printk("kernel addr:0x%lx\n",mach.kernel_addr);
 	printk("kernel size:0x%lx\n",mach.kernel_size);
 	printk("viraddr size:0x%lx\n",mach.viraddr_size);	
-	printk("bitmap addr:0x%lx\n",mach.bitmap_addr);
-	printk("bitmap size:0x%lx\n",mach.bitmap_size);	
 	printk("checksum:0x%lx\n",mach.checksum);	
 	return;
 }
 
 /**
  * 初始化内核栈
+ * 编译器在编译过程会生成堆栈的操作，但是并不会在目标模块中包含栈空间，
+ * 应用程序的栈是由操作系统分配的，内核程序的栈就要我们加载内核时手动分配了。
  */
 static void stack_init(Machine* mach){
 	//填写机器信息
 	mach->stack_addr = (u64_t)STACK_ADR;
 	mach->stack_size = (u64_t)STACK_SIZE;	
+	
 	return;
 }
 
@@ -137,6 +134,7 @@ static void stack_display(Machine mach){
 	printk("stack addr:0x%lx\n",mach.stack_addr);
 	printk("stack size:0x%lx\n",mach.stack_size);
 	printk("=================================stack end.===================================\n");
+	
 	return;
 }
 
@@ -148,6 +146,9 @@ static void stack_display(Machine mach){
 static void kernel_init(Machine* mach){
 	addr_t addr = NULL;
 	size_t size = 0;
+	
+	mach->next_addr = KERNEL_ADR;	//crucial:set the kernel.bin's address as next_addr's initial address
+	
 	//获取内核文件信息
 	size = get_image_file(IMAGE_ADR,KERNEL_NAME,&addr); 
 	if(0==size || NULL==addr){
@@ -156,12 +157,15 @@ static void kernel_init(Machine* mach){
 	}
 
 	//复制到指定位置
-	reserve(KERNEL_ADR,size);	//将对应内存标记为已占用
 	memcpy(addr,size,KERNEL_ADR);	//将内核文件复制到KERNEL_ADR位置
-	
+
 	//填写机器信息
-	mach->kernel_addr = (u64_t)KERNEL_ADR;
+	mach->kernel_addr = KERNEL_ADR;
 	mach->kernel_size = (u64_t)size;
+
+	//初始化next_addr:使其紧挨着kernel存放
+	mach->next_addr = ALIGN_4K(KERNEL_ADR+mach->kernel_size);
+	
 	return;
 }
 
@@ -173,6 +177,7 @@ static void kernel_display(Machine mach){
 	printk("kernel addr:0x%lx\n",mach.kernel_addr);
 	printk("kernel size:0x%lx\n",mach.kernel_size);	
 	printk("================================kernel end.===================================\n");
+	
 	return;
 }
 
@@ -192,24 +197,29 @@ static void font_init(Machine* mach){
 	}
 	
 	//复制到指定位置
-	addr_t dst = allocate(size);	//内存分配
+	addr_t dst = (addr_t)mach->next_addr;	//内存分配
 	memcpy(addr,size,dst);
 	
 	//填写机器信息结构体
 	mach->font_addr = (u64_t)dst;
 	mach->font_size = (u64_t)size;
+
+	//计算下一个4K对齐地址
+	mach->next_addr = ALIGN_4K(mach->next_addr+mach->font_size);
+	
 	return;
 }
 
 
 /**
- * 
+ * 输出字体信息
  */
 static void font_display(Machine mach){
 	printk("=================================font info====================================\n");
 	printk("font addr:0x%lx\n",mach.font_addr);
 	printk("font size:0x%lx\n",mach.font_size);	
 	printk("=================================font end.====================================\n");
+	
 	return;
 }
 
@@ -229,11 +239,14 @@ static void logo_init(Machine* mach){
 	}
 	
 	//复制到指定位置
-	addr_t dst = allocate(size);	//内存分配
+	addr_t dst = (addr_t)mach->next_addr;	//内存分配
 	memcpy(addr,size,dst);
 	
 	//填写机器信息结构体
 
+	//计算下一个4K对齐地址
+	mach->next_addr = ALIGN_4K(mach->next_addr+size);
+	
 	return;
 }
 
@@ -247,19 +260,6 @@ static void logo_display(Machine mach){
 	printk("logo addr:0x%lx\n",0);
 	printk("logo size:0x%lx\n",0);	
 	printk("=================================logo end.====================================\n");
-	return;
-}
-
-static void bitmap_init(Machine* mach){
-	mach->bitmap_addr = (u64_t)allocate(0x1000);
-	mach->bitmap_size = 0x1000;
-	memcpy(BITMAP_ADR,(size_t)mach->bitmap_size,(addr_t)mach->bitmap_addr);
-	return;
-}
-static void bitmap_display(Machine mach){
-	printk("================================bitmap info===================================\n");
-	printk("bitmap addr:0x%lx\n",mach.bitmap_addr);
-	printk("bitmap size:0x%lx\n",mach.bitmap_size);	
-	printk("================================bitmap end.===================================\n");
+	
 	return;
 }

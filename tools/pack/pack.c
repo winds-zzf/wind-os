@@ -70,19 +70,20 @@ u32_t checksum_file(FILE* file) {
 }
 
 /**
- * 初始化文件头
+ * 初始化文件头描述符
  */
 static void init_header(Header* header) {
 	header->version = 0;
-	header->start = 0;
 	header->size = 0;
+	header->start = 0;
+	header->number = 0;
 	header->checksum = 0;
 }
 
 /**
- * 初始化文件头
+ * 初始化文件句柄
  */
-static void init_handle(Handle* handle) {
+static void init_fhandle(FHandle* handle) {
 	memset(handle->fname,0,sizeof(handle->fname));
 	handle->start = 0;
 	handle->size = 0;
@@ -93,40 +94,42 @@ static void init_handle(Handle* handle) {
  * 打包函数
  * 结构体数组传参，如果是二维数组，则应该给形参指明列长，不然形参指针和实参指针结构会不一致
  */
-Status pack(const char* fname,char fnames[][FNAME_MAX_LEN], int len) {
+Status pack(const char* fname,char fnames[][FNAME_MAX_LEN], int number) {
 	//映像头
 	Header header;
 	//文件头数组
-	Handle* fhds = (Handle*)malloc(len * sizeof(Handle));
+	FHandle* fhds = (FHandle*)malloc(number * sizeof(FHandle));
 	//文件句柄分配
 	FILE* image = get_fp(fname,"wb+");	//映像文件
 
 	//映像头和文件头从0x4000=16KB处连续存放
 	init_header(&header);
 	header.version = VERSION;
+	header.size = 0;
 	header.start = 0x4000 + sizeof(Header);	//文件头起始地址
-	header.size = len;	//文件数目
+	header.number = number;	//文件数目
 	
 	//文件从0x5000=20KB处连续存放
-	for (u32_t i = 0, base=0x0; i < header.size; i++) {
+	for (u32_t i = 0; i < header.number; i++) {
 		printf("正在打包%s...\t",fnames[i]);
 		FILE* fp = get_fp(fnames[i],"rb+");
-		init_handle(&fhds[i]);		//初始化文件头
+		init_fhandle(&fhds[i]);		//初始化文件头
 		strcpy(fhds[i].fname, fnames[i]);
-		fhds[i].start = base;
-		fhds[i].size = file_copy(fp, image, base);
+		fhds[i].start = header.size;
+		fhds[i].size = file_copy(fp, image, header.size);
 		fhds[i].checksum = checksum_file(fp);
-		base += (i == 0)? 0x5000 : fhds[i].size;
+		header.size += (i == 0)? 0x5000 : fhds[i].size;
 		fclose(fp);
 		printf("打包完成:0x%X\t%d\t0x%X\n",fhds[i].start,fhds[i].size,fhds[i].checksum);
 	}
-	header.checksum = checksum_mem(fhds,sizeof(Handle)*header.size);	//计算文件头结构体数组的校验和
+	
+	header.checksum = checksum_mem(fhds,sizeof(FHandle)*header.number);	//计算文件头结构体数组的校验和
 	
 	//写入映像头
 	mem_to_file(&header, sizeof(header), image, 0x4000);
 	
 	//写入文件头
-	mem_to_file(fhds,sizeof(Handle)* header.size,image,0x4000+sizeof(Header));
+	mem_to_file(fhds,sizeof(FHandle)* header.number,image,0x4000+sizeof(Header));
 
 	//文件句柄和动态内存释放
 	fclose(image);
@@ -141,16 +144,16 @@ Status pack(const char* fname,char fnames[][FNAME_MAX_LEN], int len) {
 Status unpack(const char* fname) {
 	FILE* img = get_fp(fname, "rb+");	//映像文件
 	Header header;	//映像头
-	Handle* fhds=NULL;	//文件头数组
+	FHandle* fhds=NULL;	//文件头数组
 
 	mem_from_file(&header, sizeof(Header),img,0x4000);	//0x4000处读取映像头
-	fhds = (Handle*)malloc(sizeof(Handle)*header.size);
-	mem_from_file(fhds, sizeof(Handle) * header.size,img,0x4000+sizeof(Header));	//在Header后读取Handle数组
-	if (checksum_mem(fhds,sizeof(Handle)*header.size)!=header.checksum) {	//CRC校验和0不为0
+	fhds = (FHandle*)malloc(sizeof(FHandle)*header.number);
+	mem_from_file(fhds, sizeof(FHandle) * header.number,img,0x4000+sizeof(Header));	//在Header后读取Handle数组
+	if (checksum_mem(fhds,sizeof(FHandle)*header.number)!=header.checksum) {	//CRC校验和0不为0
 		printf("fhds is damaged!");
 		return ERROR;
 	}
-	for (u32_t i = 0; i < header.size; i++) {
+	for (u32_t i = 0; i < header.number; i++) {
 		printf("%s\t%d\t%d\t", fhds[i].fname,fhds[i].start,fhds[i].size);
 		print(fhds[i].checksum,16);
 		FILE* fp = get_fp(fhds[i].fname, "wb+");

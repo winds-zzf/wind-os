@@ -5,6 +5,7 @@
 #include"global.h"
 
 static void load_file(const char_t* fname,const addr_t dst);
+static void grub_init();
 
 /**
  * 加载映像文件
@@ -14,21 +15,28 @@ void grub_entry(){
 	clear_screen(0x0f00);
 	printk("==================================grub start==================================\n");
 
-    	//初始化内存位示图
-    	memset(BITMAP_ADR,0,0x1000);	//清空指定区域内存
-    	allocate_init(BITMAP_ADR,0x100000,0x8000000);
-	
-	//输出内核映像信息
-	image_display((addr_t)IMAGE_ADR);
-    	
-    	printk("loading loader.bin...\n");
-    	load_file(LOADER_NAME,LOADER_ADR);
-    	
-    	printk("loading bios.bin...\n");
-    	load_file(BIOS_NAME,BIOS_ADR);
+	//performing initialization of grub
+	grub_init();
     	
     	printk("==================================grub end.===================================\n");
     	die(0x200);
+    	
+    	return;
+}
+
+/**
+ * grub阶段的初始化负责加载loader必要的文件
+ */
+static void grub_init(){
+	//1.输出Wind.kif信息
+	image_display((addr_t)IMAGE_ADR);
+
+    	//2.将loader.bin加载到内存中
+    	load_file(LOADER_NAME,LOADER_ADR);
+    	
+    	//3.将bios.bin加载到内存中
+    	load_file(BIOS_NAME,BIOS_ADR);
+
     	return;
 }
 
@@ -41,10 +49,7 @@ static void load_file(const char_t* fname,const addr_t dst){
     	addr_t src = NULL;		//文件地址
     	size_t size = 0;		//文件大小
     	size = get_image_file(IMAGE_ADR,fname,&src);
-    	
-    	//设置这片内存区域为保留
-    	reserve(dst,size);
-    	
+    	printk("loading %s...\n",fname);
     	if(memcpy(src,size,dst)==0){
     		printk("error in loading the <%s>...\n",fname);     
     	}

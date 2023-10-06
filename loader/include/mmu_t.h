@@ -49,9 +49,9 @@
 #define MMU_PT1_SIZE	1		//一级页目录的子目录项数
 #define MMU_PT2_SIZE	16		//二级页目录的子目录项数
 #define MMU_PT3_SIZE	512		//三级页目录的子目录项数
-#define MMU_PT_SIZE		0x1000	//页目录大小
-#define MMU_P_SIZE		0x200000	//分页大小
-#define MMU_SIZE (18*MMU_PT_SIZE)		//MMU页表总大小
+#define MMU_PT_SIZE		0x1000	//页目录大小：4KB
+#define MMU_P_SIZE		0x200000	//分页大小：2MB
+#define MMU_SIZE (18*MMU_PT_SIZE)	//MMU页表总大小
 
 
 #endif //__MMU_T_H

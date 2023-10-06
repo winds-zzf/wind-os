@@ -20,9 +20,9 @@ static char_t* convertr(char_t *str,addr_t val,uint_t base){
 	
 	do{
 		*--p = "0123456789ABCDEF"[val%base];
-	}while(val/=base);
+	}while(val/=base);	//32位CPU下不支持64位的除法和求余操作
 	
-	while(0!=*p){	//将转换后的结果复制到str下
+	while(0!=*p){		//将转换后的结果复制到str下
 		*str++ = *p++;
 	}
 	
@@ -34,7 +34,6 @@ static char_t* convertr(char_t *str,addr_t val,uint_t base){
  * str: 转换结果存储在str指向的字符串中
  * val: 待转换的64位无符号整数
  * order: 2的阶数，如8进制的order=3
- * width: 数据位宽，空余位置填充0
  */
 static char_t* convert2(char_t *str,u64_t val,uint_t order){
 	register char_t *p;
@@ -134,6 +133,7 @@ void scank(const char_t* fmt,...){
  * buffer: 输出缓冲区
  * fmt: 格式控制字符串
  * args: 参数列表
+ * 缺少对参数个数与格式控制字符串是否匹配的检查
  */
 static void _sprintk(char_t* buffer,const char_t* fmt,va_list args){
 	char_t *p = buffer;	//位置指针

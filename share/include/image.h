@@ -29,5 +29,10 @@ FHandle* get_file(const addr_t addr,const char_t *fname);
  */
 size_t get_image_file(const addr_t image_adr,const char_t* fname,addr_t* adr);
 
+/**
+ * 获取image文件大小
+ * adr: 映像文件地址
+ */
+size_t get_image_size(addr_t adr);
 
 #endif //__IMAGE_H

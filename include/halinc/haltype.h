@@ -17,11 +17,15 @@
 #include "cpuctrl_t.h"
 
 //内存模块
-#include "memory_t.h"
+#include "remmu_t.h"   //待优化模块
+#include "mmu_t.h"
+#include "memview_t.h"
 #include "mempage_t.h"
 #include "memtable_t.h"
-#include "memarea_t.h"	
+#include "memarea_t.h"
+#include "memobject_t.h"	
 #include "memmgr_t.h"
+#include "memapi_t.h"	
 
 
 #endif //__HALTYPE_H

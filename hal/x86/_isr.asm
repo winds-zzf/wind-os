@@ -23,7 +23,7 @@ ALIGN	16
 exc_bounds_check:
 	SRFTFAULT 5
 ALIGN	16
-exc_inval_opcode:
+exc_inval_opcode:	;通过空指针访问内存的时候会报这个错误
 	SRFTFAULT 6
 ALIGN	16
 exc_copr_not_available:
@@ -44,7 +44,7 @@ ALIGN	16
 exc_stack_exception:
 	SRFTFAULT_ECODE 12
 ALIGN	16
-exc_general_protection:
+exc_general_protection:	;越界访存
 	SRFTFAULT_ECODE 13
 ALIGN	16
 exc_page_fault:

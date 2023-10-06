@@ -10,16 +10,21 @@
 #ifdef CFG_X86_PLATFORM
 
 //硬件抽象层目标文件
-#define BUILD_HALY_OBJS _hal.o hal.o vgastr.o stdio.o string.o utils.o allocate.o global.o platform.o memory.o i8259.o _isr.o interrupt.o cpuctrl.o gdt.o idt.o tss.o mempage.o memtable.o memarea.o memmgr.o
+#define BUILD_HALY_OBJS _hal.o hal.o vgastr.o stdio.o string.o utils.o global.o platform.o \
+				_isr.o gdt.o idt.o tss.o i8259.o interrupt.o spinlock.o \
+				remmu.o mmu.o memview.o mempage.o memtable.o memarea.o memobject.o memmgr.o memapi.o 
 //内核目标文件
-#define BUILD_KRNL_OBJS	kernel.o callback.o
+#define BUILD_KRNL_OBJS 	kernel.o knlglobal.o \
+					kvmarea.o kvmbox.o kvmprocess.o mempool.o \
+					thread.o schedule.o waitlist.o idle.o sem.o \
+					device.o
 //内存管理目标文件
 #define BUILD_MEMY_OBJS 		//all relative *.o
 //文件系统目标文件
 #define BUILD_FSYS_OBJS 		//all relative *.o
 //驱动程序目标文件
 #define BUILD_DRIV_OBJS 		//all relative *.o
-//程序库目标文件
+//函数库目标文件
 #define BUILD_LIBS_OBJS 		//all relative *.o
 //进程管理目标文件
 #define BUILD_TASK_OBJS 		//all relative *.o

@@ -5,6 +5,11 @@
 #ifndef __LIST_H
 #define __LIST_H
 
+/**
+ * 可以考虑环状分配与合并
+ * 比如说从双向循环链表中取出一个子链构成子双向循环链表，或者将一个双向循环链表合并到另一个双向循环链表中
+ */
+
 
 #include "list_t.h"
 
@@ -19,6 +24,7 @@ INLINE void list_init(List *list){
 	return;
 }
 
+
 /**
  * 移除两个节点中间的子链
  * 只需给出子链的前驱节点和后继结点prev->(sub list)->next
@@ -28,6 +34,7 @@ INLINE void __list_del(List *prev, List *next){
 	prev->next = next;
 	return;
 }
+
 
 /**
  * 在指定的两个节点之间插入新节点
@@ -51,6 +58,7 @@ INLINE void list_add(List *new, List *head){
 	return;
 }
 
+
 /**
  * 尾插法插入新节点
  * prev = head->prev
@@ -61,6 +69,7 @@ INLINE void list_add_tail(List *new, List *head){
 	return;
 }
 
+
 /**
  * 将entry节点从所在链表中移除
  */
@@ -68,6 +77,7 @@ INLINE void __list_del_entry(List *entry){
 	__list_del(entry->prev, entry->next);
 	return;
 }
+
 
 /**
  * 将entry从所在链表中移除，并将entry节点初始化为一个链表
@@ -77,6 +87,7 @@ INLINE void list_del(List *entry){
 	list_init(entry);
 	return;
 }
+
 
 /**
  * 将list节点移动到head节点后
@@ -88,6 +99,7 @@ INLINE void list_move(List *list, List *head){
 	return;
 }
 
+
 /**
  * 将list节点移动到head节点前
  * 节点移动可以跨链表，也可以是在同一链表中
@@ -98,6 +110,7 @@ INLINE void list_move_tail(List *list, List *head){
 	return;
 }
 
+
 /**
  * 判断链表是否为空
  */
@@ -107,6 +120,7 @@ INLINE bool_t list_is_empty(const List *head){
 	}
 	return FALSE;
 }
+
 
 /**
  * 仔细判断链表是否为空
@@ -119,17 +133,44 @@ INLINE bool_t list_is_empty_careful(const List *head){
 	return FALSE;
 }
 
+
+/**
+ * 节点是否是链表的第一个元素
+ */
+INLINE bool_t list_is_first(const List* list,const List* head){
+	if(list == head->next){
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
+/**
+ * 节点是否是最后一个元素
+ */
+INLINE bool_t list_is_last(const List* list,const List* head){
+	if(list == head->prev){
+		return TRUE;
+	}
+	return FALSE;
+}
+
+
 /**
  * 遍历这个链表
  * 从head的下一个开始，一直向后(next)走，直到到达head。cur只是循环变量 
  * head指向的节点不会被处理
  */
-#define list_for_each(pos, head) for(pos = (head)->next; pos != (head); pos = pos->next)
+#define list_for_each(pos, head) \
+	for(pos = (head)->next; pos != (head); pos = pos->next)
+
 
 /**
- * 从head的下一个开始，直到head的下一个等于head（在循环的过程中需要改变head，否则死循环）
+ * 这个宏用于依次取出链表中的首元结点并执行删除，（如果在遍历时不执行删除的话，代码会陷入死循环）
  */
-#define list_for_each_head_dell(pos, head) for(pos = (head)->next; pos != (head); pos = (head)->next)
+#define list_for_each_head_dell(pos, head) \
+	for(pos = (head)->next; pos != (head); pos = (head)->next)
+
 
 /**
  * 根据结构体成员地址获取结构体起始地址
@@ -137,6 +178,29 @@ INLINE bool_t list_is_empty_careful(const List *head){
  * type:结构体类型名
  * member:结构体成员名
  */
-#define list_entry(ptr, type, member) ((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+#define list_entry(ptr, type, member) \
+	((type *)((char *)(ptr) - (unsigned long)(&((type *)0)->member)))
+
+
+/**
+ *
+ */
+#define list_first_oneobj(head,o_type,o_member) \
+	list_entry((head)->next,o_type,o_member)
+
+/**
+ * 获取当前对象的下一个相邻对象
+ * pos是数据对象指针，而不是List指针，因此要保证链表上的数据对象类型相同
+ */
+#define list_next_entry(pos,type,member) \
+	list_entry((pos)->member.next,type,member)
+
+/**
+ * 获取当前对象的前一个相邻对象
+ * pos是数据对象指针，而不是List指针，因此要保证链表上的数据对象类型相同
+ */
+#define list_prev_entry(pos,type,member) \
+	list_entry((pos)->member.prev,type,member)
+
 
 #endif //__LIST_H

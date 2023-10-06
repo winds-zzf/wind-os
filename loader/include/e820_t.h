@@ -12,7 +12,11 @@
 #define RAM_ACPINVS		4		//ACPI NVS
 #define RAM_UNUSABLE	5		//不可用内存
 
-//e820数组结构定义，存储内存视图
+/**
+ * e820数组结构定义，存储内存视图
+ * 虽然loader运行在32位模式，但是并不映射E820收集大于4GB的内存视图
+ * 插入多个内存条后，获取e820数组的条目数也将改变，多个内存条是统一编制的。
+ */
 typedef struct E820{
 	u64_t addr;	//内存区域起始地址
 	u64_t size;	//内存区域大小

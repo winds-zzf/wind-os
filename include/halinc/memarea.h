@@ -8,15 +8,14 @@
 
 
 /**
- *
+ * 
  */
 void memarea_init();
 
-
 /**
- *
+ * marking pages by area type and then mount them into area
  */
-void memarea_display();
+void mount_pages();
 
 
 #endif //__MEMAREA_H

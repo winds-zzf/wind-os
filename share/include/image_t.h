@@ -22,10 +22,11 @@ typedef unsigned int u32_t;
  */
 typedef struct HEADER{
 	u32_t version;		//映像版本
-	u32_t start;		//文件头其实偏移
-	u32_t size;		//文件头数目
+	u32_t size;		//映像大小
+	u32_t start;		//文件头起始偏移
+	u32_t number;		//文件头数目
 	u32_t checksum;	//文件头校验和
-}Header;
+}__attribute__((packed))Header;	//压缩存储
 
 /**
  * 文件头描述符
@@ -35,7 +36,7 @@ typedef struct FHANDLE{
 	u32_t start;				//文件起始偏移
 	u32_t size;				//文件大小
 	u32_t checksum;			//文件校验和
-}FHandle;
+}__attribute__((packed))FHandle;	//压缩存储
 
 
 #endif //_IMAGE_T_H

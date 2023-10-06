@@ -10,14 +10,13 @@
 
 void mmu_init(Machine *mach){
 	//页表指针
-	u64_t *p1 = (u64_t*)(PAGE_ADR+0x1000*0);	//一级页目录(4KB,512)
-	u64_t *p2 = (u64_t*)(PAGE_ADR+0x1000*1);	//二级页目录(4KB,512)
-	u64_t *p3 = (u64_t*)(PAGE_ADR+0x1000*2);	//三级页目录(4KB,512)
+	u64_t *p1 = (u64_t*)(MMU_ADR+0x1000*0);	//一级页目录(4KB,512)
+	u64_t *p2 = (u64_t*)(MMU_ADR+0x1000*1);	//二级页目录(4KB,512)
+	u64_t *p3 = (u64_t*)(MMU_ADR+0x1000*2);	//三级页目录(4KB,512)
 	u64_t addr = 0;	//从物理地址0开始映射
 	
 	//初始化
-	memset(PAGE_ADR,0,MMU_SIZE);	//MMU页表总大小
-	reserve(PAGE_ADR,MMU_SIZE);	//保留内存
+	memset(MMU_ADR,0,MMU_SIZE);	//MMU页表总大小
 
 	/*
 	 * MMU平坦映射
@@ -49,16 +48,17 @@ void mmu_init(Machine *mach){
 	p1[(KERNEL_VIRADR_START>>MMU_PT1_SHIFT) & 0x1ff] = p1[0];
 
 	//填写机器信息
-	mach->page_addr = (u64_t)PAGE_ADR;			//页表地址
-	mach->page_size = (u64_t)MMU_SIZE;			//页表总大小
+	mach->mmu_addr = (u64_t)MMU_ADR;			//页表地址
+	mach->mmu_size = (u64_t)MMU_SIZE;			//页表总大小
 	mach->viraddr_size = (u64_t)0x400000000ULL;	//内核虚拟地址空间大小
+	
 	return;
 }
 
 void mmu_display(Machine mach){
 	printk("=================================mmu info====================================\n");
-	printk("mmu page address:0x%lx\n",mach.page_addr);
-	printk("mmu page size:0x%lx\n",mach.page_size);
+	printk("mmu page address:0x%lx\n",mach.mmu_addr);
+	printk("mmu page size:0x%lx\n",mach.mmu_size);
 	printk("virtual memory size:0x%lx\n",mach.viraddr_size);
 	printk("=================================mmu end.====================================\n");
 	return;

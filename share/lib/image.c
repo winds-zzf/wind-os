@@ -26,17 +26,18 @@ void image_display(const addr_t adr){
 	FHandle *fhds= (FHandle*)((addr_t)header+sizeof(Header));	//文件头数组地址
 	//输出映像头信息
 	printk("version:\t%d\n",header->version);
-	printk("start:\t0x%x\n",header->start);
 	printk("size:\t%d\n",header->size);
+	printk("start:\t0x%x\n",header->start);
+	printk("number:\t%d\n",header->number);
 	printk("checksum:\t0x%x\n",header->checksum);
 	//文件头校验和
-	if (!verify((addr_t)fhds,sizeof(FHandle)*header->size,header->checksum)) {
+	if (!verify((addr_t)fhds,sizeof(FHandle)*header->number,header->checksum)) {
 		printk("the kernel image file handles is damaged!\n");
 		return;
 	}
 	//输出文件头数组信息
 	printk("fname\t\tstart\t\tsize\t\tchecksum\n");
-	for (u32_t i = 1; i < header->size; i++) {	//grub.bin文件加载后就在内存中被修改了，因此校验和没有实用价值
+	for (u32_t i = 1; i < header->number; i++) {	//grub.bin文件加载后就在内存中被修改了，因此校验和没有实用价值
 		printk("%s\t\t",fhds[i].fname);
 		printk("0x%x\t\t",fhds[i].start);
 		printk("%d\t\t",fhds[i].size);
@@ -47,18 +48,18 @@ void image_display(const addr_t adr){
 		}
 	}
 	printk("=================================image end.====================================\n");
-	return;
+	return ;
 }
 
 FHandle* get_file(const addr_t adr,const char_t *fname){					
 	Header *header = (Header*)(adr+HEADER_OFFSET);		//获取映像头地址
 	FHandle *fhds= (FHandle*)((addr_t)header+sizeof(Header));	//文件头数组地址
 	
-	if (!verify((addr_t)fhds,sizeof(FHandle)*header->size,header->checksum)) {
+	if (!verify((addr_t)fhds,sizeof(FHandle)*header->number,header->checksum)) {
 		printk("the kernel image file handles is damaged!\n");
 	}
 	
-	for(u32_t i=0;i<header->size;i++){		//查找指定文件
+	for(u32_t i=0; i<header->number; i++){		//查找指定文件
 		if(strcmp(fhds[i].fname,fname)==0){
 			if(verify(adr+fhds[i].start,fhds[i].size,fhds[i].checksum)){	//校验文件
 				return fhds+i;
@@ -77,4 +78,9 @@ size_t get_image_file(const addr_t image_adr,const char_t* fname,addr_t* adr){
 	*adr = fhd->start+image_adr;
 
 	return fhd->size;		
+}
+
+size_t get_image_size(addr_t adr){
+	Header *header = (Header*)(adr+HEADER_OFFSET);		//获取映像头地址
+	return header->size;
 }

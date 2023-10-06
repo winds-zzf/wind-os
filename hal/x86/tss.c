@@ -6,7 +6,14 @@
 #include "globalctrl.h"
 
 /**
- * 
+ * 初始化tss
+ */
+void tss_t_init(tss_t* tss){
+	return ;
+}
+
+/**
+ * 设置task state segment
  */
 void set_tss(Segment *segment, u64_t base, u32_t limit, u16_t attribute){
 	u32_t *x64tssb_h = (u32_t *)(segment + 1);
