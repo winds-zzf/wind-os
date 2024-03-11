@@ -8,6 +8,7 @@
 
 /**
  * 
+ * 
  */
 static void context_t_init(context_t *context){
 	context->nextrip = 0;
@@ -33,7 +34,7 @@ static u64_t thread_id(thread_t *thread){
  */
 static void thread_t_init(thread_t *thread){
 	spinlock_init(&thread->lock);
-	list_init(&thread->hook);
+	list_t_init(&thread->hook);
 	
 	thread->status = THREAD_STATUS_NEW;	//进程创建态
 	thread->flags = THREAD_FLAG_FREE;		//进程空闲
@@ -76,16 +77,17 @@ thread_t* new_thread(){
 	}
 	//初始化刚分配的thread_t
 	thread_t_init(thread);
-	
 	return thread;
 }
 
 /**
  * 
  */
-bool_t del_thread(){
-	
-	return FALSE;
+bool_t del_thread(thread_t* thread){
+	if(mempool_delete((addr_t)thread,sizeof(thread_t))){
+		return FALSE;
+	}
+	return TRUE;
 }
 
 /**
@@ -104,7 +106,7 @@ void krnl_stack_init(thread_t* thread,void* entry, cpuflag_t cpuflags){
 	//获取寄存器在栈中的存放地址
 	intstkregs_t* regs = (intstkregs_t*)(thread->krlstktop-sizeof(intstkregs_t));
 	//将寄存器结构清零
-	memset((addr_t)regs,0,sizeof(intstkregs_t));
+	memset(regs,0,sizeof(intstkregs_t));
 	//rip寄存器的值设置为程序运行入口地址
 	regs->rip_old = (u64_t)entry;
 	//cs寄存器的值设置为内核代码段选择子
@@ -152,7 +154,7 @@ static void user_stack_init(thread_t* thread,void* entry,cpuflag_t cpuflags){
 	//获取将intstkregs_t放入堆栈后的起始地址
 	intstkregs_t *regs = (intstkregs_t*)(thread->krlstktop-sizeof(intstkregs_t));
 	//将regs实例清零
-	memset((addr_t)regs,0,sizeof(intstkregs_t));
+	memset(regs,0,sizeof(intstkregs_t));
 	//rip寄存器的值设置为用户程序代码入口地址
 	regs->rip_old = (u64_t)entry;
 	//cs寄存器的值设置为用户程序代码段选择子

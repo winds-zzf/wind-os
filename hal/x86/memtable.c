@@ -30,8 +30,8 @@ static void set_memlist(MemList *list,uint_t status,uint_t order){
 	list->allocate_num = 0;
 	list->recycle_num = 0;
 	//initializing pages list
-	list_init(&list->free_pages);
-	list_init(&list->allocate_pages);
+	list_t_init(&list->free_pages);
+	list_t_init(&list->allocate_pages);
 	
 	return;
 }

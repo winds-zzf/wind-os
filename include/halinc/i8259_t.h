@@ -26,7 +26,7 @@
 #define _INTM_CTLMASK	0x21		// setting bits in this port disables ints   <Master>
 #define _INTS_CTL 		0xA0		// I/O port for second interrupt controller  <Slave>
 #define _INTS_CTLMASK 	0xA1		// setting bits in this port disables ints   <Slave>
-#define _EOI 0x20				// end of interrupt.中断结束信号
+#define _EOI 0x20				// end of interrupt.
 
 
 #endif //__8259A_T_H

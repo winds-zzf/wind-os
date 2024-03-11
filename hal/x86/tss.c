@@ -6,6 +6,18 @@
 #include "globalctrl.h"
 
 /**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+/**
  * 初始化tss
  */
 void tss_t_init(tss_t* tss){

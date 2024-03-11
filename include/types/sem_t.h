@@ -20,15 +20,15 @@
 
 /* 等待队列 */
 typedef struct WAITLIST_T{
-	Spinlock 	lock;		//保护此结构的自旋锁
-	List		waits;		//等待进程队列
-	size_t	waitsNum;		//等待队列长度
+	spinlock_t 	lock;		//保护此结构的自旋锁
+	list_t		waits;		//等待进程队列
+	size_t		waitsNum;		//等待队列长度
 }waitlist_t;
 
 
 /* 信号量结构体 */
 typedef struct SEM_T{
-	Spinlock 		lock;	//保护信号量的自旋锁
+	spinlock_t 	lock;	//保护信号量的自旋锁
 	uint_t 		flag;	//信号量标志
 	sint_t 		count;	//资源计数
 	waitlist_t	wlst;	//该信号量所描述资源的等待队列

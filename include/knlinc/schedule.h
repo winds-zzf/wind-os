@@ -37,5 +37,30 @@ void schedule_wait(waitlist_t* wlst);
  */
 void schedule_up(waitlist_t* wlst);
 
+/**
+ *
+ */
+void schedule_set_flag();
+
+/**
+ *
+ */
+u64_t schedule_get_flag();
+
+/**
+ *
+ */
+void schedule_set_flag_ex(uint_t flag);
+
+/**
+ *
+ */
+void schedule_inc_tick();
+
+/**
+ *
+ */
+void schedule_check();
+
 
 #endif //__SCHEDULE_H

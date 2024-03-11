@@ -22,6 +22,7 @@ void cpu_init(Machine *mach){
 	
 	//填写机器信息
 	mach->cpu_mode = 0x40;	//cpu mode：64位
+
 	return;
 }
 
@@ -29,6 +30,7 @@ void cpu_display(Machine mach){
 	printk("=================================cpu info==================================\n");
 	printk("cpu mode:0x%lx\n",mach.cpu_mode);
 	printk("=================================cpu end.==================================\n");
+
 	return;
 }
 
@@ -52,6 +54,7 @@ static bool_t check_cpuid(){
         :
         : "eax", "edx", "cc" // 添加操作数约束和cc(clobber)
     );
+
     return rets;
 }
 
@@ -75,5 +78,6 @@ static bool_t check_longmode() {
         :
         : "eax", "edx", "cc" // 添加操作数约束和cc(clobber)
     );
+
     return rets;
 }

@@ -1,5 +1,5 @@
 ;GRUB识别头
-FLAGS 	EQU 0x00010003	;多引导协议标志位额
+FLAGS 	EQU 0x00010003	;多引导协议标志位
 MAGIC1 	EQU 0x1BADB002	;grub1协议魔数
 MAGIC2	EQU 0xe85250d6	;grub2协议魔数
 
@@ -7,7 +7,7 @@ global _start
 extern grub_entry
 
 [section .start.text]	;定义.start.text代码节
-[bits 32]				;汇编程2位指令
+[bits 32]				;汇编程32位指令
 _start:
 	jmp _entry
 
@@ -60,7 +60,6 @@ _entry:
 	;长跳转
 	jmp dword 0x8:_32bits_mode
 
-
 _32bits_mode:
 	mov ax,0x10 	;使用0x10初始化段寄存器，0x10是b32_code_descriptor的段选择子
 	mov ds,ax
@@ -94,4 +93,6 @@ GDT_END:
 GDTR:
 GDTR_LEN dw GDT_END-GDT_START-1		;b16_null_descriptor不计算在长度之内
 GDTR_BASE dd GDT_START
+
+
 

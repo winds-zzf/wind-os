@@ -5,7 +5,7 @@
 #ifndef __MMU_H
 #define __MMU_H
 
-
+#include "_string.h"
 #include "mmu_t.h"
 
 
@@ -65,13 +65,13 @@ INLINE void mmu_t_init(mmu_t *mmu){
 	mmu->pt1 = NULL;
 
 	//初始化链表
-	list_init(&mmu->pt1s);
+	list_t_init(&mmu->pt1s);
 	mmu->pt1sNum = 0;
-	list_init(&mmu->pt2s);
+	list_t_init(&mmu->pt2s);
 	mmu->pt2sNum = 0;
-	list_init(&mmu->pt3s);
+	list_t_init(&mmu->pt3s);
 	mmu->pt3sNum = 0;
-	list_init(&mmu->pt4s);
+	list_t_init(&mmu->pt4s);
 	mmu->pt4sNum = 0;
 
 	return;
@@ -85,28 +85,28 @@ INLINE void pt1_init(pt1_t *pt1){
 	if(NULL==pt1){
 		return;
 	}
-	memset((addr_t)pt1,0,sizeof(pt1_t));
+	memset(pt1,0,sizeof(pt1_t));
 	return;
 }
 INLINE void pt2_init(pt2_t *pt2){
 	if(NULL==pt2){
 		return;
 	}
-	memset((addr_t)pt2,0,sizeof(pt2_t));
+	memset(pt2,0,sizeof(pt2_t));
 	return;
 }
 INLINE void pt3_init(pt3_t *pt3){
 	if(NULL==pt3){
 		return;
 	}
-	memset((addr_t)pt3,0,sizeof(pt3_t));
+	memset(pt3,0,sizeof(pt3_t));
 	return;
 }
 INLINE void pt4_init(pt4_t *pt4){
 	if(NULL==pt4){
 		return;
 	}
-	memset((addr_t)pt4,0,sizeof(pt4_t));
+	memset(pt4,0,sizeof(pt4_t));
 	return;
 }
 

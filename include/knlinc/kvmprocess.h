@@ -13,7 +13,7 @@ sint_t krluserspace_accessfailed(addr_t fairvadrs);
 
 void kvmProcess_test_main();
 
-void init_krlmm();
+void kvm_init();
 
 
 #endif //__KVMPROCESS_H

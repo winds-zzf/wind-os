@@ -12,7 +12,7 @@
 /**
  * 初始化内核虚拟内存地址空间
  */
-void init_krlmm(){
+void kvm_init(){
 	//初始化进程的用户空间
 	init_userspace_kvmspace(&kvmProcess.kvmSpace);
 	
@@ -25,13 +25,12 @@ void init_krlmm(){
 	//初始化内核内存池
 	mempool_init();
 	
-	//kvmProcess_test_main();
 	return;
 }
 
 void kvmProcess_init(KvmProcess *process){
 	spinlock_init(&process->lock);
-	list_init(&process->hook);
+	list_t_init(&process->hook);
 	process->flag = 0;
 	process->status = 0;
 	process->count = 0;		//KvmProcess的共享计数
@@ -112,7 +111,7 @@ static KvmArea* find_area_for_new(KvmSpace *space,addr_t start,addr_t size){
 	}
 	printk("#1.1.3\n");
 	//cache不命中，依次遍历每个KvmArea
-	List *pos = NULL;	//遍历工作指针
+	list_t *pos = NULL;	//遍历工作指针
 	list_for_each(pos,&space->areas){
 		curArea = list_entry(pos,KvmArea,hook);	//获取链表上钩子pos挂载的结构体KvmArea
 		//检查curArea是否可行(curArea不为NULL)
@@ -228,7 +227,7 @@ static KvmArea* find_area_for_delete(KvmSpace *space,addr_t start,size_t size){
 	}
 
 	//cache未命中，遍历space中的所有KvmArea
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&space->areas){
 		curArea = list_entry(pos,KvmArea,hook);
 		if(curArea->start<=start && end<=curArea->end){
@@ -362,7 +361,7 @@ static KvmArea* vma_map_find_kvmarea(KvmSpace *space,addr_t vadrs){
 	}
 
 	//cache不命中，遍历所有的KvmArea(curArea会被重复判断)
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&space->areas){
 		cur = list_entry(pos,KvmArea,hook);
 		if(cur->start<=vadrs && vadrs<cur->end){
@@ -405,11 +404,7 @@ static MemPage* vma_new_usermsa(KvmProcess *process,KvmBox *box){
 		return NULL;
 	}
 
-	/**
-	 * 这里为什么不是用这个内存分配函数？？？
-	 */
 	printk("f:2.1.4.0.2\n");
-	size_t realNumber = 0;
 	MemPage *page = mem_divide_apps(&memmgr);
 	printk("f:2.1.4.0.3\n");
 	if(NULL==page){
@@ -454,7 +449,7 @@ static bool_t vma_del_usermsa(KvmProcess *process,KvmBox *box,MemPage *page,addr
 	}
 
 	//挨个遍历寻找
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&box->pages){
 		page = list_entry(pos,MemPage,hook);
 		if(mempage_padr(page)==padr){
@@ -603,7 +598,7 @@ void kvmProcess_test_main(){
 	//输出开始地址
 	printk("start:0x%lx\n", adr);	//分配的是虚拟地址
 	printk("try to write data\n");
-	memset(adr,0,0x1000);
+	memset((void*)adr,0,0x1000);
 	printk("end writting data\n");
 	kvm_delete(&kvmProcess,adr,0x1000);
 	

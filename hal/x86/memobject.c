@@ -15,6 +15,8 @@ void memobject_init(){
 	//初始化内存对象管理器
 	init_mObjManager(&memmgr.objManager);
 	
+	//测试提供的API
+	memobject_test_main();
 	return;
 }
 
@@ -23,7 +25,7 @@ void memobject_init(){
  * 简单初始化内存对象容器挂载点
  */
 static void init_mObjMount(MObjMount *mount,size_t size){
-	list_init(&mount->containers);
+	list_t_init(&mount->containers);
 	//挂载点初始并不挂载容器，容器是申请时动态分配的
 	mount->containers_num = 0;
 	//挂载点缓存有近期使用的容器，一个挂载点可以同时有多个容器，但是他们对象大小相同
@@ -59,7 +61,7 @@ static void init_mObjManager(MObjManager *manager){
  * 初始化内存对象
  */
 static void init_mObject(MObject *object,uint_t status){
-	list_init(&object->hook);
+	list_t_init(&object->hook);
 	object->status = status;
 	object->start = object;	//将MObject结构体暂存在未分配对象开始地址处(充分利用空闲内存空间)
 	
@@ -70,7 +72,7 @@ static void init_mObject(MObject *object,uint_t status){
  * 简单初始化内存对象容器拓展
  */
 static void init_mObjExtend(MObjExtend *extend,addr_t start,addr_t end,MObjContainer *container){
-	list_init(&extend->hook);
+	list_t_init(&extend->hook);
 	extend->start_addr = start;
 	extend->end_addr = end;
 	extend->container = container;	//拓展空间所属的容器
@@ -83,7 +85,7 @@ static void init_mObjExtend(MObjExtend *extend,addr_t start,addr_t end,MObjConta
  */
 static void init_mObjContainer(MObjContainer *container,addr_t start,addr_t end,size_t size){
 	spinlock_init(&container->lock);
-	list_init(&container->hook);
+	list_t_init(&container->hook);
 	container->status = 0;
 	container->flag = 0;
 	//容器起止地址，对象大小
@@ -92,15 +94,15 @@ static void init_mObjContainer(MObjContainer *container,addr_t start,addr_t end,
 	container->mobj_size = size;
 	
 	container->total_num = 0;
-	list_init(&container->assigns);
-	list_init(&container->frees);
+	list_t_init(&container->assigns);
+	list_t_init(&container->frees);
 	container->frees_num = 0;
-	list_init(&container->extends);
+	list_t_init(&container->extends);
 	container->extends_num = 0;
 	
 	//管理分配的物理内存页表
-	list_init(&container->mems.basic);		//容器基本内存页
-	list_init(&container->mems.extends);	//容器拓展内存页
+	list_t_init(&container->mems.basic);		//容器基本内存页
+	list_t_init(&container->mems.extends);	//容器拓展内存页
 	container->mems.size = 0;			//连续内存页数量
 	
 	return;
@@ -123,13 +125,11 @@ INLINE bool_t check_container(MObjContainer *container,size_t size){
 static MObjContainer* find_container_for_create(MObjMount *mount){
 	//先检查挂载点的容器缓存
 	if(mount->cache){
-		printk("hit:");
 		return mount->cache;	//cache命中
 	}
-	printk("miss:");
 	//cache未命中，进一步检查挂载点是否挂载有容器
 	if(mount->containers_num>0){
-		List *pos=NULL;
+		list_t *pos=NULL;
 		//遍历挂载点挂载的所有容器
 		list_for_each(pos,&mount->containers){
 			//首次链表为空，会导致cache=NULL
@@ -179,7 +179,6 @@ static MObjContainer* _create_container(addr_t start,addr_t end,size_t size,MemP
 		container->frees_num++;
 		container->total_num++;
 	}
-	printk("size:%d\n",container->frees_num);
 	return container;
 }
 
@@ -198,10 +197,11 @@ static MObjContainer* create_container(MObjManager *manager,MObjMount *mount){
 	}else {
 		pageNumber = 4;
 	}
-	
+
 	//为容器分配物理内存空间，也就是之前实现的物理内存页面管理器
 	size_t realNumber=0;
 	MemPage *pages = mem_divide(&memmgr,pageNumber,&realNumber,MEMAREA_TYPE_KRNL,DMF_RELDIV);
+
 	if(NULL==pages){	
 		return NULL;	//内存分配失败
 	}
@@ -218,7 +218,7 @@ static MObjContainer* create_container(MObjManager *manager,MObjMount *mount){
 
 	//将容器挂载到挂载点
 	mount_container(mount,container);
-	
+
 	//容器计数+1
 	manager->number++;
 	
@@ -350,7 +350,6 @@ static void* mobj_create_core(size_t size){
 	//获取内存对象管理器指针
 	MObjManager *manager = &memmgr.objManager;
 	void* object =NULL;	 //查找到的内存对象
-
 	//内存对象管理器上锁并关中断
 	cpuflag_t cpuflag = 0;
 	spinlock_lock_cli(&manager->lock,&cpuflag);
@@ -358,9 +357,9 @@ static void* mobj_create_core(size_t size){
 	//1.根据申请大小size在manager中查找容器挂载点
 	MObjMount *mount = &manager->mounts[(size-1)/32];
 	
-	
 	//2.从挂载点中查找合适的容器（一个挂载点可能有多个容器）
 	MObjContainer *container = find_container_for_create(mount);
+
 	if(NULL==container){
 		//如果没有找到容器就尝试新建一个容器
 		container = create_container(manager,mount);
@@ -370,7 +369,6 @@ static void* mobj_create_core(size_t size){
 			goto ret_step;	
 		}
 	}
-	
 	//3.从容器中分配一个内存对象，更新cache
 	object = allocate_object(container);
 	mount->cache = container;
@@ -395,7 +393,6 @@ void* mobj_new(size_t size){
 	if(0==size || size>2048){
 		return NULL;
 	}
-
 	//调用核心函数进行内存对象分配
 	return mobj_create_core(size);
 }
@@ -420,7 +417,7 @@ static bool_t check_container_for_delete(MObjContainer *container,void *start,si
 	
 	//检查每个拓展空间
 	MObjExtend* extand = NULL;
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&container->extends){
 		extand = list_entry(pos,MObjExtend,hook);	//获取一个拓展空间对象
 		if((addr_t)start>=extand->start_addr+sizeof(MObjExtend)&&((addr_t)start+size-1)<=container->end_addr){
@@ -443,7 +440,7 @@ static MObjContainer* find_container_for_delete(MObjMount *mount,void *start,siz
 	}	
 	//缓存未命中，遍历挂载点上挂载的所有容器
 	if(mount->containers_num>0){	//挂载点上至少一个容器
-		List *pos = NULL;
+		list_t *pos = NULL;
 		MObjContainer *container = NULL;
 		list_for_each(pos,&mount->containers){
 			//取出一个容器
@@ -527,7 +524,7 @@ static bool_t _destroy_container(MObjManager *manager,MObjMount *mount,MObjConta
 	manager->number--;
 	
 	//释放容器拓展页面
-	List *pos = NULL;
+	list_t *pos = NULL;
 	MemPage *pages = NULL;
 	if(container->extends_num>0){
 		//依次遍历每个subpages
@@ -536,9 +533,8 @@ static bool_t _destroy_container(MObjManager *manager,MObjMount *mount,MObjConta
 			//将subpage脱链
 			list_del(&pages->hook);
 			//释放这段内存页面
-			printk("reback subpage\n");
 			if(!mem_merge(&memmgr,pages,container->mems.size)){
-				printk("error\n");
+				printk("error in mem_merge\n");
 			}
 		}
 	}
@@ -548,7 +544,7 @@ static bool_t _destroy_container(MObjManager *manager,MObjMount *mount,MObjConta
 		pages = list_entry(pos,MemPage,hook);
 		list_del(&pages->hook);
 		if(!mem_merge(&memmgr,pages,container->mems.size)){
-			printk("error\n");
+			printk("error in mem_merge\n");
 		}
 	}	
 	
@@ -576,7 +572,7 @@ static bool_t mobj_recycle_core(void* addr,size_t size){
 	//获取内存对象管理器指针
 	MObjManager *manager = &memmgr.objManager;
 	bool_t rets = FALSE;
-
+	
 	//内存对象管理器加锁并关中断
 	cpuflag_t cpuflag = 0;
 	spinlock_lock_cli(&manager->lock,&cpuflag);
@@ -600,10 +596,10 @@ static bool_t mobj_recycle_core(void* addr,size_t size){
 		rets = FALSE;
 		goto ret_step;
 	}
-	
+
 	//尝试销毁容器（如果容器中的内存对象都已经被回收，则销毁容器）
 	destroy_container(manager,mount,container);
-	
+
 	//如果执行到这一步，说明前面的所有步骤都成功执行了
 	rets = TRUE;
 //公共处理
@@ -621,10 +617,10 @@ ret_step:
  * size: 待释放内存对象大小(unsigned integer非负数)
  */
 bool_t mobj_delete(void *addr,size_t size){
+	//参数检查
 	if(NULL==addr || size>2048){
 		return FALSE;
 	}
-	
 	//调用内存对象释放核心函数
 	return mobj_recycle_core(addr,size);
 }
@@ -642,39 +638,86 @@ INLINE void test_find_container_for_create();
 INLINE void test_hit();	//cache命中测试
 
 void memobject_test_main(){
-	printk("testing the memobject\n");
+	//printk("testing the memobject\n");
 	//test_mobj_new();		//综合测试
 	//test_mobj_delete();	//综合测试
 	//test_create_container();	
 	//test_extend_container();
-	test_delete_container();
+	//test_delete_container();
 	//test_destroy_container();
 	//test_find_container_for_delete();
 	//test_find_container_for_create();
 
-	die(0);
+	//die(0);
 	return;
 }
 
 INLINE void test_mobj_new(){
-	MObject* obj  = NULL; 
+	void* obj = NULL;
+	for(s64_t i=-4096;i<=4096;i++){
+		obj=mobj_new(i);
+		if (i<=0){	//在i<0时，分配必须失败
+			if(obj!=NULL){
+				printk("error i<=0:0x%lx\n",-i);
+				die(0);	
+			}
+		} else if(i<=2048){	//i属于[1,2048]时，分配必须成功
+			if(obj==NULL){
+				printk("error in i<=2048:0x%lx\n",i);
+				die(0);	
+			}
+			/**
+			 * 检查分配的内存地址是否合法
+			 */
+		} else if(i<=4096){	//i大于2048时，分配必须失败
+			if(obj!=NULL){
+				printk("error in i>2048:0x%lx\n",i);
+				die(0);	
+			}
+		}
+	}
 	
-	obj = (MObject*)mobj_new(123);
-	printk("object:0x%lx,0x%lx\n",obj->status,obj->start);
-	obj = (MObject*)mobj_new(132);
-	printk("object:0x%lx,0x%lx\n",obj->status,obj->start);
-	obj = (MObject*)mobj_new(258);
-	printk("object:0x%lx,0x%lx\n",obj->status,obj->start);
-	obj = (MObject*)mobj_new(513);
-	printk("object:0x%lx,0x%lx\n",obj->status,obj->start);
-	obj = (MObject*)mobj_new(1024);
-	printk("object:0x%lx,0x%lx\n",obj->status,obj->start);	
+	printk("successfully pass test_mobj_new\n");
 	return;
 }
 
+/**
+ * 1.参数错误
+ * 2.重复释放
+ * 3.参数不匹配
+ * 4.内存耗尽
+ */
 INLINE void test_mobj_delete(){
-	
-	
+	void* objs[2048+1];	//XXX={NULL}是自动调用memset初始化的吗？
+	//分配内存对象
+	for(s64_t i=1;i<=2048;i++){
+		objs[i]=mobj_new(i);
+		if(objs[i]==NULL){
+			printk("error in new:0x%lx\n",i);
+			die(0);
+		}
+		//申请完后立即释放
+		if(mobj_delete(objs[i],i)==FALSE){
+			printk("error in delete:0x%lx,0x%lx\n",objs[i],i);
+			die(0);
+		}
+	}
+	/*
+	//统一释放
+	for(s64_t i=0;i<4096;i++){
+		if(i<=0 || i>2048){
+			if(mobj_delete(objs[i],i)==TRUE){
+				printk("error in delete:0x%lx\n",i);
+				die(0);
+			}
+		}else{
+			if(mobj_delete(objs[i],i)==FALSE){
+				printk("error in delete:0x%lx,0x%lx\n",objs[i],i);
+			}
+		}
+	}
+	*/
+	printk("successfully pass test_mobj_delete\n");
 	return;
 }
 

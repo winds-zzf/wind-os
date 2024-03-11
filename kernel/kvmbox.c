@@ -7,7 +7,7 @@
 
 void kvmBox_init(KvmBox *box){
 	spinlock_init(&box->lock);
-	list_init(&box->hook);
+	list_t_init(&box->hook);
 
 	box->status = 0;
 	box->flag = 0;
@@ -16,7 +16,7 @@ void kvmBox_init(KvmBox *box){
 	//共享计数的初始化待定
 	
 	
-	list_init(&box->pages);
+	list_t_init(&box->pages);
 	box->pagesNum = 0;
 
 	box->father = NULL;
@@ -31,15 +31,15 @@ void kvmBox_init(KvmBox *box){
 
 void kvmBoxs_init(KvmBoxs *boxs){
 	spinlock_init(&boxs->lock);
-	list_init(&boxs->hook);
+	list_t_init(&boxs->hook);
 	
 	boxs->status = 0;
 	boxs->flag = 0;
 
-	list_init(&boxs->boxs);
+	list_t_init(&boxs->boxs);
 	boxs->boxsNum = 0;
 
-	list_init(&boxs->caches);
+	list_t_init(&boxs->caches);
 	boxs->cachesNum = 0;
 	boxs->cachesMax = KMBOX_CACHE_MAX;
 	boxs->cachesMin = KMBOX_CACHE_MIN;

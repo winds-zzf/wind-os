@@ -18,7 +18,7 @@
  * list指向头结点，由于是双相链表，因此初始时prev和next都是指向头节点本身
  * 注意：这种方式的双向链是环状的，环状链的好处是，节点是平等的，谁都可以是头或位，删除也不用担心空指针异常
  */
-INLINE void list_init(List *list){
+INLINE void list_t_init(list_t *list){
 	list->prev = list;
 	list->next = list;
 	return;
@@ -29,7 +29,7 @@ INLINE void list_init(List *list){
  * 移除两个节点中间的子链
  * 只需给出子链的前驱节点和后继结点prev->(sub list)->next
  */
-INLINE void __list_del(List *prev, List *next){
+INLINE void __list_del(list_t *prev, list_t *next){
 	next->prev = prev;
 	prev->next = next;
 	return;
@@ -40,7 +40,7 @@ INLINE void __list_del(List *prev, List *next){
  * 在指定的两个节点之间插入新节点
  * 由于是双向链表，与prev和next分别建立两个连接，共四个赋值语句
  */
-INLINE void __list_add(List *new, List *prev, List *next){
+INLINE void __list_add(list_t *new, list_t *prev, list_t *next){
 	next->prev = new;
 	new->next = next;
 	new->prev = prev;
@@ -53,7 +53,7 @@ INLINE void __list_add(List *new, List *prev, List *next){
  * prev = head
  * next = head->next
  */
-INLINE void list_add(List *new, List *head){
+INLINE void list_add(list_t *new, list_t *head){
 	__list_add(new, head, head->next);
 	return;
 }
@@ -64,7 +64,7 @@ INLINE void list_add(List *new, List *head){
  * prev = head->prev
  * next = head
  */
-INLINE void list_add_tail(List *new, List *head){
+INLINE void list_add_tail(list_t *new, list_t *head){
 	__list_add(new, head->prev, head);
 	return;
 }
@@ -73,7 +73,7 @@ INLINE void list_add_tail(List *new, List *head){
 /**
  * 将entry节点从所在链表中移除
  */
-INLINE void __list_del_entry(List *entry){
+INLINE void __list_del_entry(list_t *entry){
 	__list_del(entry->prev, entry->next);
 	return;
 }
@@ -82,9 +82,9 @@ INLINE void __list_del_entry(List *entry){
 /**
  * 将entry从所在链表中移除，并将entry节点初始化为一个链表
  */
-INLINE void list_del(List *entry){
+INLINE void list_del(list_t *entry){
 	__list_del(entry->prev, entry->next);
-	list_init(entry);
+	list_t_init(entry);
 	return;
 }
 
@@ -93,7 +93,7 @@ INLINE void list_del(List *entry){
  * 将list节点移动到head节点后
  * 节点移动可以是跨链表，也可以是在同一个链表中
  */
-INLINE void list_move(List *list, List *head){
+INLINE void list_move(list_t *list, list_t *head){
 	list_del(list);
 	list_add(list, head);
 	return;
@@ -104,7 +104,7 @@ INLINE void list_move(List *list, List *head){
  * 将list节点移动到head节点前
  * 节点移动可以跨链表，也可以是在同一链表中
  */
-INLINE void list_move_tail(List *list, List *head){
+INLINE void list_move_tail(list_t *list, list_t *head){
 	list_del(list);					//从list中移出list节点
 	list_add_tail(list, head);		//将list插入到head前面
 	return;
@@ -114,7 +114,7 @@ INLINE void list_move_tail(List *list, List *head){
 /**
  * 判断链表是否为空
  */
-INLINE bool_t list_is_empty(const List *head){
+INLINE bool_t list_is_empty(const list_t *head){
 	if (head->next == head){
 		return TRUE;
 	}
@@ -125,8 +125,8 @@ INLINE bool_t list_is_empty(const List *head){
 /**
  * 仔细判断链表是否为空
  */
-INLINE bool_t list_is_empty_careful(const List *head){
-	List *next = head->next;
+INLINE bool_t list_is_empty_careful(const list_t *head){
+	list_t *next = head->next;
 	if (next == head && next == head->prev){	//头结点指向自己
 		return TRUE;
 	}
@@ -137,7 +137,7 @@ INLINE bool_t list_is_empty_careful(const List *head){
 /**
  * 节点是否是链表的第一个元素
  */
-INLINE bool_t list_is_first(const List* list,const List* head){
+INLINE bool_t list_is_first(const list_t* list,const list_t* head){
 	if(list == head->next){
 		return TRUE;
 	}
@@ -148,7 +148,7 @@ INLINE bool_t list_is_first(const List* list,const List* head){
 /**
  * 节点是否是最后一个元素
  */
-INLINE bool_t list_is_last(const List* list,const List* head){
+INLINE bool_t list_is_last(const list_t* list,const list_t* head){
 	if(list == head->prev){
 		return TRUE;
 	}

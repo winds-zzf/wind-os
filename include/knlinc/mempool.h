@@ -21,5 +21,10 @@ bool_t mempool_delete(addr_t addr,size_t size);
  */
 void mempool_init();
 
+/**
+ * 测试主函数
+ */
+void mempool_test_main();
+
 
 #endif //__MEMPOOL_H

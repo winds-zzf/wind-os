@@ -20,7 +20,7 @@ void e820_init(Machine* mach){
 	}
 
 	//copy the e820s from the mask address to E820S_ADR
-	memcpy((addr_t)e820s,num*sizeof(E820),E820S_ADR);
+	memcpy(E820S_ADR,(addr_t)e820s,num*sizeof(E820));
 
 	//检查指定内存地址区域是否可用(内存地址从1MB开始大小为128MB的区域是USABLE)，0x0~0xfffff这1MB内存段一般不使用
 	if(NULL == check_memsize(e820s,num,0x100000U,0x8000000U)){	//找不到满足条件的内存段

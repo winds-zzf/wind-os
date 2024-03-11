@@ -10,7 +10,7 @@
  * addr: 
  */
 static void init_pageaddr(PageAddr* addr){
-	memset((addr_t)addr,0,sizeof(PageAddr));
+	memset(addr,0,sizeof(PageAddr));
 	return ;
 }
 
@@ -20,7 +20,7 @@ static void init_pageaddr(PageAddr* addr){
  */ 
 static void init_mempage(MemPage* page){
 	//initilizing list and lock
-	list_init(&page->hook);
+	list_t_init(&page->hook);
 	spinlock_init(&page->lock);
 	//page flags:set initial value
 	page->flags.olkty = PAGEFLAGS_OLKTY_INIT;
@@ -57,7 +57,7 @@ static void set_mempage(MemPage* page,addr_t phyadr){
  * return:size of array, that is, the number of descriptors
  */
 static size_t count_pages(){
-	Machine *mach = &machine;
+	machine_t *mach = &machine;
 	MemView* views = (MemView*)(mach->e820s_addr);
 	size_t index = 0;
 	
@@ -76,7 +76,7 @@ static size_t count_pages(){
  * principle of memory partition：directly discard the page less than 4KB in size to avoid incomplete pages
  */
 void mempage_init(){
-	Machine *mach = &machine;
+	machine_t *mach = &machine;
 	MemView *views = (MemView*)(mach->e820s_addr);
 
 	//counting the length of 'pages' array
@@ -140,7 +140,7 @@ static void mark_occupy(addr_t start,size_t size){
  * 注意：x86的BIOS中断表从内存地址0x0开始,每个表项2B，共256项，用于处理系统级别的中断
  */
 void mempage_occupy(){
-	Machine* mach = &machine;
+	machine_t* mach = &machine;
 	
 	//BIOS中断表占用内存(这里并不是bios.bin，bios.bin也是借助BIOS中断(表)来实现功能的)
 	mark_occupy(0,0x1000);
@@ -207,7 +207,7 @@ INLINE void test_mark(){
  * 
  */
 void mempage_display(){
-	Machine* mach = &machine;
+	machine_t* mach = &machine;
 	printk("pages address:0x%lx\n",mach->pages_addr);
 	printk("pages number:0x%lx\n",mach->pages_num);
 	printk("pages size:0x%lx\n",mach->pages_size);

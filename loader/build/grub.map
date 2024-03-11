@@ -6,7 +6,6 @@ Removed property 0xc0000002 to merge grub.o (not found) and vgastr.o (0x3)
 Removed property 0xc0000002 to merge grub.o (not found) and string.o (0x3)
 Removed property 0xc0000002 to merge grub.o (not found) and stdio.o (0x3)
 Removed property 0xc0000002 to merge grub.o (not found) and image.o (0x3)
-Removed property 0xc0000002 to merge grub.o (not found) and utils.o (0x3)
 
 Discarded input sections
 
@@ -24,6 +23,9 @@ Discarded input sections
  .group         0x0000000000000000        0x8 stdio.o
  .group         0x0000000000000000        0x8 stdio.o
  .group         0x0000000000000000        0x8 stdio.o
+ .group         0x0000000000000000        0x8 stdio.o
+ .text.__x86.get_pc_thunk.ax
+                0x0000000000000000        0x4 stdio.o
  .text.__x86.get_pc_thunk.bx
                 0x0000000000000000        0x4 stdio.o
  .note.gnu.property
@@ -33,14 +35,6 @@ Discarded input sections
                 0x0000000000000000        0x4 image.o
  .note.gnu.property
                 0x0000000000000000       0x1c image.o
- .group         0x0000000000000000        0x8 utils.o
- .group         0x0000000000000000        0x8 utils.o
- .text.__x86.get_pc_thunk.ax
-                0x0000000000000000        0x4 utils.o
- .text.__x86.get_pc_thunk.bx
-                0x0000000000000000        0x4 utils.o
- .note.gnu.property
-                0x0000000000000000       0x1c utils.o
 
 Memory Configuration
 
@@ -60,7 +54,7 @@ Linker script and memory map
                 0x00000000040000da                __end_start_text = .
                 0x00000000040000da                __begin_text = .
 
-.text           0x00000000040000dc      0xae0
+.text           0x00000000040000dc      0x9d1
  *(.text)
  .text          0x00000000040000dc       0xf8 grub.o
                 0x0000000004000156                grub_entry
@@ -72,135 +66,120 @@ Linker script and memory map
                 0x0000000004000264                clear_screen
                 0x000000000400028c                scroll_screen
                 0x00000000040002c0                write_string
- .text          0x00000000040003c5       0x8a string.o
+ .text          0x00000000040003c5       0x58 string.o
                 0x00000000040003c5                strcmp
                 0x00000000040003eb                strcpy
-                0x000000000400040b                strlen
-                0x000000000400041f                strcat
- .text          0x000000000400044f      0x33a stdio.o
-                0x00000000040006f3                sscank
-                0x0000000004000709                scank
-                0x000000000400072f                sprintk
-                0x0000000004000747                printk
- .text          0x0000000004000789      0x293 image.o
-                0x0000000004000789                image_display
-                0x0000000004000912                get_file
-                0x00000000040009db                get_image_file
-                0x0000000004000a0d                get_image_size
- .text          0x0000000004000a1c      0x1a0 utils.o
-                0x0000000004000a1c                die
-                0x0000000004000a7a                utf_to_unicode
-                0x0000000004000a83                unicode_to_utf8
-                0x0000000004000a8c                checksum_crc32
-                0x0000000004000ac7                checksum_crc64
-                0x0000000004000b5a                error
-                0x0000000004000b8c                warning
-                0x0000000004000bbc                __end_text = .
-                0x0000000004000bbc                __begin_data = .
+                0x0000000004000409                strlen
+ .text          0x000000000400041d      0x321 stdio.o
+                0x000000000400041d                die
+                0x00000000040006e4                sprintk
+                0x00000000040006fc                printk
+ .text          0x000000000400073e      0x36f image.o
+                0x000000000400073e                checksum_crc32
+                0x0000000004000779                checksum_crc64
+                0x0000000004000808                image_display
+                0x0000000004000987                get_file
+                0x0000000004000a4d                get_image_file
+                0x0000000004000a7f                get_image_size
+                0x0000000004000a8e                image_test_main
+                0x0000000004000aad                __end_text = .
+                0x0000000004000aad                __begin_data = .
 
-.iplt           0x0000000004000bbc        0x0
- .iplt          0x0000000004000bbc        0x0 _grub.o
+.iplt           0x0000000004000aad        0x0
+ .iplt          0x0000000004000aad        0x0 _grub.o
 
 .text.__x86.get_pc_thunk.bx
-                0x0000000004000bbc        0x4
+                0x0000000004000aad        0x4
  .text.__x86.get_pc_thunk.bx
-                0x0000000004000bbc        0x4 grub.o
-                0x0000000004000bbc                __x86.get_pc_thunk.bx
+                0x0000000004000aad        0x4 grub.o
+                0x0000000004000aad                __x86.get_pc_thunk.bx
 
 .text.__x86.get_pc_thunk.ax
-                0x0000000004000bc0        0x4
+                0x0000000004000ab1        0x4
  .text.__x86.get_pc_thunk.ax
-                0x0000000004000bc0        0x4 vgastr.o
-                0x0000000004000bc0                __x86.get_pc_thunk.ax
+                0x0000000004000ab1        0x4 vgastr.o
+                0x0000000004000ab1                __x86.get_pc_thunk.ax
 
 .text.__x86.get_pc_thunk.si
-                0x0000000004000bc4        0x4
+                0x0000000004000ab5        0x4
  .text.__x86.get_pc_thunk.si
-                0x0000000004000bc4        0x4 stdio.o
-                0x0000000004000bc4                __x86.get_pc_thunk.si
+                0x0000000004000ab5        0x4 stdio.o
+                0x0000000004000ab5                __x86.get_pc_thunk.si
 
-.text.__x86.get_pc_thunk.bp
-                0x0000000004000bc8        0x4
- .text.__x86.get_pc_thunk.bp
-                0x0000000004000bc8        0x4 stdio.o
-                0x0000000004000bc8                __x86.get_pc_thunk.bp
+.text.__x86.get_pc_thunk.di
+                0x0000000004000ab9        0x4
+ .text.__x86.get_pc_thunk.di
+                0x0000000004000ab9        0x4 stdio.o
+                0x0000000004000ab9                __x86.get_pc_thunk.di
 
-.data           0x0000000004000bcc        0x8
+.data           0x0000000004000ac0        0x8
  *(.data)
- .data          0x0000000004000bcc        0x0 grub.o
- .data          0x0000000004000bcc        0x8 vgastr.o
- .data          0x0000000004000bd4        0x0 string.o
- .data          0x0000000004000bd4        0x0 stdio.o
- .data          0x0000000004000bd4        0x0 image.o
- .data          0x0000000004000bd4        0x0 utils.o
-                0x0000000004000bd4                __end_data = .
-                0x0000000004000bd4                __begin_rodata = .
+ .data          0x0000000004000ac0        0x0 grub.o
+ .data          0x0000000004000ac0        0x8 vgastr.o
+ .data          0x0000000004000ac8        0x0 string.o
+ .data          0x0000000004000ac8        0x0 stdio.o
+ .data          0x0000000004000ac8        0x0 image.o
+                0x0000000004000ac8                __end_data = .
+                0x0000000004000ac8                __begin_rodata = .
 
-.got            0x0000000004000bd4        0x0
- .got           0x0000000004000bd4        0x0 _grub.o
+.got            0x0000000004000ac8        0x0
+ .got           0x0000000004000ac8        0x0 _grub.o
 
-.got.plt        0x0000000004000bd4        0xc
- .got.plt       0x0000000004000bd4        0xc _grub.o
-                0x0000000004000bd4                _GLOBAL_OFFSET_TABLE_
+.got.plt        0x0000000004000ac8        0xc
+ .got.plt       0x0000000004000ac8        0xc _grub.o
+                0x0000000004000ac8                _GLOBAL_OFFSET_TABLE_
 
-.igot.plt       0x0000000004000be0        0x0
- .igot.plt      0x0000000004000be0        0x0 _grub.o
+.igot.plt       0x0000000004000ad4        0x0
+ .igot.plt      0x0000000004000ad4        0x0 _grub.o
 
-.rodata         0x0000000004000be0      0x2ed
+.rodata         0x0000000004000ad4      0x2c0
  *(.rodata)
- .rodata        0x0000000004000be0       0x18 vgastr.o
- .rodata        0x0000000004000bf8       0x48 stdio.o
- .rodata        0x0000000004000c40       0x30 utils.o
+ .rodata        0x0000000004000ad4       0x18 vgastr.o
+ .rodata        0x0000000004000aec       0x5c stdio.o
  *(.rodata.*)
  .rodata.str1.1
-                0x0000000004000c70       0xe1 grub.o
+                0x0000000004000b48       0xe1 grub.o
  .rodata.str1.1
-                0x0000000004000d51       0x11 stdio.o
- .rodata.str1.1
-                0x0000000004000d62      0x16b image.o
+                0x0000000004000c29      0x16b image.o
                                         0x171 (size before relaxing)
-                0x0000000004000ecd                __end_rodata = .
-                0x0000000004000ecd                __begin_kstrtab = .
+                0x0000000004000d94                __end_rodata = .
+                0x0000000004000d94                __begin_kstrtab = .
 
-.eh_frame       0x0000000004000ed0      0x630
- .eh_frame      0x0000000004000ed0       0xb8 grub.o
- .eh_frame      0x0000000004000f88       0xf8 vgastr.o
+.eh_frame       0x0000000004000d94      0x55c
+ .eh_frame      0x0000000004000d94       0xb8 grub.o
+ .eh_frame      0x0000000004000e4c       0xf8 vgastr.o
                                         0x124 (size before relaxing)
- .eh_frame      0x0000000004001080       0x60 string.o
-                                         0x78 (size before relaxing)
- .eh_frame      0x00000000040010e0      0x178 stdio.o
-                                        0x1a4 (size before relaxing)
- .eh_frame      0x0000000004001258      0x1b0 image.o
-                                        0x1dc (size before relaxing)
- .eh_frame      0x0000000004001408       0xf8 utils.o
-                                        0x138 (size before relaxing)
+ .eh_frame      0x0000000004000f44       0x44 string.o
+                                         0x5c (size before relaxing)
+ .eh_frame      0x0000000004000f88      0x134 stdio.o
+                                        0x174 (size before relaxing)
+ .eh_frame      0x00000000040010bc      0x234 image.o
+                                        0x260 (size before relaxing)
 
-.rel.dyn        0x0000000004001500        0x0
- .rel.got       0x0000000004001500        0x0 _grub.o
- .rel.iplt      0x0000000004001500        0x0 _grub.o
+.rel.dyn        0x00000000040012f0        0x0
+ .rel.got       0x00000000040012f0        0x0 _grub.o
+ .rel.iplt      0x00000000040012f0        0x0 _grub.o
 
 .kstrtab
  *(.kstrtab)
-                0x0000000004001500                __end_kstrtab = .
-                0x0000000004001500                __begin_bss = .
+                0x00000000040012f0                __end_kstrtab = .
+                0x00000000040012f0                __begin_bss = .
 
-.bss            0x0000000004001500        0x0
+.bss            0x00000000040012f0        0x0
  *(.bss)
- .bss           0x0000000004001500        0x0 grub.o
- .bss           0x0000000004001500        0x0 vgastr.o
- .bss           0x0000000004001500        0x0 string.o
- .bss           0x0000000004001500        0x0 stdio.o
- .bss           0x0000000004001500        0x0 image.o
- .bss           0x0000000004001500        0x0 utils.o
-                0x0000000004001500                __end_bss = .
-                0x0000000004001500                __end_ldr = .
+ .bss           0x00000000040012f0        0x0 grub.o
+ .bss           0x00000000040012f0        0x0 vgastr.o
+ .bss           0x00000000040012f0        0x0 string.o
+ .bss           0x00000000040012f0        0x0 stdio.o
+ .bss           0x00000000040012f0        0x0 image.o
+                0x00000000040012f0                __end_bss = .
+                0x00000000040012f0                __end_ldr = .
 LOAD _grub.o
 LOAD grub.o
 LOAD vgastr.o
 LOAD string.o
 LOAD stdio.o
 LOAD image.o
-LOAD utils.o
 OUTPUT(grub.elf elf32-i386)
 
 .note.GNU-stack
@@ -215,5 +194,3 @@ OUTPUT(grub.elf elf32-i386)
                 0x0000000000000000        0x0 stdio.o
  .note.GNU-stack
                 0x0000000000000000        0x0 image.o
- .note.GNU-stack
-                0x0000000000000000        0x0 utils.o

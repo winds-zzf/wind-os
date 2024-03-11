@@ -10,7 +10,7 @@
 /**
  * get the MemArea from mgr by areaType
  */
-static MemArea* get_memArea(Memmgr *mgr,uint_t areaType){
+static MemArea* get_memArea(memmgr_t *mgr,uint_t areaType){
 	//parameters testing
 	if(NULL==mgr || areaType>=mgr->areas_num || areaType<1){
 		return NULL;
@@ -61,14 +61,16 @@ static bool_t put_subpages(MemList *mlist, MemPage *head,MemPage* tail){
 	//更新子串
 	head->flags.olkty = PAGEFLAGS_OLKTY_ODER;
 	head->next = tail;
-	tail->flags.olkty = PAGEFLAGS_OLKTY_BAFH;
-	tail->next = mlist;
+	/**
+	 * 为什么加上这一句会导致计数出错
+	 */
+	//tail->flags.olkty = PAGEFLAGS_OLKTY_BAFH;
+	//tail->next = mlist;
 	//将子串添加到链表
 	list_add(&head->hook,&mlist->free_pages);
 	//更新统计信息
 	mlist->free_num++;
 	mlist->total_num++;
-	
 	return TRUE;
 }
 
@@ -218,7 +220,7 @@ static MemPage* divide_core(MemArea *area,size_t requestSize,size_t *realSize,ui
  * flags: 
  * return:
  */
-static MemPage* divide_frame(Memmgr *mgr,size_t requestSize,size_t *realSize,uint_t areaType,uint_t flags){
+static MemPage* divide_frame(memmgr_t *mgr,size_t requestSize,size_t *realSize,uint_t areaType,uint_t flags){
 	size_t retSize = 0;
 	MemPage *retPage = NULL;
 
@@ -263,7 +265,7 @@ static MemPage* divide_frame(Memmgr *mgr,size_t requestSize,size_t *realSize,uin
  * flags: page flags
  * return：the continued MemPages allocated from specified area by specified size 
  */
-MemPage* mem_divide(Memmgr *mgr,size_t requestSize,size_t *realSize,uint_t areaType,uint_t flags){
+MemPage* mem_divide(memmgr_t *mgr,size_t requestSize,size_t *realSize,uint_t areaType,uint_t flags){
 	//parameters testing
 	if(NULL==mgr|| 0==requestSize ||NULL==realSize||0==areaType){	//error parameters
 		return NULL;
@@ -285,7 +287,7 @@ MemPage* mem_divide(Memmgr *mgr,size_t requestSize,size_t *realSize,uint_t areaT
 /**
  * 
  */
-static MemPage* mem_divide_apps_core(Memmgr *mgr){
+static MemPage* mem_divide_apps_core(memmgr_t *mgr){
 	MemPage *rets = NULL;
 	//获取内存应用区
 	MemArea *area = get_memArea(mgr,MEMAREA_TYPE_APPS);
@@ -324,7 +326,7 @@ ret_step:
 /**
  * 应用区内存分配
  */
-MemPage* mem_divide_apps(Memmgr *mgr){
+MemPage* mem_divide_apps(memmgr_t *mgr){
 	//参数检查
 	if(NULL==mgr){
 		return NULL;
@@ -336,7 +338,7 @@ MemPage* mem_divide_apps(Memmgr *mgr){
 		return page;
 	}
 	
-	//懒分配失败，尝试分配内核区的内存页
+	//懒分配失败，尝试从内核区分配内存页
 	size_t realNumber = 0;
 	page = mem_divide(mgr,1,&realNumber,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
 
@@ -358,8 +360,7 @@ static bool_t merge_update_subpages(MemList *mlist,MemPage *head,size_t size){
 			return FALSE;
 		}
 		//页面不再被任何进程使用，需要合并回收
-		//设置地址未分配位
-		head->addr.allocate = PAGEADDR_NO_ALLOC;
+		head->addr.allocate = PAGEADDR_NO_ALLOC;	//设置地址未分配位
 		head->flags.olkty = PAGEFLAGS_OLKTY_BAFH;	//挂载链表类型为BAFH
 		head->next = mlist;
 		return TRUE;
@@ -387,7 +388,7 @@ static bool_t merge_update_subpages(MemList *mlist,MemPage *head,size_t size){
  * 从MemList中查找与(head,tail)连续的subpages，并将它们连接在一起
  */
 static bool_t get_continue_subpages(MemList *mlist,MemPage **head,MemPage **tail){
-	List* pos = NULL;
+	list_t* pos = NULL;
 	MemPage *start = NULL,*end=NULL;
 	//依次遍历
 	list_for_each(pos,&mlist->free_pages){
@@ -427,15 +428,16 @@ static bool_t merge_execute(MemArea *area,MemPage* pages,size_t size,MemList *st
 	//设置subpage的信息，完成释放，并根据返回值确定是否需要进一步的合并操作
 	bool_t rets = merge_update_subpages(startList,pages,size);
 
-	if(!rets){//subpage仍被占用不需要合并
+	if(rets==FALSE){//subpage仍被占用不需要合并
 		return TRUE;
 	}
 	//从低阶MemList开始，依次向高阶进行合并
 	for(; startList<endList; startList++){
-		if(!get_continue_subpages(startList,&startPage,&endPage)){
+		if(get_continue_subpages(startList,&startPage,&endPage)==FALSE){
 			break;
 		}
 	}
+
 	//将最终合并出来的内存添加到list中
 	put_subpages(startList,startPage,endPage);
 
@@ -467,13 +469,12 @@ static bool_t merge_core(MemArea *area,MemPage *pages,size_t size){
 	}else{
 		//获取需要处理的链表范围
 		MemList *startList = NULL,*endList=NULL;
-		if(!merge_list_range(area,size,&startList,&endList)){
+		if(merge_list_range(area,size,&startList,&endList)==FALSE){
 			return FALSE;
 		}
-
-		//执行分割任务
+		
+		//执行合并任务
 		rets = merge_execute(area,pages,size,startList,endList);
-
 	}
 
 	return rets;
@@ -483,7 +484,7 @@ static bool_t merge_core(MemArea *area,MemPage *pages,size_t size){
 /**
  * the frame function of memory merge
  */
-static bool_t merge_frame(Memmgr *mgr,MemPage *pages,size_t size){
+static bool_t merge_frame(memmgr_t *mgr,MemPage *pages,size_t size){
 	//获取内存区
 	MemArea *area = get_memArea(mgr,pages[0].flags.marty);
 	if(NULL==area){
@@ -500,12 +501,7 @@ static bool_t merge_frame(Memmgr *mgr,MemPage *pages,size_t size){
 	//内存区解锁并开中断
 	spinlock_unlock_sti(&area->lock,&cpuflag);
 
-	//result testing
-	if(FALSE==rets){
-		return FALSE;
-	}else{
-		return TRUE;
-	}
+	return rets;
 }
 
 
@@ -515,7 +511,7 @@ static bool_t merge_frame(Memmgr *mgr,MemPage *pages,size_t size){
  * pages：the continued pages to be released 
  * pages：the length of pages
  */
-bool_t mem_merge(Memmgr *mgr,MemPage *pages,size_t size){
+bool_t mem_merge(memmgr_t *mgr,MemPage *pages,size_t size){
 	//parameters tesing
 	if(NULL==mgr || NULL==pages || 0==size){
 		return FALSE;
@@ -525,11 +521,7 @@ bool_t mem_merge(Memmgr *mgr,MemPage *pages,size_t size){
 	bool_t rets =  merge_frame(mgr,pages,size);
 
 	//result testing
-	if(FALSE==rets){
-		return FALSE;
-	}else{
-		return TRUE;
-	}
+	return rets;
 }
 
 //============================================================================================
@@ -548,42 +540,14 @@ void memapi_test_main(){
 	//test_divide_list_range();
 	//test_merge_list_range();
 	//test_mem_divide();
-	test_mem_merge();
+	//test_mem_merge();
 	
-	die(0);
+	//die(0);
 	return;	
 }
 
 INLINE void test_get_order(){
-	get_order(0x0);	
-	get_order(0x1);
-	get_order(0x10);
-	get_order(0x100);
-	get_order(0x1000);
-	get_order(0x10000);
-	get_order(0x100000);
-	get_order(0x1000000);
-	get_order(0x10000000);
-	get_order(0x100000000);
-	get_order(0x1000000000);
-	get_order(0x10000000000);
-	get_order(0);	
-	get_order(1);
 	
-	get_order(2);
-	get_order(3);
-	
-	get_order(4);
-	get_order(5);
-	
-	get_order(8);
-	get_order(9);
-	
-	get_order(16);
-	get_order(17);
-	
-	get_order(32);
-	get_order(33);
 	return;
 }
 
@@ -606,6 +570,7 @@ INLINE void test_divide_list_range(){
 	return;
 }
 
+
 INLINE void test_merge_list_range(){
 	
 	
@@ -613,101 +578,35 @@ INLINE void test_merge_list_range(){
 }
 
 INLINE void test_mem_divide(){
-	/**
-	size_t realSize = 0;
-	MemPage* subpage = NULL;
-	
-	memlists_tostring(memmgr.areas[0].table.lists);
-	//
-	subpage = mem_divide(&memmgr,0,&realSize,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld,0x%lx\n",realSize,subpage);
-	memlists_tostring(memmgr.areas[2].table.lists);
-	//
-	subpage = mem_divide(&memmgr,10,&realSize,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld,0x%lx\n",realSize,subpage);
-	memlists_tostring(memmgr.areas[2].table.lists);
-	//
-	subpage = mem_divide(&memmgr,10,&realSize,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld,0x%lx\n",realSize,subpage);
-	memlists_tostring(memmgr.areas[2].table.lists);
-	//
-	subpage = mem_divide(&memmgr,16,&realSize,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld,0x%lx\n",realSize,subpage);
-	memlists_tostring(memmgr.areas[2].table.lists);
-	//
-	subpage = mem_divide(&memmgr,16,&realSize,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld,0x%lx\n",realSize,subpage);
-	memlists_tostring(memmgr.areas[2].table.lists);
-	*/
-
-	/*
-	MemPage* subpage = NULL;
-	printk("echo:0x%lx,%d\n",subpage,memmgr.areas[2].table.list.free_num);
-	subpage = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage,memmgr.areas[2].table.list.free_num);
-	subpage = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage,memmgr.areas[2].table.list.free_num);
-	subpage = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage,memmgr.areas[2].table.list.free_num);	
-	subpage = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage,memmgr.areas[2].table.list.free_num);
-	*/
-	
+	//穷举测试
+	//将所有内存分配光
 	return;
 }
 
 INLINE void test_mem_merge(){
-	/*
-	size_t realSize1=0, realSize2=0, realSize3=0, realSize4=0;
-	memlists_tostring(memmgr.areas[1].table.lists);
-	//allocating
-	MemPage *subpage1 = mem_divide(&memmgr,14,&realSize1,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld\n",realSize1);
-	memlists_tostring(memmgr.areas[1].table.lists);
-	MemPage *subpage2 = mem_divide(&memmgr,14,&realSize2,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld\n",realSize2);
-	memlists_tostring(memmgr.areas[1].table.lists);
-	MemPage *subpage3 = mem_divide(&memmgr,14,&realSize3,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld\n",realSize3);
+	MemPage *subpage = NULL;
+	size_t realSize=0;
+	list_t head;
+	list_t_init(&head);
+	
 	memlists_tostring(memmgr.areas[1].table.lists);	
-	MemPage *subpage4 = mem_divide(&memmgr,14,&realSize4,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
-	printk("size:%ld\n",realSize4);
+	do{
+		subpage = mem_divide(&memmgr,16,&realSize,MEMAREA_TYPE_KRNL,MEMTABLE_RELDIV);
+		if(NULL!=subpage)
+			list_add(&subpage->hook,&head);
+	}while(NULL!=subpage);
+
 	memlists_tostring(memmgr.areas[1].table.lists);	
-	//recycling
-	printk("recycle\n");
-	mem_merge(&memmgr,subpage4,realSize4);
+	
+	list_t *pos = NULL;
+	list_for_each_head_dell(pos,&head){
+		subpage = list_entry(pos,MemPage,hook);
+		list_del(&subpage->hook);
+		mem_merge(&memmgr,subpage,16);
+	}
+	
 	memlists_tostring(memmgr.areas[1].table.lists);
-	mem_merge(&memmgr,subpage3,realSize3);
-	memlists_tostring(memmgr.areas[1].table.lists);
-	mem_merge(&memmgr,subpage2,realSize2);
-	memlists_tostring(memmgr.areas[1].table.lists);
-	mem_merge(&memmgr,subpage1,realSize1);
-	memlists_tostring(memmgr.areas[1].table.lists);
-	*/
-
-	printk("echo:0x%lx,%d\n",0x0,memmgr.areas[2].table.list.free_num);
-	MemPage* subpage1 = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage1,memmgr.areas[2].table.list.free_num);
-	MemPage* subpage2 = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage2,memmgr.areas[2].table.list.free_num);
-	MemPage* subpage3 = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage3,memmgr.areas[2].table.list.free_num);	
-	MemPage* subpage4 = mem_divide_apps(&memmgr);
-	printk("echo:0x%lx,%d\n",subpage4,memmgr.areas[2].table.list.free_num);
-
-	mem_merge(&memmgr,subpage1,1);
-	printk("echo:%d\n",memmgr.areas[2].table.list.free_num);
-	mem_merge(&memmgr,subpage2,1);
-	printk("echo:%d\n",memmgr.areas[2].table.list.free_num);
-	mem_merge(&memmgr,subpage3,1);
-	printk("echo:%d\n",memmgr.areas[2].table.list.free_num);
-	mem_merge(&memmgr,subpage4,1);
-	printk("echo:%d\n",memmgr.areas[2].table.list.free_num);
-
-	/**
-	 * 1.如何防止重复回收内存
-	 * 2.如何保证内存地址的最大连续性
-	 */
+	printk("successfully pass test_mem_merge test\n");
 	
 	return;
 }

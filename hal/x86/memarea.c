@@ -10,7 +10,7 @@ static void init_memarea(MemArea *areas);
 
 void memarea_init(){
 	/**
-	 * 运算符取地址的时候，成员的地址是List地址+成员偏移地址，因此如果List就是物理地址，那么成员地址也是物理地址
+	 * 运算符取地址的时候，成员的地址是list_t地址+成员偏移地址，因此如果list_t就是物理地址，那么成员地址也是物理地址
 	 * 因此为了避免areas及其成员地址为物理地址，这里areas应该使用虚拟地址
 	 */
 	MemArea *areas = (MemArea*)MAP_RV(machine.next_addr);
@@ -106,7 +106,7 @@ void mount_pages(){
  * basic initialization for single MemArea instance 
  */
 static void init_memarea(MemArea *area){
-	list_init(&area->list);
+	list_t_init(&area->hook);
 	spinlock_init(&area->lock);
 	area->status = 0;
 	area->flag = 0;

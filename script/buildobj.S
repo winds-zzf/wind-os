@@ -1,8 +1,7 @@
 #include "config.h"
 #include "buildfile.h"
 
-# 引导器构造目标
-BUILD_MK_BOOT_OBJS := BUILD_BOOT_OBJS
+
 # hal层构造目标
 BUILD_MK_HALY_OBJS := BUILD_HALY_OBJS
 # kernel构造目标  
@@ -17,6 +16,7 @@ BUILD_MK_DRIV_OBJS := BUILD_DRIV_OBJS
 BUILD_MK_LIBS_OBJS := BUILD_LIBS_OBJS
 # 进程管理构造目标
 BUILD_MK_TASK_OBJS := BUILD_TASK_OBJS
+
 # link目标
 BUILD_MK_LINK_OBJS := BUILD_LINK_OBJS
 # elf文件

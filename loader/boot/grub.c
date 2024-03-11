@@ -50,7 +50,7 @@ static void load_file(const char_t* fname,const addr_t dst){
     	size_t size = 0;		//文件大小
     	size = get_image_file(IMAGE_ADR,fname,&src);
     	printk("loading %s...\n",fname);
-    	if(memcpy(src,size,dst)==0){
+    	if(memcpy(dst,src,size)==0){
     		printk("error in loading the <%s>...\n",fname);     
     	}
     	

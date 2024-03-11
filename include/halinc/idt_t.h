@@ -65,13 +65,13 @@ extern IntGate idt[INTMAX];
 
 
 /* 中断描述符表头 */
-typedef struct IDTR{
+typedef struct IDTR_T{
 	u16_t len;	//长度
 	u64_t base;	//基址
-}__attribute__((packed))Idtr;		//10B
+}__attribute__((packed))idtr_t;		//10B
 
 /* IDTR */
-extern Idtr idtr;
+extern idtr_t idtr;
 
 
 #endif //__IDT_T_H

@@ -6,16 +6,14 @@
 MAKEFLAGS = -s
 
 #ifdef CFG_X86_PLATFORM
-SHARE_PATH = ../share/lib/
 KERNELCE_PATH = ../hal/x86/
+
 HEADFILE_PATH = -I ../include \
 			-I ../include/types \
 			-I ../include/halinc \
 			-I ../include/knlinc \
 			-I ../include/libinc \
-			-I ../include/drvinc \
-			-I ../share/include \
-			-I ../share
+			-I ../include/drvinc
 #endif
 
 CCBUILD_PATH = $(KERNELCE_PATH)

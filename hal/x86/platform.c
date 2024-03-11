@@ -6,11 +6,12 @@
 #include "globalctrl.h"
 
 void platform_init(){
-	Machine* mach = &machine;
+	machine_t* mach = &machine;
 	//clearing memory of Machine struct
-	memset((addr_t)mach,0,sizeof(Machine));	//mach is the address allocated by compiler，existing in kernel.bin
+	memset(mach,0,sizeof(machine_t));	//mach is the address allocated by compiler，existing in kernel.bin
 	//copying 'mach'
-	memcpy(MACHINE_ADR,sizeof(Machine),(addr_t)mach);	
+	memcpy(mach,(void*)MACHINE_ADR,sizeof(machine_t));	
+	
 	return;
 }
 
@@ -39,5 +40,6 @@ void platform_display(){
 	printk("areas size:0x%lx\n",machine.areas_size);		
 	printk("next addr:0x%lx\n",machine.next_addr);	
 	printk("checksum:0x%lx\n",machine.checksum);
+
 	return;
 }

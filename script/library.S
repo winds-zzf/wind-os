@@ -11,6 +11,7 @@ HEADFILE_PATH = -I ../include \
 			-I ../include/knlinc \
 			-I ../include/libinc \
 			-I ../include/drvinc
+			
 CCBUILD_PATH = $(KERNELCE_PATH)
 
 include buildcmd.mk

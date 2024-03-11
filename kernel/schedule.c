@@ -7,10 +7,10 @@
 
 
 /**
- * 
+ * 初始化thdlst_t结构
  */
 static void thdlst_t_init(thdlst_t* threads){
-	list_init(&threads->threads);	//初始化空进程链表
+	list_t_init(&threads->threads);	//初始化空进程链表
 	threads->threadsNum = 0;
 	threads->curthd= NULL;		//没有正在运行的进程
 	
@@ -19,11 +19,14 @@ static void thdlst_t_init(thdlst_t* threads){
 
 
 /**
- * 
+ * 初始化schedata_t结构
  */
 static void schedata_t_init(schedata_t* data){
 	spinlock_init(&data->lock);
 	data->cpuid = 0;
+	/**
+	 * 为什么每个调度器初始为不需要调度而不是需要调度idle？？？
+	 */
 	data->flags = NOTS_SCHED_FLGS;
 	data->count = 0;
 	data->threadNum = 0;
@@ -41,7 +44,7 @@ static void schedata_t_init(schedata_t* data){
 }
 
 /**
- * 
+ * 初始化调度器类
  */
 static void scheclass_t_init(scheclass_t* class){
 	spinlock_init(&class->lock);
@@ -61,7 +64,7 @@ static void scheclass_t_init(scheclass_t* class){
 void schedule_init(){
 	//初始化进程调度器
 	scheclass_t_init(&scheclass);
-	
+
 	return ;
 }
 
@@ -148,6 +151,7 @@ static thread_t* select_thread(){
 	 * 为什么将调度器的优先级设置为最大？
 	 */
 	data->priority = THREAD_PRIORITY_MIN;
+	
 	thread = idle_thread();	//获取空转进程
 out:
 	spinlock_unlock_sti(&data->lock,&cpuflag);
@@ -227,7 +231,7 @@ void __to_new_context(thread_t* next,thread_t* prev){
 static void switch_thread(thread_t* prev,thread_t *next){
 	__asm__ __volatile__(
 		"pushfq \n\t"//保存当前进程的标志寄存器
-		"cli \n\t"  //关中断
+		"cli \n\t"  //关中断，为什么要在这个位置关中断
 		//保存当前进程的通用寄存器
 		"pushq %%rax\n\t"
 		"pushq %%rbx\n\t"
@@ -244,7 +248,7 @@ static void switch_thread(thread_t* prev,thread_t *next){
 		"pushq %%r13\n\t"
 		"pushq %%r14\n\t"
 		"pushq %%r15\n\t"
-		//保存CPU的RSP寄存器到当前进程的机器上下文结构中
+		//保存内核栈RSP寄存器到当前进程的机器上下文结构中
 		"movq %%rsp,%[PREV_RSP] \n\t"
 		//把下一个进程的机器上下文结构中的RSP的值，写入CPU的RSP寄存器
 		"movq %[NEXT_RSP],%%rsp \n\t"//事实上这里已经切换到下一个进程了，因为切换进程的内核栈    
@@ -270,29 +274,58 @@ static void switch_thread(thread_t* prev,thread_t *next){
 		//输出当前进程的内核栈地址
 		: [ PREV_RSP ] "=m"(prev->context.nextrsp)
 		//读取下一个进程的内核栈地址
-		: [ NEXT_RSP ] "m"(next->context.nextrsp), "D"(next), "S"(prev)//为调用__to_new_context函数传递参数
+		: [ NEXT_RSP ] "m"(next->context.nextrsp), "D"(next), "S"(prev)		//为调用__to_new_context函数传递参数
 		: "memory"
     );
     return;
 }
 
+void schedule_set_flag(){
+	uint_t cpuid = hal_retn_cpuid();
+	schedata_t* data = &scheclass.schedatas[cpuid];
+
+	cpuflag_t cpuflag;
+	spinlock_lock_cli(&data->lock,&cpuflag);
+
+	//"需要调度"标志
+	data->flags = NEED_SCHED_FLGS;
+
+	spinlock_unlock_sti(&data->lock,&cpuflag);
+	return ;
+}
+
+u64_t schedule_get_flag(){
+	uint_t cpuid = hal_retn_cpuid();
+	schedata_t* data = &scheclass.schedatas[cpuid];
+	return data->flags;
+}
+
+void schedule_set_flag_ex(uint_t flag){
+	uint_t cpuid = hal_retn_cpuid();
+	schedata_t* data = &scheclass.schedatas[cpuid];
+
+	cpuflag_t cpuflag;
+	spinlock_lock_cli(&data->lock,&cpuflag);
+
+	//"需要调度"标志
+	data->flags = flag;
+
+	spinlock_unlock_sti(&data->lock,&cpuflag);
+	return;
+}
 
 /**
  * 
  */
 void krl_schedule(){
-	printk("schedule\n");
 	/**
 	 * 参考Cosmos里面是如何避免频繁调度同一个idle的
 	 */
-
-
-
-	 
 	//返回当前运行的进程
 	thread_t* prev = current_thread();
 	//选择下一个运行的进程
 	thread_t* next = select_thread();
+
 	//执行进程切换
 	switch_thread(prev,next);
 	
@@ -358,6 +391,10 @@ void schedule_wait(waitlist_t *wlst){
 		data->thdlst[prity].curthd=NULL;
 	}
 	data->thdlst[prity].threadsNum--;
+
+	/**
+	 * 这里并没有修改总调度器的进程总数
+	 */
 	
 	//CPU调度器释放锁
 	spinlock_unlock_sti(&data->lock,&sche_cpuflag);
@@ -403,13 +440,93 @@ void schedule_up(waitlist_t* wlst){
 	data->thdlst[prity].threadsNum++;
 	
 	spinlock_unlock_sti(&data->lock,&sche_cpuflag);
-	return;	//正常返回、
+	return;	//正常返回
 	
 //错误处理
 err_step:
 	{printk("schedule_up error\n");die(0);}
 	return;
 }
+
+void schedule_inc_tick(){
+	//获取当前运行进程
+	thread_t* thd = current_thread();
+	//当前运行进程时钟+1
+	cpuflag_t cpuflag;
+	spinlock_lock_cli(&thd->lock,&cpuflag);
+
+	//更新时钟计数ms
+	thd->tick++;
+	//超过最大运行时间，切换进程
+	if(thd->tick>THREAD_RUN_TICK){
+		thd->tick = 0;
+		/**
+		 * 将进程设置为需要调度，在中断处理完毕后就会执行调度
+		 * 为什么不在这个位置直接执行调度程序进行抢占？
+		 */
+		schedule_set_flag();
+	}
+	
+	spinlock_unlock_sti(&thd->lock,&cpuflag);
+	return;
+}
+
+/**
+ * 检查是否需要调度
+ */
+void schedule_check(){
+	uint_t cpuid = hal_retn_cpuid();
+	schedata_t *data = &scheclass.schedatas[cpuid];
+	uint_t flag = 0;
+
+	cpuflag_t cpuflag;
+	spinlock_lock_cli(&data->lock,&cpuflag);
+
+	/**
+	 * ？？？？？
+	 */
+	if(data->flags == NEED_START_CPUIDLE_SCHED_FLGS){
+		flag = 1;
+	}
+	
+	/**
+	 * ？？？？
+	 */
+	if(data->flags == NEED_SCHED_FLGS){
+		data->flags = NOTS_SCHED_FLGS;
+		flag = 1;
+	}
+	
+	spinlock_unlock_sti(&data->lock,&cpuflag);
+
+	if(flag==1){
+		//执行进程调度
+		krl_schedule();
+	}
+	return;
+}
+
+/**
+ * 调度器如何终止一个进程(异常终止，运行结束)？
+ */
+
+/**
+ * 缓存亲和度
+ * 在设计多处理器调度时遇到的最后一个问题，是所谓的缓存亲和度（cache affinity）。
+ * 这个概念很简单：一个进程在某个CPU上运行时，会在该CPU的缓存中维护许多状态。
+ * 下次该进程在相同CPU上运行时，由于缓存中的数据而执行得更快。
+ * 相反，在不同的CPU上执行，会由于需要重新加载数据而很慢（好在硬件保证的缓存一致性可以保证正确执行）。
+ * 因此多处理器调度应该考虑到这种缓存亲和性，并尽可能将进程保持在同一个CPU上。
+ */
+
+/**
+ * 操作系统自身应该运行在所有的CPU上
+ */
+
+/**
+ * 进程通过进行系统调用时，通过陷入指令执行操作系统内核代码，这个过程中发生进程切换了吗？
+ */
+
 
 //=================================================================================================================
 

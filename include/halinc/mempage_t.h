@@ -9,7 +9,7 @@
 
 #define  PAGEADDR_NO_ALLOC (0)
 #define  PAGEADDR_ALLOC (1)
-/* 页物理地址(高位和标志位) */
+/* 页物理地址(仅适于页物理地址，而不能用于描述普通物理地址) */
 typedef struct PAGEADDR{
 	u64_t	allocate:1;	//分配位
 	u64_t	share:1;		//共享位
@@ -62,14 +62,15 @@ typedef struct PAGEFLAGS{
 
 /** 
  * 页描述符
- * 页描述符要尽可能的小，因为物理内存能划分成大量的页
+ * 页描述符要尽可能的小，因为物理内存会被划分成大量的页，需要大量页描述符
+ * page_t
  */
 typedef struct MEMPAGE{
-	List 	hook;		//16B链表
-	Spinlock	lock;		//4B保护自身的自旋锁
+	list_t 	hook;		//16B链表
+	spinlock_t	lock;		//4B保护自身的自旋锁
 	PageFlags flags;		//4B物理页标志
 	PageAddr 	addr;		//8B物理地址和标志
-	void* 	next;		//8B下一个相邻页(该字段有什么用？)
+	void* 	next;		//8B下一个相邻页
 }MemPage;	//40B
 
 

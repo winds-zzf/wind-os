@@ -11,7 +11,7 @@
  */
 void waitlist_t_init(waitlist_t* wlst){
 	spinlock_init(&wlst->lock);
-	list_init(&wlst->waits);
+	list_t_init(&wlst->waits);
 	wlst->waitsNum = 0;
 	
 	return;
@@ -36,9 +36,11 @@ void waitlist_up(waitlist_t* wlst){
  * 将等待队列中的所有进程唤醒，加入到就绪队列等待
  */
 void waitlist_allup(waitlist_t* wlst){
+	printk("#^");
 	//将等待队列所有的进程都添加到进程调度
 	while(list_is_empty_careful(&wlst->waits)==FALSE){
 		//选择一个进程，挂载到就绪队列
+		printk("#");
 		schedule_up(wlst);
 	}
 	return;
@@ -51,6 +53,7 @@ void waitlist_allup(waitlist_t* wlst){
 void waitlist_add(waitlist_t *wlst,thread_t* thd){
 	cpuflag_t cpuflag;
 	spinlock_lock_cli(&wlst->lock,&cpuflag);
+	
 	//先进先出:放在队列尾部
 	list_add_tail(&thd->hook,&wlst->waits);
 	wlst->waitsNum++;

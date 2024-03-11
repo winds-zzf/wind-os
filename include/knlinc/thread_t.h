@@ -6,6 +6,7 @@
 #define __THREAD_T_H
 
 #include "tss_t.h"
+#include "objnode_t.h"
 
 
 /* 进程五状态模型状态 */
@@ -66,17 +67,11 @@ typedef struct CONTEXT_T{
 	tss_t*	nexttss;		//指向tss结构
 }context_t;
 
-/* 资源描述符 */
-typedef struct OBJNODE_T{
-
-
-
-}objnode_t;
 
 /* 进程结构 */
 typedef struct THREAD_T{
-	Spinlock 		lock;		//保护结构的自旋锁
-	List			hook;		//挂载进程的钩子
+	spinlock_t 		lock;		//保护结构的自旋锁
+	list_t			hook;		//挂载进程的钩子
 	u64_t		flags;		//进程标志
 	u64_t		status;		//进程状态（创建,就绪,运行,阻塞,终止）
 	//

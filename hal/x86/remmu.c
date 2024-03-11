@@ -14,7 +14,7 @@
  * 在写入上级页表项时应转换为物理地址。
  */
 void remmu_init(){
-	Machine *mach = &machine;
+	machine_t *mach = &machine;
 	//base,p1,p2,p3中的地址必须是物理地址，因为MMU本身就是用于转换虚拟地址的，所以MMU页表中不能包含虚拟地址
 	u64_t base = mach->next_addr;		//物理地址
 	u64_t *p1 = (u64_t*)(base+0x1000*0);	//一级页目录(4KB,512)
@@ -22,7 +22,7 @@ void remmu_init(){
 	u64_t *p3 = (u64_t*)(base+0x1000*2);	//三级页目录(4KB,512)
 	
 	//初始化
-	memset(base,0,REMMU_SIZE);	//MMU页表总大小
+	memset((void*)base,0,REMMU_SIZE);	//MMU页表总大小
 
 	/*
 	 * MMU平坦映射
@@ -67,7 +67,7 @@ void remmu_init(){
 }
 
 void remmu_display(){
-	Machine *mach = &machine;
+	machine_t *mach = &machine;
 	printk("=================================mmu info====================================\n");
 	printk("mmu page address:0x%lx\n",mach->mmu_addr);
 	printk("mmu page size:0x%lx\n",mach->mmu_size);

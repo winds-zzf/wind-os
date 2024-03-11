@@ -5,10 +5,10 @@
 #include "globaltype.h"
 #include "globalctrl.h"
 
-static void set_memmgr(Memmgr *mgr);
+static void set_memmgr(memmgr_t *mgr);
 
-void memmgr_init(Machine* mach){
-	Memmgr *mgr = &memmgr;	//obtaining the handle of memmgr
+void memmgr_init(machine_t* mach){
+	memmgr_t *mgr = &memmgr;	//obtaining the handle of memmgr
 	
 	//重新初始化页表(此处可以更改分页模式)
 	remmu_init();
@@ -34,17 +34,16 @@ void memmgr_init(Machine* mach){
 	//6.further initializing for 'mgr'
 	set_memmgr(mgr);
 
+	//测试API
+	memapi_test_main();
+
 	//7.initializing the memory object
 	memobject_init();
-	//memobject_test_main();
-
-	
-	//测试API
-	//memapi_test_main();
+		
 	return;
 }
 
-void memmgr_display(Machine *mach){
+void memmgr_display(machine_t* mach){
 	
 	return;	
 }
@@ -52,9 +51,9 @@ void memmgr_display(Machine *mach){
 /**
  * simple initialization for 'Memmgr' struct
  */
-static void init_memmgr(Memmgr *mgr){
+static void init_memmgr(memmgr_t *mgr){
 	//
-	list_init(&mgr->list);
+	list_t_init(&mgr->list);
 	spinlock_init(&mgr->lock);
 	//
 	mgr->status = 0;
@@ -80,8 +79,8 @@ static void init_memmgr(Memmgr *mgr){
 /**
  * further initializing for memmgr 
  */
-static void set_memmgr(Memmgr *mgr){
-	Machine *mach = &machine;
+static void set_memmgr(memmgr_t *mgr){
+	machine_t *mach = &machine;
 	//basic initializing for memmgr
 	init_memmgr(mgr);
 	//inheriting the physical addresses about memmgr from machine and converting them to virtual  

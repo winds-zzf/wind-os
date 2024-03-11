@@ -61,13 +61,13 @@ typedef struct SEGMENT{
 extern Segment gdt[CPUCORE_MAX][GDTMAX];
 
 /* 全局段描述符表头 */
-typedef struct GDTR{
+typedef struct GDTR_T{
 	u16_t 	len;				//长度
 	u64_t 	base;			//基址
-}__attribute__((packed))Gdtr;		//10B
+}__attribute__((packed))gdtr_t;		//10B
 
 /* GDTR */
-extern Gdtr gdtr[CPUCORE_MAX];
+extern gdtr_t gdtr[CPUCORE_MAX];
 
 
 #endif //__GDT_T_H

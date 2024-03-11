@@ -8,8 +8,8 @@
 
 /* 进程占用内存空间管理 */
 typedef struct  KVMPROCESS{
-	Spinlock	lock;	//保护自身结构的自旋锁
-	List		hook;	//链表钩子
+	spinlock_t	lock;	//保护自身结构的自旋锁
+	list_t		hook;	//链表钩子
 	
 	uint_t 	flag;	//相关标志
 	uint_t	status;	//自身状态

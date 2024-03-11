@@ -27,16 +27,6 @@ Echo_ASM = @echo 'ASM -[M] 正在构建'$<
 !$(Echo_GCC)
 
 #
-%.o : $(SHARE_PATH)%.c
-!$(CC) $(CFLAGS) -o $@ $<
-!$(Echo_GCC)
-
-#
-%.o : $(SHARE_PATH1)%.c
-!$(CC) $(CFLAGS) -o $@ $<
-!$(Echo_GCC)
-
-#
 %.o : $(CCBUILD_PATH)%.S
 !$(CC) $(CFLAGS) -o $@ $<
 !$(Echo_GCC)

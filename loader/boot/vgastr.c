@@ -4,7 +4,6 @@
  */
 #include"global.h"
 #include"vgastr_t.h"
-#include"machine.h"
 
 /**
  * 由于Cursor放在了程序的数据区，而不是特定地址下，因此不能多个模块进行共享
@@ -54,11 +53,15 @@ void clear_screen(u16_t val){
 }
 
 void scroll_screen(){
-	u16_t* src = (u16_t*)(VGA_ADR+OFFSET(1,0));	//获取第二行首元素地址
-	memcpy((addr_t)src,(VGA_ROW-1)*VGA_COL*2,(addr_t)VGA_ADR);	//将后面的所有行移动到前面来
+	//获取第二行首元素地址
+	u16_t* src = (u16_t*)(VGA_ADR+OFFSET(1,0));
+	//将后面的所有行移动到前面来
+	memcpy((addr_t)VGA_ADR,(addr_t)src,(VGA_ROW-1)*VGA_COL*2);
 	src = (u16_t*)(VGA_ADR+OFFSET(VGA_ROW-1,0));
+	
 	for(uint_t i=0;i<VGA_COL;i++){
-		*src++ = (u16_t)VGA_DEFAULT_VAL; 			//使用默认值初始化最后一行
+		//使用默认值初始化最后一行
+		*src++ = (u16_t)VGA_DEFAULT_VAL; 
 	}
 	return;
 }
@@ -66,7 +69,8 @@ void scroll_screen(){
 void write_string(const char_t* str){
 	char_t* addr = NULL;
 	while(*str){
-		addr = (char_t*)(VGA_ADR+OFFSET(cursor.r,cursor.c));	//每次处理一个字符之前定位地址
+		//每次处理一个字符之前定位地址
+		addr = (char_t*)(VGA_ADR+OFFSET(cursor.r,cursor.c));
 		set_cursor(cursor.r,cursor.c);		//设置光标位置
 		switch(*str){	//依次处理每个字符
 		case '\n':

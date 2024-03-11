@@ -11,12 +11,12 @@
 /**
  * 物理内存管理器初始化
  */
-void memmgr_init(Machine *mach);
+void memmgr_init(machine_t *mach);
 
 /**
  * 
  */
-void memmgr_display(Machine* mach);
+void memmgr_display(machine_t* mach);
 
 
 #endif //__MEMMGR_H

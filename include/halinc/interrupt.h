@@ -22,22 +22,24 @@ void interrupt_init();
 void interrupt_display();
 
 /**
- * 初始化中断回调函数句柄
+ * 初始化中断服务例程，并将指定字段置位
  * ihandle:中断回调函数句柄 
  * flag: 标志位
  * ifault: 中断异常描述符
  * device: 设备描述符
  * entry: 回调函数入口
  */
-void init_intHandle(IntHandle *ihandle,u32_t flag,IntFault *ifault,void* device,IntCallback entry);
+void intservice_t_init(intservice_t *intserv,u32_t flag,IntFault *ifault,void* device,IntCallback entry);
 
 /**
- * 为中断异常描述符添加中断回调函数
- * ifault: 中断异常描述符
- * ihandle: 中断回调函数句柄
- * return 返回true当且仅当添加成功
+ *
  */
-bool_t  add_ihandle(IntFault *ifault,IntHandle *ihandle);
+bool_t add_intservice(IntFault *ifault,intservice_t* iservice);
+
+/**
+ * 根据中断号获取中断异常描述符
+ */
+IntFault* get_intFault(uint_t irq_num);
 
 /**
  * 异常分发器：用于处理异常中断
@@ -61,5 +63,17 @@ void hal_hwint_allocator(uint_t int_num, void *sframe);
  * msgp: 消息指针
  */
 sysstus_t hal_syscal_allocator(uint_t sys_num,void* msgp);
+
+
+/**
+ * 开启指定硬件中断信号线上的中断
+ */
+drvstus_t hal_enable_intline(u32_t intnum);
+
+/**
+ * 屏蔽指定硬件中断信号线上的中断
+ */
+drvstus_t hal_disable_intline(u32_t intnum);
+
 
 # endif //__INTERRUPT_H

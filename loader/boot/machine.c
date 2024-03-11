@@ -157,7 +157,7 @@ static void kernel_init(Machine* mach){
 	}
 
 	//复制到指定位置
-	memcpy(addr,size,KERNEL_ADR);	//将内核文件复制到KERNEL_ADR位置
+	memcpy(KERNEL_ADR,addr,size);	//将内核文件复制到KERNEL_ADR位置
 
 	//填写机器信息
 	mach->kernel_addr = KERNEL_ADR;
@@ -198,7 +198,7 @@ static void font_init(Machine* mach){
 	
 	//复制到指定位置
 	addr_t dst = (addr_t)mach->next_addr;	//内存分配
-	memcpy(addr,size,dst);
+	memcpy(dst,addr,size);
 	
 	//填写机器信息结构体
 	mach->font_addr = (u64_t)dst;
@@ -240,7 +240,7 @@ static void logo_init(Machine* mach){
 	
 	//复制到指定位置
 	addr_t dst = (addr_t)mach->next_addr;	//内存分配
-	memcpy(addr,size,dst);
+	memcpy(dst,addr,size);
 	
 	//填写机器信息结构体
 

@@ -23,35 +23,40 @@
 #define MEMAREA_HWAD_START 0
 #define MEMAREA_HWAD_SIZE 0x2000000
 #define MEMAREA_HWAD_END (MEMAREA_HWAD_START+MEMAREA_HWAD_SIZE-1)
-/* 内核区 */
+/** 
+ * 内核区
+ */
 #define MEMAREA_KRNL_START 0x2000000
 #define MEMAREA_KRNL_SIZE (0x40000000-0x2000000)
 #define MEMAREA_KRNL_END (MEMAREA_KRNL_START+MEMAREA_KRNL_SIZE-1)
-/* 应用区 */
+/** 
+ * 应用区
+ */
 #define MEMAREA_APPS_START 0x40000000
 #define MEMAREA_APPS_SIZE (0xffffffffffffffff-0x40000000)
 #define MEMAREA_APPS_END (MEMAREA_APPS_START+MEMAREA_APPS_SIZE-1)
-/* 共享区 */
+/**
+ * 共享区
+ */
 
 #define MEMAREA_MAX 4	//最大内存区数量
 /* 内存区数据结构 */
 typedef struct MEMAREA{
-	List 	list;		//链表
-	Spinlock 	lock;		//自旋锁
+	list_t 	hook;		//挂载内存区的钩子
+	spinlock_t 	lock;		//自旋锁
 	
 	uint_t 	status;		//内存区状态
 	uint_t	flag;		//内存区标志
 	uint_t	type;		//内存区类型
 	
-	//暂未实现
+	//
 	sem_t	sem;			//内存区信号量
-	;					//内存区等待队列
 	
 	size_t	total_num;	//内存区总页面数
 	size_t	allocate_num;	//内存区已分配页面数
 	size_t	free_num;		//内存区空闲页面数
 	size_t	retain_num;	//内存区保留页面数
-	size_t	horizon;		//内存分配的水位线
+	size_t	horizon;		//内存分配的水位线(当内存分配超过这个值的时候开始回收内存)
 	
 	addr_t	start;		//内存区开始地址
 	addr_t	end;			//内存区结束地址

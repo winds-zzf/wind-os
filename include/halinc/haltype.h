@@ -4,9 +4,13 @@
 #ifndef __HALTYPE_H
 #define __HALTYPE_H
 
+//基本函数
+#include "_stdio_t.h"
+#include "_string_t.h"
 
 //平台模块
 #include "platform_t.h"
+#include "vgastr_t.h"
 
 //中断模块
 #include "gdt_t.h"

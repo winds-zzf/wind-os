@@ -22,7 +22,7 @@ typedef struct E820{
 
 /* 内存视图结构定义 */
 typedef struct MEMVIEW{
-	Spinlock lock;		//保护结构体的自旋锁
+	spinlock_t lock;		//保护结构体的自旋锁
 	u32_t type;		//内存地址空间类型
 	u64_t addr;		//内存空间的开始地址
 	u64_t size;		//内存空间的大小

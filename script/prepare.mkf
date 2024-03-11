@@ -5,21 +5,19 @@ Echo_GCC = @echo 'GCC -[M] 正在预编译脚本'$@
 
 CC = gcc
 CPPFLGSLDS = $(HEADFILE_PATH) -E -P
-# 内核头文件路径
-HEADFILE_PATH = -I ../include/ \
-			-I ../include/types \
-			-I ../include/halinc \
-			-I ../share \
-			-I ../share/include
+
+# 编译脚本文件.S路径
+HEADFILE_PATH = -I ../include/
+#
 CCBUILD_PATH = ./
 
-# 转换器
+# 脚本转换器
 Scripter = ./scripter
 
-#linker脚本
-LDS_OBJS = windlink.lds
-#Makefile脚本
-MK_OBJS = buildobj.mk buildcmd.mk buildrule.mk hal.mk kernel.mk driver.mk library.mk task.mk link.mk memory.mk fsys.mk
+#目标linker脚本
+LDS_OBJS = windlink.lds applink.lds
+#目标Makefile脚本
+MK_OBJS = buildobj.mk buildcmd.mk buildrule.mk hal.mk kernel.mk driver.mk library.mk task.mk link.mk memory.mk fsys.mk app.mk applds.mk
 
 .PHONY : all
 

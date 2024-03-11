@@ -11,7 +11,7 @@ void kvmarea_init(){
 
 void kvmArea_init(KvmArea *area){
 	spinlock_init(&area->lock);
-	list_init(&area->hook);
+	list_t_init(&area->hook);
 	area->flag = 0;
 	area->limits = 0;
 	area->mapType = 0;
@@ -28,7 +28,7 @@ void kvmSpace_init(KvmSpace *space){
 	spinlock_init(&space->lock);
 	space->flag = 0;
 
-	list_init(&space->areas);
+	list_t_init(&space->areas);
 	space->areasNum = 0;
 
 	space->startArea= NULL;

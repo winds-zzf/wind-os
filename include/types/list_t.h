@@ -9,9 +9,9 @@
 /**
  * 双向循环链表节点
  */
-typedef struct LIST{
-	struct LIST *prev,*next;		//前驱后继指针
-}List;
+typedef struct LIST_T{
+	struct LIST_T *prev,*next;		//前驱后继指针
+}list_t;
 
 
 /**

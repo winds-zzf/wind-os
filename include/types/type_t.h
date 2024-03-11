@@ -22,6 +22,8 @@ typedef signed long s64_t;
 
 typedef unsigned int uint_t;	//无符号int
 typedef signed int sint_t;	//有符号int
+typedef signed long slong_t;	//有符号长整数
+typedef unsigned long ulong;	//无符号长整数
 
 //专用类型
 typedef u64_t bool_t;		//使用u64_t以提供最大的兼容性
@@ -32,9 +34,12 @@ typedef u8_t byte_t;		//子节类型
 
 //硬件类型
 typedef u64_t cpuflag_t;		//CPU标志类型
-typedef sint_t drvstus_t;	//驱动状态类型
-typedef sint_t sysstus_t;	//系统状态类型
-typedef u64_t mmstus_t;		//
+typedef s64_t drvstus_t;		//驱动状态类型
+typedef s64_t sysstus_t;		//系统状态类型
+typedef u64_t memstus_t;		//
+typedef s64_t hand_t;		//
+typedef void* buf_t;		//缓冲区类型
+
 
 //宏定义
 #define PUBLIC			//公有域：default
@@ -47,8 +52,6 @@ typedef u64_t mmstus_t;		//
 
 #define ALIGN(x,b) (((x)+(b)-1)&~((b)-1))	//x向上a倍对齐
 #define ALIGN_4K(x) ALIGN(x,0x1000)		//向上4K对齐
-
-#define HALT()	//主动死机
 
 
 //定义错误类型

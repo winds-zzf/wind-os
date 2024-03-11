@@ -5,7 +5,6 @@
 #include"globaltype.h"
 #include"globalctrl.h"
 
-#include"vgastr_t.h"
 
 /**
  * 由于Cursor放在了程序的数据区，而不是特定地址下，因此不能多个模块进行共享
@@ -56,7 +55,7 @@ void clear_screen(u16_t val){
 
 void scroll_screen(){
 	u16_t* src = (u16_t*)(VGA_ADR+OFFSET(1,0));	//获取第二行首元素地址
-	memcpy((addr_t)src,(VGA_ROW-1)*VGA_COL*2,(addr_t)VGA_ADR);	//将后面的所有行移动到前面来
+	memcpy((void*)VGA_ADR,src,(VGA_ROW-1)*VGA_COL*2);	//将后面的所有行移动到前面来
 	src = (u16_t*)(VGA_ADR+OFFSET(VGA_ROW-1,0));
 	for(uint_t i=0;i<VGA_COL;i++){
 		*src++ = (u16_t)VGA_DEFAULT_VAL; 			//使用默认值初始化最后一行

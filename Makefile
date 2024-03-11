@@ -5,7 +5,7 @@ MAKEFLAGS = -s
 
 .PHONY : all clean backup prepare build copy pack install start
 
-BACKUP_FILE := ./hal ./include ./kernel ./loader ./script ./share ./tools ./Makefile ./Makefile.x86
+BACKUP_FILE := ./hal ./apps ./include ./kernel ./loader ./script ./tools ./Makefile ./Makefile.x86
 
 # 清理->备份->构造->复制->打包->安装->启动
 all: clean backup prepare build copy pack install start
@@ -40,6 +40,7 @@ build:
 copy:
 	cd ./loader/build/;cp grub.bin loader.bin bios.bin  ../../release/ # 拷贝引导器文件
 	cp ./build/kernel.bin ./release/ 		# 拷贝内核文件
+	#cd ./build/; cp user.app ostime.app helloworld.app ../release/		# 拷贝应用程序文件
 	
 
 # 打包：将内核所需文件打包成映像

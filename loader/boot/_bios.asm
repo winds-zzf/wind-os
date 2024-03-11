@@ -7,7 +7,7 @@ global _start		;声明_start为全局标号，以便其他模块引用
 [bits 16]		;设置代码位数为16位
 _start:
 _16_mode:
-	mov	bp,0x20 		;0x20是指向GDT中的16位数据段描述符k16da_dsc
+	mov	bp,0x20 	;0x20是指向GDT中的16位数据段描述符k16da_dsc
 	mov	ds, bp
 	mov	es, bp
 	mov	ss, bp

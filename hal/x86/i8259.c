@@ -33,21 +33,21 @@ void i8259_send_eoi(){
 }
 
 
-void i8259_enabled_line(u32_t line){
+void i8259_enable_line(u32_t line){
 	cpuflag_t flags;
 	save_flags_cli(&flags);
-	if (line < 8){
-		u8_t amtmp = in_u8(_INTM_CTLMASK);
-		amtmp &= (u8_t)(~(1 << line));
-		out_u8_p(_INTM_CTLMASK, amtmp);
+	if (line < 8){	//Master 8259a
+		u8_t mtmp = in_u8(_INTM_CTLMASK);
+		mtmp &= (u8_t)(~(1 << line));
+		out_u8_p(_INTM_CTLMASK, mtmp);
 	}
-	else{
-		u8_t astmp = in_u8(_INTM_CTLMASK);
-		astmp &= (u8_t)(~(1 << 2));
-		out_u8_p(_INTM_CTLMASK, astmp);
-		astmp = in_u8(_INTS_CTLMASK);
-		astmp &= (u8_t)(~(1 << (line - 8)));
-		out_u8_p(_INTS_CTLMASK, astmp);
+	else{	//Slave 8259a
+		u8_t stmp = in_u8(_INTM_CTLMASK);
+		stmp &= (u8_t)(~(1 << 2));
+		out_u8_p(_INTM_CTLMASK, stmp);
+		stmp = in_u8(_INTS_CTLMASK);
+		stmp &= (u8_t)(~(1 << (line - 8)));
+		out_u8_p(_INTS_CTLMASK, stmp);
 	}
 	restore_flags_sti(&flags);
 	return;
@@ -57,21 +57,22 @@ void i8259_disable_line(u32_t line){
 	cpuflag_t flags;
 	save_flags_cli(&flags);
 	if (line < 8){
-		u8_t amtmp = in_u8(_INTM_CTLMASK);
-		amtmp |= (u8_t)((1 << line));
-		out_u8_p(_INTM_CTLMASK, amtmp);
+		u8_t mtmp = in_u8(_INTM_CTLMASK);
+		mtmp |= (u8_t)((1 << line));
+		out_u8_p(_INTM_CTLMASK, mtmp);
 	}
 	else{
-		u8_t astmp = in_u8(_INTM_CTLMASK);
-		astmp |= (u8_t)((1 << 2));
-		out_u8_p(_INTM_CTLMASK, astmp);
-		astmp = in_u8(_INTS_CTLMASK);
-		astmp |= (u8_t)((1 << (line - 8)));
-		out_u8_p(_INTS_CTLMASK, astmp);
+		u8_t stmp = in_u8(_INTM_CTLMASK);
+		stmp |= (u8_t)((1 << 2));
+		out_u8_p(_INTM_CTLMASK, stmp);
+		stmp = in_u8(_INTS_CTLMASK);
+		stmp |= (u8_t)((1 << (line - 8)));
+		out_u8_p(_INTS_CTLMASK, stmp);
 	}
 	restore_flags_sti(&flags);
 	return;
 }
+
 
 void i8259_save_disableline(u64_t *svline, u32_t line){
 	u32_t intftmp;
@@ -88,7 +89,7 @@ void i8259_save_disableline(u64_t *svline, u32_t line){
 	return;
 }
 
-void i8259_rest_enabledline(u64_t *svline, u32_t line){
+void i8259_rest_enableline(u64_t *svline, u32_t line){
 	cpuflag_t flags;
 	save_flags_cli(&flags);
 

@@ -49,6 +49,7 @@ exc_general_protection:	;越界访存
 ALIGN	16
 exc_page_fault:
 	SRFTFAULT_ECODE 14
+;
 ALIGN	16
 exc_copr_error:
 	SRFTFAULT 16

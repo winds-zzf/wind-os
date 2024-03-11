@@ -12,7 +12,7 @@ static bool_t e820_to_memview(MemView *view,E820 *e820);
  * 收集内存信息，生成Memory结构体
  */
 void memview_init(){
-	Machine *mach = &machine;
+	machine_t *mach = &machine;
 	uint_t num = 0;		//数组元素个数
 	E820* e820s = (E820*)mach->e820s_addr;	//从机器信息结构体中获取e820结构体数组
 	
@@ -38,7 +38,7 @@ void memview_init(){
 }
 
 void memview_display(){
-	Machine* mach = &machine;
+	machine_t* mach = &machine;
 	printk("memory addr:0x%lx\n",mach->e820s_addr);
 	printk("memory num:0x%lx\n",mach->e820s_num);
 	printk("memory size:0x%lx\n",mach->e820s_size);
@@ -98,7 +98,7 @@ static bool_t e820_to_memview(MemView* view,E820* e820){
 	}
 
 	//初始化Memory结构体
-	memset((addr_t)view,0,sizeof(MemView));
+	memset(view,0,sizeof(MemView));
 	
 	//复制参数
 	view->type = e820->type;	

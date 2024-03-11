@@ -7,7 +7,7 @@
 #define __PLATFORM_T_H
 
 
-#define CPUCORE_MAX 1			//CPU核心数
+#define CPUCORE_MAX 8			//CPU核心数
 #define MACHINE_ADR 0x100000		//机器信息结构体地址
 
 /* 64位虚拟地址空间划分 */
@@ -40,7 +40,7 @@
  * （Machine中既有虚拟地址，也有物理地址）
  * （注意，栈是向低地址处增长的）
  */
-typedef struct MACHINE{
+typedef struct MACHINE_T{
 	u64_t stack_addr;		//内核栈地址
 	u64_t stack_size;		//内核栈大小
 
@@ -68,9 +68,9 @@ typedef struct MACHINE{
 	u64_t viraddr_size;		//内核虚拟地址空间大小
 
 	//must virtual address
-	u64_t pages_addr;		//内存页表首地址
-	u64_t pages_num;		//内存页表数量
-	u64_t pages_size;		//内存页表大小
+	u64_t pages_addr;		//物理内存页表首地址
+	u64_t pages_num;		//物理内存页表数量
+	u64_t pages_size;		//物理内存页表大小
 
 	//must virtual address
 	u64_t areas_addr;		//内存区地址
@@ -81,8 +81,10 @@ typedef struct MACHINE{
 	u64_t next_addr;		//指向下一个4K对齐的内存地址
 	
 	u64_t checksum;		//校验和
-}__attribute__((packed))Machine;
-extern Machine machine;	//头文件中声明为全局变量
+}__attribute__((packed))machine_t;
+
+/* 头文件中声明为全局变量 */
+extern machine_t machine;
 
 
 # endif //__PLATFORM_T_H

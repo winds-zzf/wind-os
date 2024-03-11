@@ -205,7 +205,7 @@ typedef struct CR3_T{
  * MMU综合管理结构体
  */
 typedef struct MMU_T{
-	Spinlock	lock;	//保护此结构的自旋锁
+	spinlock_t	lock;	//保护此结构的自旋锁
 	u64_t	status;	//状态位
 	u64_t	flag;	//标志位
 	
@@ -213,10 +213,10 @@ typedef struct MMU_T{
 	pt1_t	*pt1;	//一级页表指针（为什么要有这个字段，为什么要用指针）
 
 	//管理各级页表所占用物理页的页描述符链表
-	List		pt1s;	//一级页表链表
-	List		pt2s;	//二级页表链表
-	List		pt3s;	//三级页表链表
-	List		pt4s;	//四级页表链表
+	list_t		pt1s;	//一级页表链表
+	list_t		pt2s;	//二级页表链表
+	list_t		pt3s;	//三级页表链表
+	list_t		pt4s;	//四级页表链表
 	//链表长
 	uint_t	pt1sNum;	//一级页表链表长
 	uint_t	pt2sNum;	//二级页表链表长

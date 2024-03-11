@@ -24,28 +24,28 @@
  * 栈地址是内核栈最后一个元素的地址：0x8FFF0:0x90000-0x10
  */
 //1MB之后的地址
-#define MACHINE_ADR		0x100000U			//machine:机器信息结构体machine地址
+#define MACHINE_ADR		0x100000U			//machine_t:机器信息结构体machine_t地址
 #define LOADER_ADR 		0x200000U			//loader.bin:二级引导器地址
-#define MMU_ADR		0x1000000U		//page:MMU页表
+#define MMU_ADR		0x1000000U		//MMU页表
 #define KERNEL_ADR 		0x2000000U		//kernel.bin:内核地址(低32MB将来会回收并保留给硬件使用)
-#define IMAGE_ADR 		0x4000000U		//Wind.kif(grub.bin):映像文件地址
+#define IMAGE_ADR 		0x4000000U		//Wind.kif(grub.bin引导):映像文件地址
 
 /* 内核地址空间 */
 #define KERNEL_VIRADR_START 	0xffff800000000000ULL	//内核起始虚拟地址(高17为全1)
 #define KERNEL_VIRADR_SIZE	0x400000000ULL			//内核虚拟地址大小:16GB
 
-
-/* 通用聚合头文件 */
-#include "type.h"       //全局类型定义
-#include "lib.h"		//标准库函数
-
 typedef struct MACHINE Machine;	//声明机器信息结构体
 
 /* 硬件模块聚合头文件 */
+#include "type.h"       //全局类型定义
+#include "stdio.h"		//
+#include "string.h"		//
+#include "image.h"		//
+
 #include "vgastr.h"		//文本模式处理
 #include "mmu.h"		//MMU处理模块
 #include "cpu.h"     	//CPU处理模块
-#include "graph.h"		//vbe模式模块
+#include "graph.h"		//显卡处理模块
 #include "acpi.h"		//acpi处理模块
 #include "e820.h"		//e820数组模块
 #include "disk.h"		//disk管理模块

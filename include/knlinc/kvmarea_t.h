@@ -10,8 +10,8 @@
 /*考虑将命名更改为zone*/
 /* 虚拟内存地址区间 */
 typedef struct KVMAREA{
-	Spinlock 	lock;	//保护自身结构的锁
-	List		hook;	//挂载钩子
+	spinlock_t 	lock;	//保护自身结构的锁
+	list_t		hook;	//挂载钩子
 	
 	u64_t	flag;	//相关标志
 	u64_t	limits;	//
@@ -32,10 +32,10 @@ typedef struct KVMAREA{
  * 虚拟内存地址空间(准备更名为虚拟内存段)
  */
 typedef struct KVMSPACE{
-	Spinlock	lock;		//保护自身结构的锁
+	spinlock_t	lock;		//保护自身结构的锁
 	uint_t	flag;		//相关标志
 	
-	List		areas;		//虚拟地址区间链表
+	list_t		areas;		//虚拟地址区间链表
 	uint_t 	areasNum;		//虚拟地址区间计数
 
 	void*	father;		//指向它的上层结构（暂未定义类型）

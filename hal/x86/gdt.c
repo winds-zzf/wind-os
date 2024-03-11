@@ -66,10 +66,13 @@ static void set_segment(Segment *segment, u32_t base, u32_t limit, u16_t attribu
 }
 
 /**
- * 
+ * 初始化gdt
  */
 void gdt_init(){
 	for (u32_t i = 0; i < CPUCORE_MAX; i++){
+		/**
+		 * 为什么这样设置？？？
+		 */
 		set_segment(&gdt[i][0], 0, 0, 0);	//空白描述符：用于占位
 		set_segment(&gdt[i][1], 0, 0, DA_CR | DA_64 | 0);
 		set_segment(&gdt[i][2], 0, 0, DA_DRW | DA_64 | 0);
@@ -80,6 +83,7 @@ void gdt_init(){
 		gdtr[i].base = (u64_t)gdt[i];
 		gdtr[i].len = sizeof(gdt[i]) - 1;
 	}
+	
 	//设置并加载GDTR
 	load_gdt();
 	load_tr(0x30);

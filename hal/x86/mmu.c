@@ -139,7 +139,7 @@ static bool_t del_pt1(mmu_t *mmu,pt1_t *pt1,MemPage *page){
 	}
 
 	//如果page为NULL，只能根据pt1的地址去查找并删除
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&mmu->pt1s){
 		page = list_entry(pos,MemPage,hook);
 		if(mempage_padr(page)==padr){
@@ -173,7 +173,7 @@ static bool_t del_pt2(mmu_t *mmu,pt2_t *pt2,MemPage *page){
 		}
 	}
 	
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&mmu->pt2s){
 		page = list_entry(pos,MemPage,hook);
 		if(mempage_padr(page)==padr){
@@ -207,7 +207,7 @@ static bool_t del_pt3(mmu_t *mmu,pt3_t *pt3,MemPage *page){
 		}
 	}
 
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&mmu->pt3s){
 		page = list_entry(pos,MemPage,hook);
 		if(padr==mempage_padr(page)){
@@ -241,7 +241,7 @@ static bool_t del_pt4(mmu_t *mmu,pt4_t *pt4,MemPage *page){
 		}
 	}
 
-	List *pos = NULL;
+	list_t *pos = NULL;
 	list_for_each(pos,&mmu->pt4s){
 		page = list_entry(pos,MemPage,hook);
 		if(padr==mempage_padr(page)){
@@ -670,7 +670,7 @@ static bool_t clean_pt1(mmu_t *mmu){
 		return FALSE;
 	}
 	//归还一级页表占用的所有物理页
-	List *pos = NULL;
+	list_t *pos = NULL;
 	MemPage *page = NULL;
 	list_for_each_head_dell(pos,&mmu->pt1s){
 		//页描述符脱链
@@ -692,7 +692,7 @@ static bool_t clean_pt2(mmu_t *mmu){
 		return FALSE;
 	}
 
-	List *pos = NULL;
+	list_t *pos = NULL;
 	MemPage *page = NULL;
 	list_for_each_head_dell(pos,&mmu->pt2s){
 		page = list_entry(pos,MemPage,hook);
@@ -711,7 +711,7 @@ static bool_t clean_pt3(mmu_t *mmu){
 		return FALSE;
 	}
 
-	List *pos = NULL;
+	list_t *pos = NULL;
 	MemPage *page = NULL;
 	list_for_each_head_dell(pos,&mmu->pt3s){
 		page = list_entry(pos,MemPage,hook);
@@ -730,7 +730,7 @@ static bool_t clean_pt4(mmu_t *mmu){
 		return FALSE;
 	}
 
-	List *pos = NULL;
+	list_t *pos = NULL;
 	MemPage *page = NULL;
 	list_for_each_head_dell(pos,&mmu->pt4s){
 		page = list_entry(pos,MemPage,hook);
@@ -839,8 +839,7 @@ void mmu_refresh(){
  */
 bool_t mmu_init(mmu_t *mmu){
 	bool_t rets = FALSE;
-	cr3_t cr3;
-	
+
 	//参数检查
 	if(NULL==mmu){
 		return FALSE;
@@ -860,14 +859,12 @@ bool_t mmu_init(mmu_t *mmu){
 	/**
  	 * 保留原先设置的2MB模式页表，并取消平坦映射
  	 */
-	//1.读取原先的cr3寄存器，并获取顶级页表的物理地址和线性虚拟地址
-	cr3.entry = read_cr3();
-	addr_t pcr3 = (addr_t)(cr3.flags.adr<<12);
-	addr_t vcr3 = MAP_RV(pcr3);
+ 	//1.获取2MB分页模式的一级页表
+	addr_t vcr3 = MAP_RV(machine.mmu_addr);
 	//2.将原先的一级页表复制到受mmu管理一级页表下
-	memcpy(vcr3,sizeof(pt1_t),(addr_t)mmu->pt1);
+	memcpy(mmu->pt1,(void*)vcr3,sizeof(pt1_t));
 	//3.将mmu管理的一级页表设置到cr3寄存器中
-	cr3.entry = (u64_t)MAP_VR((addr_t)mmu->pt1);
+	mmu->cr3.entry = (u64_t)MAP_VR((addr_t)mmu->pt1);
 	//4.取消原先的平坦映射，用于用户地址空间映射（这个时候再使用平坦映射将会产生缺页异常）
 	mmu->pt1->entries[0].entry = 0;
 

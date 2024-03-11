@@ -6,7 +6,9 @@
 #include "globalctrl.h"
 
 //模拟某种资源的信号量
-static sem_t sem;
+static sem_t sem1;
+static sem_t sem2;
+static sem_t sem3;
 
 /**
  * idle程序入口地址
@@ -15,25 +17,62 @@ static sem_t sem;
  * 空转进程会不停的轮询，执行进程调度函数，以便于有新进程到来是，可以立即响应，并切换到新进程
  */
 static void idle_main(){
+	uint_t cpuid = hal_retn_cpuid();
+	schedata_t* data = &scheclass.schedatas[cpuid];
 	while(TRUE){
-		printk("@idle:");
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk("\n");
-		krl_schedule();
+		printk("@idle:%d,%d,%d\n",sem1.count,sem2.count,sem3.count);
+		printk("num:%d\n",data->threadNum);
+		printk("sem1.num:%d\n",sem1.wlst.waitsNum);
+		printk("sem2.num:%d\n",sem2.wlst.waitsNum);
+		printk("sem3.num:%d\n",sem3.wlst.waitsNum);
+	}
+	return;
+}
+
+void thread_a_main(){
+	while(TRUE){
+		CLI();
+		sem_down(&sem1);
+		STI();
+		printk("A");
+		CLI();
+		sem_up(&sem2);
+		STI();
 	}
 	
-	return;
+	return ;
+}
+
+void thread_b_main(){
+	while(TRUE){
+		CLI();
+		sem_down(&sem2);
+		STI();
+		printk("B");
+		CLI();
+		sem_up(&sem3);
+		STI();
+	}
+	
+	return ;
+}
+
+void thread_c_main(){
+	while(TRUE){
+		CLI();
+		sem_down(&sem3);
+		STI();
+		printk("C");
+		CLI();
+		sem_up(&sem1);
+		STI();
+	}
+	return ;
 }
 
 
 /**
- * 创建一个空转进程
- * 
+ * 创建一个空转进程，空转进程属于内核进程，处在内核文件只中
  */
 static thread_t* new_idle_thread(void* entry){
 	//分配内核栈，使用默认内核栈大小
@@ -84,6 +123,21 @@ static void idle_new(){
 	return ;
 }
 
+void init_abc_thread(){
+	sem_t_init(&sem1);
+	sem_t_init(&sem2);
+	sem_t_init(&sem3);	
+	sem_set(&sem1,0,0);
+	sem_set(&sem2,0,0);
+	sem_set(&sem3,0,0);
+	
+	krlnew_thread(thread_a_main,0,THREAD_PRIVILEGE_SYS,2,THREAD_STACKSIZE_KRNL,THREAD_STACKSIZE_USER);
+	krlnew_thread(thread_b_main,0,THREAD_PRIVILEGE_SYS,2,THREAD_STACKSIZE_KRNL,THREAD_STACKSIZE_USER);
+	krlnew_thread(thread_c_main,0,THREAD_PRIVILEGE_SYS,2,THREAD_STACKSIZE_KRNL,THREAD_STACKSIZE_USER);
+	sem_up(&sem1);
+	return;
+}
+
 static void idle_start(){
 	//
 	uint_t cpuid = hal_retn_cpuid(); 
@@ -102,70 +156,6 @@ static void idle_start(){
 	return ;
 }
 
-void thread_a_main(){
-	while(TRUE){
-		printk("@A:");
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk("\n");
-		
-		sem_down(&sem);	//申请资源
-		printk("using resource\n");die(0x200);	 //临界区
-		sem_up(&sem);		//释放资源
-	}
-	return ;
-}
-
-void thread_b_main(){
-	while(TRUE){
-		printk("@B:");
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk("\n");
-		
-		//申请资源,申请失败将会阻塞在sem_down函数，等待被唤醒后重复执行P原语
-		sem_down(&sem);	//申请资源
-		printk("using resource\n");die(0x200);	 //临界区
-		sem_up(&sem);		//释放资源
-	}
-	return ;
-}
-
-void thread_c_main(){
-	for(uint_t i=0;;i++){
-		printk("@C:");
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk(".");die(0x200);
-		printk("\n");
-		
-		sem_down(&sem);	//申请资源
-		printk("using resource\n");die(0x200);	 //临界区
-		sem_up(&sem);		//释放资源
-	}
-	return ;
-}
-
-void init_abc_thread(){
-	sem_t_init(&sem);
-	sem_set(&sem,0,1);
-	krlnew_thread(thread_a_main,0,THREAD_PRIVILEGE_SYS,0,THREAD_STACKSIZE_KRNL,THREAD_STACKSIZE_USER);
-	krlnew_thread(thread_b_main,0,THREAD_PRIVILEGE_SYS,1,THREAD_STACKSIZE_KRNL,THREAD_STACKSIZE_USER);
-	krlnew_thread(thread_c_main,0,THREAD_PRIVILEGE_SYS,2,THREAD_STACKSIZE_KRNL,THREAD_STACKSIZE_USER);
-	return;
-}
-
 /**
  * 初始化空转进程
  */
@@ -176,5 +166,16 @@ void idle_init(){
 	init_abc_thread();
 	//启动空转进程
 	idle_start();
+	
 	return ;	
 }
+
+/**
+ * 对于用户态进程来说，出于程序设计方便和内存安全的角度等原因，
+ * 为每个用户态进程引入了独立的虚拟地址空间，其被映射到用户空间。
+ * 用户进程，平时运行在用户态，有自己的虚拟地址空间，但是可以通过中断、系统调用等内陷到内核态。
+ * 内核进程，没有独立的地址空间，所有内核线程的地址空间都是一样的，没有自己的地址空间，
+ * 所以它们的”current->mm”都为空，其运行在内核空间，本身就是内核的一部分或者说是内核的分身。
+ * 
+ * 有些系统中专门为全局中断处理提供了中断栈，但是x86中并没有中断栈，中断在当前进程的内核栈中处理。
+ */

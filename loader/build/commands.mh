@@ -6,22 +6,13 @@ ASM		= nasm
 CC		= gcc
 LD		= ld
 OBJCOPY = objcopy
-OJCYFLAGS = -S -O binary
+OBJFLAGS = -S -O binary
 
 # 汇编器的选项和参数，用于生成32位目标文件
-ASMBFLAGS	= -I $(HEADFILE_PATH) -I $(INCLUDE_PATH) -f elf
+ASMFLAGS	= -I $(HEADFILE_PATH) -f elf
 # C编译器的选项和参数，用于生成32位的目标文件
-BTCFLAGS	= -I $(HEADFILE_PATH) -I $(INCLUDE_PATH) -I ../../share/ -c -Os -std=c99 -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -fno-ident -ffreestanding  -fno-stack-protector -fomit-frame-pointer -Wno-unused-parameter -Wunused-variable
+GCCFLAGS	= -I $(HEADFILE_PATH) -c -Os -std=c99 -m32 -Wall -Wshadow -W -Wconversion -Wno-sign-conversion  -fno-stack-protector -fomit-frame-pointer -fno-builtin -fno-common  -fno-ident -ffreestanding  -fno-stack-protector -fomit-frame-pointer -Wno-unused-parameter -Wunused-variable
 
-LDFLAGS		= -s -static -T boot.lds -n  -Map boot.map 
-FDLDRLDFLG	= -s -Ttext 0 -n  -Map fdldr.map 
-LOADERLDFLAGS	= -s -T ldrld.lds -n  -Map hdldr.map  
-LDRIMHLDFLAGS = -s -T grub.lds -n -Map grub.map
-LDRKRLLDFLAGS = -s -T loader.lds -n -Map loader.map  
-LDRSVELDFLAGS = -s -T bios.lds -n -Map bios.map 
-
-LDRIMGFLAGS = -m k
-
-KERNELLDFLAGS	= -s -static -T kernelld.lds -n  -Map kernel.map
-DBGKERNELLDFLAGS	= -static -T kernelld.lds -n  -Map kernel.map
-INITSHELLLDFLAGS = -s -static -T app.lds -n  -Map initshellldr.map
+LDGRUBFLAGS	= -s -T grub.lds -n -Map grub.map
+LDBIOSFLAGS	= -s -T bios.lds -n -Map bios.map 
+LDLOADERFLAGS	= -s -T loader.lds -n -Map loader.map  

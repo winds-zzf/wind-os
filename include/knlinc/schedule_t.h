@@ -6,14 +6,17 @@
 #define __SCHEDULE_T_H
 
 
-#define NOTS_SCHED_FLGS (0)
-#define NEED_SCHED_FLGS (1)
+/* 调度器调度判断标志 */
+#define NOTS_SCHED_FLGS (0)	//无需调度，比如空转进程正在运行，就无需调度
+#define NEED_SCHED_FLGS (1)	//需要调度标志，比如时间片用完，进程休眠
+#define NEED_START_CPUIDLE_SCHED_FLGS (2)	//需要启动空转进程，用于首次使用调度器时启动空转进程
+#define PMPT_FLGS 0		//抢占计数
 
 /* 
  * 优先队列
  */
 typedef struct THREADLIST_T{
-	List 	threads;		//优先队列的链表头
+	list_t 	threads;		//优先队列的链表头
 	uint_t 	threadsNum;	//优先队列上的进程数
 	/**
 	 * 为什么优先队列上也要有current指针？？？
@@ -28,7 +31,7 @@ typedef struct THREADLIST_T{
  * “当前进程”表该调度器管理的CPU上当前运行的进程
  */
 typedef struct SCHDATA_T{
-	Spinlock		lock;		//保护调度器的自旋锁
+	spinlock_t		lock;		//保护调度器的自旋锁
 	u64_t		cpuid;		//调度器对应CPU的id
 	u64_t		flags;		//调度器标志
 	u64_t		count;		//进程抢占计数
@@ -42,7 +45,7 @@ typedef struct SCHDATA_T{
 
 /* 全局调度器类 */
 typedef struct SCHDCLASS_T{
-	Spinlock		lock;
+	spinlock_t		lock;
 	uint_t		cpuNum;		//CPU总数量
 	uint_t		thdNum;		//进程总数量
 	u64_t		threadid_inc;	//分配进程id所用

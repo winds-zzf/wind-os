@@ -5,7 +5,7 @@
 #include"globaltype.h"
 #include"globalctrl.h"
 
-void spinlock_init(Spinlock *lock){
+void spinlock_init(spinlock_t *lock){
 	lock->lock = 0;
 	return;
 }
@@ -19,7 +19,7 @@ void spinlock_init(Spinlock *lock){
  * 事实上cmpl $0,%1不会被常常执行,这是为了不在cpu指令高速缓存中填充无用代码,
  * 要知道那可是用每位6颗晶体管做的双极性静态,储存器,比内存条快几千个数量级
  */
-void spinlock_lock(Spinlock *lock){
+void spinlock_lock(spinlock_t *lock){
 	__asm__ __volatile__(
 		"1:         \n"		//标签1
 		"lock; xchg  %0, %1 \n"	//使用lock前缀进行原子交换指令：lock先存入%0后赋值1
@@ -45,7 +45,7 @@ void spinlock_lock(Spinlock *lock){
  * 对自旋锁解锁
  * lock：自旋锁
  */
-void spinlock_unlock(Spinlock *lock){
+void spinlock_unlock(spinlock_t *lock){
 	__asm__ __volatile__(
 		"movl   $0, %0\n"	//将0存储在lock变量所在的内存地址%0中，表示释放锁
 		:
@@ -54,7 +54,7 @@ void spinlock_unlock(Spinlock *lock){
 	return;
 }
 
-void spinlock_lock_saveflg_cli(Spinlock *lock, cpuflag_t *cpuflag){
+void spinlock_lock_saveflg_cli(spinlock_t *lock, cpuflag_t *cpuflag){
 	__asm__ __volatile__(
 		"pushfq             \n\t"
 		"cli                \n\t"
@@ -78,7 +78,7 @@ void spinlock_lock_saveflg_cli(Spinlock *lock, cpuflag_t *cpuflag){
 	return;
 }
 
-void spinlock_unlock_restflg_sti(Spinlock *lock, cpuflag_t *cpuflag){
+void spinlock_unlock_restflg_sti(spinlock_t *lock, cpuflag_t *cpuflag){
 	__asm__ __volatile__(
 		"movl   $0, %0\n\t"
 		"pushq %1 \n\t"
@@ -89,7 +89,7 @@ void spinlock_unlock_restflg_sti(Spinlock *lock, cpuflag_t *cpuflag){
 	return;
 }
 
-void spinlock_lock_cli(Spinlock *lock, cpuflag_t *cpuflag){
+void spinlock_lock_cli(spinlock_t *lock, cpuflag_t *cpuflag){
 	__asm__ __volatile__(
 		"pushfq             \n\t"
 		"cli                \n\t"
@@ -113,7 +113,7 @@ void spinlock_lock_cli(Spinlock *lock, cpuflag_t *cpuflag){
 	return;
 }
 
-void spinlock_unlock_sti(Spinlock *lock, cpuflag_t *cpuflag){
+void spinlock_unlock_sti(spinlock_t *lock, cpuflag_t *cpuflag){
 	__asm__ __volatile__(
 		"movl   $0, %0\n\t"
 		"pushq %1 \n\t"

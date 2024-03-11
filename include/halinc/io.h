@@ -4,6 +4,22 @@
  */
 
 /**
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+/**
  *
  */
 INLINE void out_u8(const u16_t port, const u8_t val){
@@ -126,6 +142,35 @@ INLINE void restore_flags_sti(cpuflag_t *flagsres){
 }
 
 /**
+ * 恢复CPU寄存器关中断
+ */
+INLINE void restore_flags_cli(cpuflag_t *flags){
+	__asm__ __volatile__(
+		"pushq %0 \t\n"
+		"popfq \t\n"
+		: "=m"(*flags)
+		:
+		: "memory"
+	);
+	return;
+}
+
+/**
+ * 保存CPU寄存器并开中断
+ */
+INLINE void save_flags_sti(cpuflag_t *flags){
+	__asm__ __volatile__(
+		"pushfq \t\n"
+		"popq %0\t\n"
+		"sti\t\n"
+		:
+		: "m"(*flags)
+		: "memory"
+	);
+	return;
+}
+
+/**
  * 
  */
 INLINE u64_t read_msr(const u32_t reg){
@@ -183,14 +228,14 @@ INLINE u64_t read_rsp(){
  * cr2寄存器中存储缺页地址
  */
 INLINE addr_t read_cr2(){
-	addr_t regtmp = 0;
+	addr_t tmp = 0;
 	__asm__ __volatile__(
 		"movq %%cr2,%0\n\t"
-		: "=r"(regtmp)
+		: "=r"(tmp)
 		:
 		: "memory"
 	);
-	return regtmp;
+	return tmp;
 }
 
 
@@ -198,11 +243,11 @@ INLINE addr_t read_cr2(){
  * 设置cr3寄存器的值
  * pl4adr：4K分页下一级页表地址
  */
-INLINE void set_cr3(u64_t pl4adr){
+INLINE void set_cr3(u64_t cr3){
 	__asm__ __volatile__(
 		"movq %0,%%cr3 \n\t"
 		:
-		: "r"(pl4adr)
+		: "r"(cr3)
 		: "memory" //, "edx"
 	);
 	return;
@@ -212,28 +257,66 @@ INLINE void set_cr3(u64_t pl4adr){
  * 读取cr3寄存器的值
  */
 INLINE u64_t read_cr3(){
-	u64_t regtmp = 0;
+	u64_t tmp = 0;
 	__asm__ __volatile__(
 		"movq %%cr3,%0\n\t"
-		: "=r"(regtmp)
+		: "=r"(tmp)
 		:
 		: "memory"
 	);
-	return regtmp;
+	return tmp;
 }
 
 /**
  * 写入cr3寄存器的值
  */
-INLINE void write_cr3(u64_t r_val){
+INLINE void write_cr3(u64_t cr3){
 	__asm__ __volatile__(
 		"movq %0,%%cr3 \n\t"
 		:
-		: "r"(r_val)
+		: "r"(cr3)
 		: "memory" //, "edx"
 	);
 	return;
 }
+
+
+/**
+ *
+ */
+#define CLI() __asm__ __volatile__("cli" \
+                                   :     \
+                                   :     \
+                                   : "memory")
+/**
+ *
+ */
+#define STI() __asm__ __volatile__("sti" \
+                                   :     \
+                                   :     \
+                                   : "memory")
+
+/**
+ * used in he idle loop; sti takes one instruction cycle to complete
+ */
+#define HALT() __asm__ __volatile__("hlt" \
+                                    :     \
+                                    :     \
+                                    : "memory")
+/**
+ *
+ */
+#define STI_HALT() __asm__ __volatile__("sti; hlt" \
+                                        :          \
+                                        :          \
+                                        : "memory")
+/**
+ *
+ */
+#define CLI_HALT() __asm__ __volatile__("cli; hlt" \
+                                        :          \
+                                        :          \
+                                        : "memory")
 
 
 
