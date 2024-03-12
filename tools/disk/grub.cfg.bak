@@ -1,14 +1,15 @@
 set timeout_style=menu
 if [ "${timeout}" = 0 ]; then
-  set timeout=10 #等待10秒钟自动启动
+  set timeout=10 # 等待10秒钟自动启动
 fi
 
+# 启动菜单项
 menuentry 'Wind' {
-	insmod part_msdos
-	insmod ext2
-	set root='hd0' 	#我们的硬盘只有一个分区所以是'hd0'
-	multiboot2 /boot/Wind.eki 	#加载boot目录下的Cosmos.eki文件
-	boot #引导启动
+	insmod part_msdos	# 
+	insmod ext2		# 文件系统格式
+	set root='hd0' 	# 我们的硬盘只有一个分区所以是'hd0'
+	multiboot2 /boot/Wind.eki 	# 加载boot目录下的Cosmos.eki文件
+	boot # 引导启动
 }
 menuentry 'Others' {
 	insmod part_msdos

@@ -1,0 +1,35 @@
+# 设置make的全局选项，-s表示静默模式，不显示命令的详细输出。
+MAKEFLAGS = -s
+
+Echo_GCC = @echo 'GCC -[M] 正在预编译脚本'$@
+
+CC = gcc
+CPPFLGSLDS = $(HEADFILE_PATH) -E -P
+
+# 编译脚本文件.S路径
+HEADFILE_PATH = -I ../include/
+#
+CCBUILD_PATH = ./
+
+# 脚本转换器
+Scripter = ./scripter
+
+#目标linker脚本
+LDS_OBJS = windlink.lds applink.lds
+#目标Makefile脚本
+MK_OBJS = buildobj.mk buildcmd.mk buildrule.mk hal.mk kernel.mk driver.mk library.mk task.mk link.mk memory.mk fsys.mk app.mk applds.mk
+
+.PHONY : all
+
+all: $(LDS_OBJS) $(MK_OBJS)
+
+# 生成链接文件
+%.lds : $(CCBUILD_PATH)%.S
+	$(CC) $(CPPFLGSLDS) -o ../build/$@ $<
+	$(Echo_GCC)
+	
+# 生成makefile并进行
+%.mk : $(CCBUILD_PATH)%.S
+	$(CC) $(CPPFLGSLDS) -o ../build/$@ $<
+	$(Scripter) ../build/$@
+	$(Echo_GCC)

@@ -1,0 +1,36 @@
+########################
+# 主控自动化编译配置文件 #
+########################
+
+# 使用-R参数禁止隐式规则的搜索
+MAKEFLAGS = -sR
+
+# 脚本转换器路径
+SCRIPT_PATH = ./script/
+# 脚本构造路径
+BUILD_PATH = ./build/
+
+# 预处理(将编译脚本文件.S转换为makefile文件)
+PREPARE_FLAG  = -C $(SCRIPT_PATH) -f prepare.mkf
+
+# 模块处理
+HAL_FLAG 		= -C $(BUILD_PATH) -f hal.mk
+KERNEL_FLAG 	= -C $(BUILD_PATH) -f kernel.mk
+DRIVER_FLAG 	= -C $(BUILD_PATH) -f driver.mk
+LIBRARY_FLAG 	= -C $(BUILD_PATH) -f library.mk
+MEMORY_FLAG   	= -C $(BUILD_PATH) -f memory.mk
+FSYS_FLAG  	= -C $(BUILD_PATH) -f fsys.mk 
+TASK_FLAG 	= -C $(BUILD_PATH) -f task.mk
+# 链接
+LINK_FLAG 	= -C $(BUILD_PATH) -f link.mk
+
+.PHONY : all
+
+all:
+	make $(PREPARE_FLAG)
+	make $(HAL_FLAG)
+	make $(KERNEL_FLAG)
+	make $(DRIVER_FLAG)
+	make $(LIBRARY_FLAG)
+	make $(LINK_FLAG)
+
